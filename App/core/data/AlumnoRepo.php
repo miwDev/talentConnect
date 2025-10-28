@@ -1,9 +1,12 @@
 <?php
 
+namespace App\core\data;
+
+
 class AlumnoRepo implements RepoInterface
 {
     // CREATE
-    public static function save($data)
+    public static function save($alumno)
     {
         return 21;
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\core\data;
+
 interface RepoInterface
 {
     // CREATE
