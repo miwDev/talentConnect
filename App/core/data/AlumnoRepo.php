@@ -5,7 +5,7 @@ class AlumnoRepo implements RepoInterface
     // CREATE
     public static function save($data)
     {
-        return 1;
+        return 21;
     }
 
     // READ
