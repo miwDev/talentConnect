@@ -1,0 +1,579 @@
+/* INDICE DE CSS
+
+    1. GLOBAL STYLES
+    2. HEADER CONTENT
+    3. MAIN CONTENT - INDEX
+    4. FOOTER CONTENT
+    5. LOGIN CONTENT
+    6. REGISTER CONTENT
+    7. REGISTER EMPRESA CONTENT
+    8. ERROR STYLES
+
+*/
+
+/* 1. GLOBAL STYLES */
+body {
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.container{
+    background-color: #FCFCFC;
+    border-radius: 0.6875em;
+    margin: 0em;
+    padding: 1em;
+}
+
+/* 2. HEADER CONTENT */
+.banner-container { 
+    position: relative; 
+    width: 100%;
+    overflow: hidden; 
+}
+
+.banner-image {
+    width: 100%; 
+    display: block;
+    filter: blur(0.8em);
+}
+
+.banner-text {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    text-align: center; 
+    color: #FCFCFC; 
+}
+
+.banner-text h1 {
+    font-size: 6.5em;
+    margin-bottom: 0.1em;
+    text-shadow: 0.125em 0.125em 0.25em black;
+    font-family: 'Geist Sans', sans-serif;
+}
+
+.banner-text h2 {
+    font-size: 1.9em;
+    font-weight: 300;
+    margin-top: 0em;
+    text-shadow: 0.125em 0.125em 0.25em black;
+    font-family: 'Geist Sans', sans-serif;
+}
+
+header {
+    position: sticky;
+    top: 0em;
+    z-index: 1000;
+}
+
+.header-banner{
+    background-color: #FCFCFC;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 0.25em 0.5em #2a63b434;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4em 4em;
+}
+
+#logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    padding: 0.3em;
+}
+
+#logo p {
+    color: #2A63B4;
+    line-height: 1.2;
+    margin: 0;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.5em;
+    font-weight: 650;
+}
+
+#nav-and-user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#nav{
+    margin-right: 5em;
+}
+
+#nav li {
+    margin-right: 3em;
+}
+
+.menu-lista {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-enlace {
+    text-decoration: none;
+    color: #2A63B4;
+    font-weight: bold;
+}
+
+#navParent a {
+    color: #2A63B4;
+    line-height: 1.2;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
+#navParent a:hover {
+    color: #5486cd;
+    line-height: 1.2;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
+.avatar {
+    content: url('/assets/images/genericAvatar.svg');
+    padding: 0;
+    cursor: pointer;
+    margin-right: 2em;
+}
+
+.avatar:hover {
+    content: url('/assets/images/genericAvatar2.svg');
+    cursor: pointer;
+}
+
+/* 3. MAIN CONTENT - INDEX */
+
+/* SECTION 1 */
+.section-container {
+    border-bottom: 3px solid #39393928; 
+    margin: 0em 8em;
+}
+
+.section-container h1, 
+.section-container h2 {
+    color: #393939;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 6em;
+}
+
+.h1-content{
+    text-align: left;
+    padding: 0.5em 0em 0em 0.5em;
+    margin-left: 2em;
+    font-family: 'Geist Sans', sans-serif;
+    color: #393939;
+    font-size: 4.8em;
+}
+
+#section1-content{
+    display: flex;
+    gap: 10em;
+}
+
+#boldSubtitle{
+    font-weight: 700;
+}
+
+.section1-img{
+    width: 1200px;
+    height: 600px;
+    padding: 5em;
+    margin: 0em 5em 0em 0em;
+}
+
+/* SECTION 2 */
+h2{
+    text-align: center;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 5em;
+}
+
+.placeholder{
+    margin-left: 10em;
+    padding: 3em;
+}
+
+/* SECTION 3 */
+.s3-container{
+    background-color: #fcfcfc;
+    border: 1.5px solid #2A63B4;
+    margin: 2em 30em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+}
+
+.s3-header{
+    margin-top: 2.5em;
+}
+
+h3{
+    text-align: center;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 2.3em;
+    color: #393939;
+}
+
+.s3-subtitle{
+    text-align: center;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #393939;
+}
+
+.s3-btn-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.btn-style {
+    text-align: center; 
+    padding: 3.5em;
+}
+
+.a-section3 {
+    background-color: #fcfcfc; 
+    color: #2A63B4;
+    padding: 0.7em 3em;
+    display: inline-flex;     
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.3em;
+    font-weight: 500;
+    border: 3px solid #2A63B4;
+    border-radius: 0.6875em;
+    cursor: pointer;
+}
+
+.a-section3:hover {
+    background-color: #2A63B4;
+    color: #fcfcfc; 
+}
+
+.s3-register-link{
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.3em;
+    padding: 1.2em;
+}
+
+.register-link{
+    text-decoration: none;
+    color: #2A63B4;
+}
+
+.register-link:hover{
+    text-decoration: none;
+    color: #538ad8;
+}
+
+/* 4. FOOTER CONTENT */
+footer {
+    background-color: #393939;
+    color: #fcfcfc;
+    padding: 0.1em 0;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1.4em;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.footer-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #444;
+    min-height: 2em;
+}
+
+.footer-logo img {
+    margin-left: 8em;
+    margin-top: 2em;
+}
+
+.footer-items {
+    display: flex;
+    gap: 10em; 
+    margin-left: 25em;
+}
+
+.footer-title {
+    font-weight: 700;
+    font-size: 1.6em;
+    margin-bottom: 10px;
+    color: #fcfcfc;
+}
+
+.social-links,
+.about-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-link,
+.about-link {
+    color: #fcfcfc9d;
+    text-decoration: none;
+    line-height: 1.6;
+}
+
+.social-link:hover,
+.about-link:hover {
+    color: #2A63B4;
+}
+
+footer > div:last-child {
+    text-align: center;
+    font-size: 0.7em;
+    color: #fcfcfc76;
+}
+
+/* 5. LOGIN CONTENT*/
+.main-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+    flex: 1;
+}
+
+.login-center-box{
+    padding: 32px;
+}
+
+.login-box {
+    background-color: #FCFCFC;
+    border: 3px solid #2A63B4;
+    padding: 48px 32px;
+    box-shadow: 0 4px 8px rgba(42, 99, 180, 0.2);
+    width: 400px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.h2-login {
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 32px;
+    color: #393939;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form label {
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 19px;
+    font-weight: 550;
+    color: #393939;
+    margin-bottom: 8px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    padding: 12px;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Geist Sans', sans-serif;
+}
+
+.form-remember {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    gap: 8px;
+    color: #393939;
+    font-size: 14px;
+}
+
+.form-remember input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-primary {
+    background-color: #2A63B4; 
+    color: #FCFCFC;
+    padding: 12px 24px;
+    margin-top: 16px;
+    border: 2px solid #2A63B4;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #5486CD;
+    border-color: #5486CD;
+}
+
+.register-link-login {
+    text-align: center;
+    margin-top: 16px;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    color: #2A63B4;
+}
+
+.register-link-login:hover {
+    color: #5486CD;
+}
+
+/* 6. REGISTER CONTENT */
+#register-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; /* Cambiado */
+    padding: 40px 0; /* Agregado */
+    flex: 1;
+    background-color: #2A63B4; /* Fondo azul agregado */
+    min-height: 100vh; /* Asegura altura completa */
+}
+
+.photo-preview {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.photo-preview-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #2A63B4;
+    background-color: #FCFCFC;
+}
+
+.photo-options {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.photo-option {
+    flex: 1;
+}
+
+.cv-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cv-filename {
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 14px;
+    color: #393939;
+    font-style: italic;
+    text-align: center;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px dashed #CCCCCC;
+}
+
+.btn-secondary {
+    background-color: #FCFCFC; 
+    color: #2A63B4;
+    padding: 12px 16px;
+    border: 2px solid #2A63B4;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background-color: #2A63B4;
+    color: #FCFCFC;
+}
+
+#register-section .login-box {
+    width: 700px;
+}
+
+/* 7. REGISTER EMPRESA CONTENT */
+#register-empresa-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; /* Cambiado */
+    padding: 40px 0; /* Agregado */
+    flex: 1;
+    background-color: #2A63B4; /* Fondo azul agregado */
+    min-height: 100vh; /* Asegura altura completa */
+}
+
+.logo-preview {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.logo-preview-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border: 2px solid #2A63B4;
+    background-color: #FCFCFC;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.logo-options {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.logo-option {
+    flex: 1;
+}
+
+#register-empresa-section .login-box {
+    width: 700px;
+}

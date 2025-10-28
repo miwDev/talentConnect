@@ -1,0 +1,14 @@
+{
+    "name": "talent-connect/app",
+    "description": "Talent Connect Application",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "league/plates": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "/"
+        }
+    }
+}
