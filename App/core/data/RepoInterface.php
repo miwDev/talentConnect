@@ -12,7 +12,7 @@ interface RepoInterface
     public static function findById(int $id);
 
     // UPDATE
-    public static function updateById($id);
+    public static function updateById($object);
 
     // DELETE
     public static function deleteById($id);

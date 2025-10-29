@@ -5,6 +5,8 @@ namespace App\core\model;
 class Alumno
 {
     private $id;
+    private $username;
+    private $password;
     private $nombre;
     private $apellido;
     private $telefono;
@@ -19,9 +21,11 @@ class Alumno
     private $estudios = [];
     private $solicitudes = [];
 
-    public function __construct($id, $nom, $ape, $tel, $direccion, $foto, $cv, $prov, $loc)
+    public function __construct($id, $username, $pass, $nom, $ape, $tel, $direccion, $foto, $cv, $prov, $loc)
     {
         $this->id = $id;
+        $this->username = $username;
+        $this->password = $pass;
         $this->nombre = $nom;
         $this->apellido = $ape;
         $this->telefono = $tel;

@@ -6,6 +6,7 @@ namespace App\core\model;
 class Empresa
 {
     private $id;
+    private $password;
     private $nombre;
     private $telefono;
     private $direccion;
@@ -20,9 +21,10 @@ class Empresa
 
     private $ofertas = [];
 
-    public function __construct($id, $nombre, $telefono, $direccion, $provincia, $localidad, $nombrePersona, $telPersona, $logo, $validacion)
+    public function __construct($id, $pass, $nombre, $telefono, $direccion, $provincia, $localidad, $nombrePersona, $telPersona, $logo, $validacion)
     {
         $this->id = $id;
+        $this->password = $pass;
         $this->nombre = $nombre;
         $this->telefono = $telefono;
         $this->direccion = $direccion;
