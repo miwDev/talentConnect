@@ -9,66 +9,90 @@
     font-family: 'Geist Sans', sans-serif;
 }
 
+main {
+    background-color: #2A63B4;
+}
+
+.header-section {
+    margin-bottom: 25px;
+}
+
 h1 {
     font-family: 'Geist Sans', sans-serif;
     font-size: 2.5em;
     color: #2A63B4;
-    margin-bottom: 30px;
-    text-align: center;
+    margin: 0 0 20px 0;
     font-weight: 600;
+    text-align: left;
 }
 
-.table-filters {
-    background: #f8fafc;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    border: 1px solid #e2e8f0;
+.search-section {
     display: flex;
     align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 400px;
 }
 
-.table-filters label {
-    font-weight: 500;
-    color: #2d3748;
-    font-size: 0.9em;
-}
-
-.table-filters input[type="text"] {
-    padding: 10px 15px;
+.search-section input[type="text"] {
+    padding: 12px 18px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
     font-family: 'Geist Sans', sans-serif;
-    min-width: 150px;
+    flex: 1;
+    font-size: 1em;
 }
 
-.table-filters input[type="text"]:focus {
+.search-section input[type="text"]:focus {
     outline: none;
     border-color: #2A63B4;
     box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
 }
 
-.table-filters input[type="button"] {
+.search-btn {
     background: #2A63B4;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 8px;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
     font-weight: 500;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    background: #1e4a8a;
+    transform: translateY(-1px);
+}
+
+.add-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+#add {
+    background: #059669;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-weight: 500;
+    font-size: 1em;
     transition: all 0.3s ease;
 }
 
-.table-filters input[type="button"]:hover {
-    background: #1e4a8a;
+#add:hover {
+    background: #047857;
+    transform: translateY(-2px);
 }
 
 .table-container {
     background: white;
-    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
@@ -85,12 +109,21 @@ thead {
 
 thead th {
     color: white;
-    padding: 16px 20px;
+    padding: 18px 20px;
     text-align: left;
     font-weight: 600;
     font-size: 0.95em;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.actions-column {
+    width: 150px;
+}
+
+/* Clase para ocultar la columna de acciones */
+.hidden {
+    display: none;
 }
 
 tbody tr {
@@ -105,6 +138,49 @@ tbody td {
     padding: 16px 20px;
     color: #4a5568;
     font-size: 0.95em;
+    vertical-align: middle;
+}
+
+/* Clase para ocultar las celdas de acciones */
+.action-cell {
+    display: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 0.85em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.edit-btn {
+    background: #2A63B4;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #1e4a8a;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
 }
 
 tbody tr:nth-child(even) {
@@ -115,19 +191,45 @@ tbody tr:nth-child(even):hover {
     background: #f1f5f9;
 }
 
-/* Estados de los botones */
-#borrar {
-    background: #dc2626;
-}
-
-#borrar:hover {
-    background: #b91c1c;
-}
-
-#add {
-    background: #059669;
-}
-
-#add:hover {
-    background: #047857;
+/* Responsive */
+@media (max-width: 768px) {
+    .list-container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .search-section {
+        max-width: 100%;
+        flex-direction: column;
+    }
+    
+    .search-section input[type="text"] {
+        width: 100%;
+    }
+    
+    .search-btn {
+        width: 100%;
+    }
+    
+    thead th, tbody td {
+        padding: 12px 15px;
+    }
+    
+    .actions-column {
+        width: 120px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-btn {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
 }

@@ -8,7 +8,7 @@ $this->layout('layout/layout', [
 ?>
 
 <?php $this->start('css') ?>
-<link rel="stylesheet" type="text/css" href="/assets/css/listaAlumnos.css" />"
+<link rel="stylesheet" type="text/css" href="/assets/css/listaAlumnos.css" />
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
@@ -17,33 +17,31 @@ $this->layout('layout/layout', [
 
 <?php $this->start('pageContent') ?>
 <div class="list-container">
-    <h1>tabla de alumnos</h1>
-    <div class="table-filters">
-        <label for="">Filtro</label>
-        <input type="text" name="filtro" id="filtro">
-        <label for="">Buscar</label>
-        <input type="text" name="buscar" id="buscar">
-        <input type="button" id="borrar" value="borrar">
-        <input type="button" id="add" value="add">
+    <div class="header-section">
+        <h1>Tabla de alumnos</h1>
+        <div class="search-section">
+            <input type="text" name="buscar" id="buscar" placeholder="Buscar alumno...">
+            <button type="button" id="buscar-btn" class="search-btn">Buscar</button>
+        </div>
     </div>
+
+    <div class="add-button-container">
+        <input type="button" id="add" value="Añadir alumno">
+    </div>
+
     <div class="table-container">
         <table>
             <thead>
-                <th>
-                    id
-                </th>
-                <th>
-                    nombre
-                </th>
-                <th>
-                    apellido
-                </th>
-                <th>
-                    email
-                </th>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th class="actions-column hidden">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-
+                <!-- Las filas se generarán dinámicamente con JavaScript -->
             </tbody>
         </table>
     </div>
