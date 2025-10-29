@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
+    <title><?= $this->e($title) ?></title>
     <link rel="stylesheet" href="https://geistfont.vercel.app/geist.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+
+    <?= $this->section('css') ?>
+    <?= $this->section('js') ?>
 </head>
+
 <body>
     <header>
         <div class="header-banner" id="hBanner">
             <div id="logo">
-                <img id="logo" src="/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120"> 
+                <img id="logo" src="/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
                 <p>TALENT </br> CONNECT</p>
             </div>
             <div id="nav-and-user">
@@ -32,22 +37,22 @@
             </div>
         </div>
     </header>
-    
+
     <main>
         <?php echo $this->section('pageContent'); ?>
     </main>
-    
+
     <footer>
         <div class="footer-container">
             <div class="footer-logo">
-                <img class="" src="/assets/images/footerLogo.png" alt="logo_placeholder" width="220" height="220"> 
+                <img class="" src="/assets/images/footerLogo.png" alt="logo_placeholder" width="220" height="220">
             </div>
             <div class="footer-items">
                 <div class="footer-social">
                     <div class="footer-title">
                         Social Media
                     </div>
-                    
+
                     <ul class="social-links">
                         <li>
                             <a href="https://www.instagram.com" target="_blank" class="social-link">Instagram</a>
@@ -64,7 +69,7 @@
                     <div class="footer-title">
                         About
                     </div>
-                    
+
                     <ul class="about-links">
                         <li>
                             <a href="https://www.instagram.com" target="_blank" class="about-link">Contact</a>
@@ -86,4 +91,5 @@
         </div>
     </footer>
 </body>
+
 </html>

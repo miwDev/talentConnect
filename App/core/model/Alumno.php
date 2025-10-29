@@ -19,17 +19,17 @@ class Alumno
     private $estudios = [];
     private $solicitudes = [];
 
-    public function __construct($id, $nom, $ape, $tel, $prov, $loc, $direccion, $foto, $cv)
+    public function __construct($id, $nom, $ape, $tel, $direccion, $foto, $cv, $prov, $loc)
     {
         $this->id = $id;
         $this->nombre = $nom;
         $this->apellido = $ape;
         $this->telefono = $tel;
-        $this->provincia = $prov;
-        $this->localidad = $loc;
         $this->direccion = $direccion;
         $this->foto = $foto;
         $this->cv = $cv;
+        $this->provincia = $prov;
+        $this->localidad = $loc;
     }
 
     public function __get($propiedad)

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Alicia",
+    "apellidos": "Gómez Pérez",
+    "email": "alicia.gomez@gmail.com"
+  },
+  {
+    "id": 2,
+    "nombre": "Roberto",
+    "apellidos": "Fernández Cano",
+    "email": "roberto.fdez@gmail.com"
+  },
+  {
+    "id": 3,
+    "nombre": "Carla",
+    "apellidos": "Martínez Soto",
+    "email": "carla.martinez@gmailplo.com"
+  },
+  {
+    "id": 4,
+    "nombre": "Javier",
+    "apellidos": "Díaz Ruiz",
+    "email": "javier.diaz@gmail.com"
+  }
+]
