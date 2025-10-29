@@ -4,6 +4,10 @@ namespace App\core\data;
 
 use App\core\model\Empresa;
 
+use PDO;
+use PDOException;
+use Exception;
+
 class EmpresaRepo implements RepoInterface
 {
     // CREATE

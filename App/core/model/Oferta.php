@@ -2,9 +2,10 @@
 
 namespace App\core\model;
 
-class Alumno
+class Oferta
 {
     private $id;
+    private $empresa;
     private $fechaCreacion;
     private $fechaFin;
     private $salario;
@@ -14,9 +15,10 @@ class Alumno
     // arrays
     private $solicitudes = [];
 
-    public function __construct($id, $fechaCreacion, $fechaFin, $salario, $descripcion, $titulo)
+    public function __construct($id, $empresa, $fechaCreacion, $fechaFin, $salario, $descripcion, $titulo)
     {
         $this->id = $id;
+        $this->empresa = $empresa;
         $this->fechaCreacion = $fechaCreacion;
         $this->fechaFin = $fechaFin;
         $this->salario = $salario;

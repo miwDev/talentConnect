@@ -4,6 +4,10 @@ namespace App\core\data;
 
 use App\core\model\Ciclo;
 
+use PDO;
+use PDOException;
+use Exception;
+
 class CicloRepo implements RepoInterface
 {
     // CREATE

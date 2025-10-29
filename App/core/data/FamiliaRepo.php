@@ -2,6 +2,10 @@
 
 namespace App\core\data;
 
+use PDO;
+use PDOException;
+use Exception;
+
 use App\core\model\Familia;
 
 class FamiliaRepo implements RepoInterface

@@ -3,12 +3,13 @@
 namespace App\core\data;
 
 use App\core\model\Alumno;
-
+use PDO;
+use PDOException;
+use Exception;
 
 class AlumnoRepo implements RepoInterface
 {
     // CREATE
-
     public static function save($alumno)
     {
         $conn = DBC::getConnection();
@@ -17,11 +18,11 @@ class AlumnoRepo implements RepoInterface
         try {
             $conn->beginTransaction();
 
-            $queryUser = 'INSERT INTO USER (user_name, password, role_id)
+            $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
                       VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
-            $stmtUser->bindParam(':username', $alumno->username);
-            $stmtUser->bindParam(':pass', $alumno->pass);
+            $stmtUser->bindValue(':username', $alumno->username);
+            $stmtUser->bindValue(':pass', $alumno->pass);
             $stmtUser->bindValue(':role_id', 2);
             $stmtUser->execute();
 
@@ -32,15 +33,15 @@ class AlumnoRepo implements RepoInterface
                         (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
                         VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad)';
             $stmtAlumno = $conn->prepare($queryAlumno);
-            $stmtAlumno->bindParam(':nombre', $alumno->nombre);
-            $stmtAlumno->bindParam(':apellido', $alumno->apellido);
-            $stmtAlumno->bindParam(':telefono', $alumno->telefono);
-            $stmtAlumno->bindParam(':direccion', $alumno->direccion);
-            $stmtAlumno->bindParam(':foto', $alumno->foto);
-            $stmtAlumno->bindParam(':cv', $alumno->cv);
-            $stmtAlumno->bindParam(':user_id', $alumno->user_id);
-            $stmtAlumno->bindParam(':provincia', $alumno->provincia);
-            $stmtAlumno->bindParam(':localidad', $alumno->localidad);
+            $stmtAlumno->bindValue(':nombre', $alumno->nombre);
+            $stmtAlumno->bindValue(':apellido', $alumno->apellido);
+            $stmtAlumno->bindValue(':telefono', $alumno->telefono);
+            $stmtAlumno->bindValue(':direccion', $alumno->direccion);
+            $stmtAlumno->bindValue(':foto', $alumno->foto);
+            $stmtAlumno->bindValue(':cv', $alumno->cv);
+            $stmtAlumno->bindValue(':user_id', $alumno->user_id);
+            $stmtAlumno->bindValue(':provincia', $alumno->provincia);
+            $stmtAlumno->bindValue(':localidad', $alumno->localidad);
             $stmtAlumno->execute();
 
             $alumnoId = $conn->lastInsertId();
@@ -48,14 +49,12 @@ class AlumnoRepo implements RepoInterface
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollBack();
+            error_log("Error al guardar alumno: " . $e->getMessage());
             $alumnoId = false;
         }
 
         return $alumnoId;
     }
-
-
-
 
     // READ
     public static function findAll()
@@ -66,7 +65,7 @@ class AlumnoRepo implements RepoInterface
         $query = $conn->prepare(
             'SELECT a.id AS alumno_id,
                 u.user_name AS username,
-                u.password AS pass,
+                u.passwrd AS pass,
                 a.nombre AS nombre,
                 a.apellido AS ape,
                 a.telefono AS tel,
@@ -101,14 +100,13 @@ class AlumnoRepo implements RepoInterface
         return $alumnos;
     }
 
-
     public static function findById(int $id)
     {
         $conn = DBC::getConnection();
 
         $query = 'SELECT a.id as alumno_id,
                         u.user_name as username,
-                        u.password as pass,
+                        u.passwrd as pass,
                         a.nombre as nombre,
                         a.apellido as ape,
                         a.telefono as tel,
@@ -123,13 +121,12 @@ class AlumnoRepo implements RepoInterface
             WHERE a.id = :value';
 
         $stmt = $conn->prepare($query);
-        $stmt->bindParam(':value', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':value', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$resultado) {
-            // No se encontró ningún alumno con ese ID
             $alumno = null;
         } else {
             $alumno = new Alumno(
@@ -149,7 +146,6 @@ class AlumnoRepo implements RepoInterface
 
         return $alumno;
     }
-
 
     // UPDATE
     public static function updateById($alumno)
@@ -172,15 +168,15 @@ class AlumnoRepo implements RepoInterface
                             WHERE id = :id';
 
             $stmtAlumno = $conn->prepare($queryAlumno);
-            $stmtAlumno->bindParam(':nombre', $alumno->nombre);
-            $stmtAlumno->bindParam(':apellido', $alumno->apellido);
-            $stmtAlumno->bindParam(':telefono', $alumno->telefono);
-            $stmtAlumno->bindParam(':direccion', $alumno->direccion);
-            $stmtAlumno->bindParam(':foto', $alumno->foto);
-            $stmtAlumno->bindParam(':cv', $alumno->cv);
-            $stmtAlumno->bindParam(':provincia', $alumno->provincia);
-            $stmtAlumno->bindParam(':localidad', $alumno->localidad);
-            $stmtAlumno->bindParam(':id', $alumno->id);
+            $stmtAlumno->bindValue(':nombre', $alumno->nombre);
+            $stmtAlumno->bindValue(':apellido', $alumno->apellido);
+            $stmtAlumno->bindValue(':telefono', $alumno->telefono);
+            $stmtAlumno->bindValue(':direccion', $alumno->direccion);
+            $stmtAlumno->bindValue(':foto', $alumno->foto);
+            $stmtAlumno->bindValue(':cv', $alumno->cv);
+            $stmtAlumno->bindValue(':provincia', $alumno->provincia);
+            $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+            $stmtAlumno->bindValue(':id', $alumno->id);
             $stmtAlumno->execute();
 
             $queryUser = 'UPDATE USER
@@ -189,9 +185,9 @@ class AlumnoRepo implements RepoInterface
                     WHERE id = :user_id';
 
             $stmtUser = $conn->prepare($queryUser);
-            $stmtUser->bindParam(':username', $alumno->username);
-            $stmtUser->bindParam(':pass', $alumno->pass);
-            $stmtUser->bindParam(':user_id', $alumno->user_id);
+            $stmtUser->bindValue(':username', $alumno->username);
+            $stmtUser->bindValue(':pass', $alumno->pass);
+            $stmtUser->bindValue(':user_id', $alumno->user_id);
             $stmtUser->execute();
 
             $conn->commit();
@@ -206,7 +202,6 @@ class AlumnoRepo implements RepoInterface
         return $salida;
     }
 
-
     // DELETE
     public static function deleteById($alumno_id)
     {
@@ -217,13 +212,13 @@ class AlumnoRepo implements RepoInterface
             $conn->beginTransaction();
 
             $stmt = $conn->prepare('SELECT user_id FROM ALUMNO WHERE id = :alumno_id');
-            $stmt->bindParam(':alumno_id', $alumno_id);
+            $stmt->bindValue(':alumno_id', $alumno_id);
             $stmt->execute();
             $user_id = $stmt->fetchColumn();
 
             if ($user_id) {
                 $stmtUser = $conn->prepare('DELETE FROM USER WHERE id = :user_id');
-                $stmtUser->bindParam(':user_id', $user_id);
+                $stmtUser->bindValue(':user_id', $user_id);
                 $stmtUser->execute();
 
                 $conn->commit();

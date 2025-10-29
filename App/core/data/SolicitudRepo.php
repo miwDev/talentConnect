@@ -4,6 +4,10 @@ namespace App\core\data;
 
 use App\core\model\Solicitud;
 
+use PDO;
+use PDOException;
+use Exception;
+
 class solicitudRepo implements RepoInterface
 {
     // CREATE
