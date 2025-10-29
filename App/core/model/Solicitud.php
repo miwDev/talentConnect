@@ -2,16 +2,13 @@
 
 namespace App\core\model;
 
-class Alumno
+class Solicitud
 {
     private $id;
     private $fechaCreacion;
     private $alumno;
     private $oferta;
     private $finalizado; // borrador
-
-    // arrays
-    private $solicitudes = [];
 
     public function __construct($id, $fechaCreacion, $alumno, $oferta, $finalizado)
     {
