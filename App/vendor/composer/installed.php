@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'talent-connect/app',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '00aea4ca321ff03ddbb9acdebf18d09931d2a296',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -20,9 +20,9 @@
             'dev_requirement' => false,
         ),
         'talent-connect/app' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '00aea4ca321ff03ddbb9acdebf18d09931d2a296',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -1,3 +1,3 @@
 <?php
 
-namespace App\helper;
+namespace App\core\helper;
