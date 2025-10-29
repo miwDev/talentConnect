@@ -12,7 +12,7 @@ class AlumnoRepo implements RepoInterface
     public static function save($alumno)
     {
         $conn = DBC::getConnection();
-        $salida = false;
+        $alumnoId = false;
 
         try {
             $conn->beginTransaction();
@@ -26,6 +26,7 @@ class AlumnoRepo implements RepoInterface
             $stmtUser->execute();
 
             $userId = $conn->lastInsertId();
+            $alumno->user_id = $userId;
 
             $queryAlumno = 'INSERT INTO ALUMNO 
                         (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
@@ -37,20 +38,22 @@ class AlumnoRepo implements RepoInterface
             $stmtAlumno->bindParam(':direccion', $alumno->direccion);
             $stmtAlumno->bindParam(':foto', $alumno->foto);
             $stmtAlumno->bindParam(':cv', $alumno->cv);
-            $stmtAlumno->bindParam(':user_id', $userId);
+            $stmtAlumno->bindParam(':user_id', $alumno->user_id);
             $stmtAlumno->bindParam(':provincia', $alumno->provincia);
             $stmtAlumno->bindParam(':localidad', $alumno->localidad);
             $stmtAlumno->execute();
 
+            $alumnoId = $conn->lastInsertId();
+
             $conn->commit();
-            $salida = true;
         } catch (Exception $e) {
             $conn->rollBack();
-            $salida = false;
+            $alumnoId = false;
         }
 
-        return $salida;
+        return $alumnoId;
     }
+
 
 
 
