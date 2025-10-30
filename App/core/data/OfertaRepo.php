@@ -3,7 +3,6 @@
 namespace App\core\data;
 
 use App\core\model\Oferta;
-
 use PDO;
 use PDOException;
 use Exception;
@@ -23,20 +22,20 @@ class OfertaRepo implements RepoInterface
                            (empresa_id, fecha_fin_oferta, salario, descripcion, titulo)
                            VALUES (:empresa_id, :fecha_fin, :salario, :descripcion, :titulo)';
             $stmtOferta = $conn->prepare($queryOferta);
-            $stmtOferta->bindParam(':empresa_id', $oferta->empresa->id);
-            $stmtOferta->bindParam(':fecha_fin', $oferta->fechaFin); // #TODO YYYY-MM-DD
-            $stmtOferta->bindParam(':salario', $oferta->salario);
-            $stmtOferta->bindParam(':descripcion', $oferta->descripcion);
-            $stmtOferta->bindParam(':titulo', $oferta->titulo);
+            $stmtOferta->bindValue(':empresa_id', $oferta->empresa->id);
+            $stmtOferta->bindValue(':fecha_fin', $oferta->fechaFin); // #TODO YYYY-MM-DD
+            $stmtOferta->bindValue(':salario', $oferta->salario);
+            $stmtOferta->bindValue(':descripcion', $oferta->descripcion);
+            $stmtOferta->bindValue(':titulo', $oferta->titulo);
 
             $stmtOferta->execute();
 
             $ofertaId = $conn->lastInsertId();
 
             $conn->commit();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $conn->rollBack();
-            error_log("Error al insertar oferta$oferta: " . $e->getMessage());
+            error_log("Error al insertar oferta $oferta: " . $e->getMessage());
             $ofertaId = false;
         }
 
@@ -114,7 +113,7 @@ class OfertaRepo implements RepoInterface
          WHERE o.id = :id'
         );
 
-        $query->bindParam(':id', $id);
+        $query->bindValue(':id', $id);
         $query->execute();
 
         $res = $query->fetch(PDO::FETCH_ASSOC);
@@ -151,6 +150,7 @@ class OfertaRepo implements RepoInterface
         return $oferta;
     }
 
+    // UPDATE
     public static function updateById($oferta)
     {
         $conn = DBC::getConnection();
@@ -170,13 +170,13 @@ class OfertaRepo implements RepoInterface
              WHERE id = :id'
             );
 
-            $query->bindParam(':fecha_creacion', $oferta->fechaCreacion);
-            $query->bindParam(':fecha_fin', $oferta->fechaFin);
-            $query->bindParam(':salario', $oferta->salario);
-            $query->bindParam(':descripcion', $oferta->descripcion);
-            $query->bindParam(':titulo', $oferta->titulo);
-            $query->bindParam(':empresa_id', $oferta->empresa->id);
-            $query->bindParam(':id', $oferta->id);
+            $query->bindValue(':fecha_creacion', $oferta->fechaCreacion);
+            $query->bindValue(':fecha_fin', $oferta->fechaFin);
+            $query->bindValue(':salario', $oferta->salario);
+            $query->bindValue(':descripcion', $oferta->descripcion);
+            $query->bindValue(':titulo', $oferta->titulo);
+            $query->bindValue(':empresa_id', $oferta->empresa->id);
+            $query->bindValue(':id', $oferta->id);
 
             $query->execute();
 
@@ -191,6 +191,7 @@ class OfertaRepo implements RepoInterface
         return $salida;
     }
 
+    // DELETE
     public static function deleteById($id)
     {
         $conn = DBC::getConnection();
@@ -200,7 +201,7 @@ class OfertaRepo implements RepoInterface
             $conn->beginTransaction();
 
             $query = $conn->prepare('DELETE FROM OFERTA WHERE id = :id');
-            $query->bindParam(':id', $id);
+            $query->bindValue(':id', $id);
             $query->execute();
 
             $conn->commit();

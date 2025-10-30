@@ -17,55 +17,61 @@ require __DIR__ . '/../core/helper/Autoloader.php';
 
 // index.php
 
-use App\core\data\AlumnoRepo;
-use App\core\data\EmpresaRepo;
+use App\core\data\OfertaRepo;
+use App\core\data\SolicitudRepo;
 use App\core\model\Alumno;
 use App\core\model\Empresa;
+use App\core\model\Oferta;
+use App\core\model\Solicitud;
 
 // ===========================================
-// PRUEBA: GUARDAR UN ALUMNO
+// DATOS BASE: empresa y alumno existentes
 // ===========================================
 
-$alumno = new Alumno(
-    null,                 // id
-    'usuario_alumno',     // username
-    '1234',               // password
-    'Juan',               // nombre
-    'Pérez',              // apellido
-    '654321098',          // teléfono
-    'Calle Falsa 123',    // dirección
-    'foto.jpg',           // foto
-    'cv.pdf',             // cv
-    'Sevilla',            // provincia
-    'Dos Hermanas'        // localidad
+// Sustituye estos IDs por los que insertaste antes
+$empresa = new Empresa(1, null, null, 'TecnoSoft SL', null, null, null, null, null, null, null, 1);
+$alumno = new Alumno(2, null, null, 'Juan', 'Pérez', null, null, null, null, null, null);
+
+// ===========================================
+// 1️⃣ CREAR UNA OFERTA
+// ===========================================
+
+$oferta = new Oferta(
+    null,                // id
+    $empresa,            // empresa (objeto Empresa)
+    null,                // fecha_creacion (la pone la BD con CURRENT_DATE)
+    '2025-12-31',        // fecha_fin
+    25000,               // salario
+    'Desarrollo de software en PHP y JavaScript', // descripción
+    'Programador Junior' // título
 );
 
-$alumnoId = AlumnoRepo::save($alumno);
+$ofertaId = OfertaRepo::save($oferta);
 
-echo "<h2>Resultado SAVE Alumno:</h2>";
-var_dump($alumnoId);
+echo "<h2>Resultado SAVE Oferta:</h2>";
+var_dump($ofertaId);
 
 
 // ===========================================
-// PRUEBA: GUARDAR UNA EMPRESA
+// 2️⃣ CREAR UNA SOLICITUD A ESA OFERTA
 // ===========================================
 
-$empresa = new Empresa(
-    null,                 // id
-    'usuario_empresa',    // username
-    'abcd',               // password
-    'TecnoSoft SL',       // nombre
-    '955123456',          // teléfono
-    'Av. de la Innovación 45', // dirección
-    'Sevilla',            // provincia
-    'Mairena del Aljarafe', // localidad
-    'Laura Gómez',        // nombrePersona
-    '600987654',          // telPersona
-    'logo.png',           // logo
-    1                     // validacion (1 = validado, 0 = no)
-);
+if ($ofertaId) {
+    // Asignamos el ID devuelto a la oferta
+    $oferta->__set('id', $ofertaId);
 
-$empresaId = EmpresaRepo::save($empresa);
+    $solicitud = new Solicitud(
+        null,        // id
+        null,        // fecha_creacion (la pone la BD con CURRENT_DATE)
+        $alumno,     // alumno (objeto Alumno)
+        $oferta,     // oferta (objeto Oferta)
+        0        // finalizado (0 = no finalizado)
+    );
 
-echo "<h2>Resultado SAVE Empresa:</h2>";
-var_dump($empresaId);
+    $solicitudId = SolicitudRepo::save($solicitud);
+
+    echo "<h2>Resultado SAVE Solicitud:</h2>";
+    var_dump($solicitudId);
+} else {
+    echo "<p style='color:red'>❌ No se pudo crear la oferta. No se probará la solicitud.</p>";
+}

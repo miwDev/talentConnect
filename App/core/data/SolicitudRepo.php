@@ -23,9 +23,9 @@ class solicitudRepo implements RepoInterface
                            (alumno_id, oferta_id, finalizado)
                            VALUES (:alumno_id, :oferta_id, :finalizado)';
             $stmtSolicitud = $conn->prepare($querySolicitud);
-            $stmtSolicitud->bindParam(':alumno_id', $solicitud->alumno->id);
-            $stmtSolicitud->bindParam(':oferta_id', $solicitud->oferta->id);
-            $stmtSolicitud->bindParam(':finalizado', $solicitud->finalizado);
+            $stmtSolicitud->bindValue(':alumno_id', $solicitud->alumno->id);
+            $stmtSolicitud->bindValue(':oferta_id', $solicitud->oferta->id);
+            $stmtSolicitud->bindValue(':finalizado', $solicitud->finalizado);
 
             $stmtSolicitud->execute();
 
@@ -34,7 +34,7 @@ class solicitudRepo implements RepoInterface
             $conn->commit();
         } catch (\PDOException $e) {
             $conn->rollBack();
-            error_log("Error al insertar solicitud: " . $e->getMessage());
+            echo "<pre>Error al insertar solicitud: " . $e->getMessage() . "</pre>";
             $solicitudId = false;
         }
 
@@ -93,7 +93,7 @@ class solicitudRepo implements RepoInterface
                 $res['fecha_solicitud'],           // $fechaCreacion (pending CONVERTER)
                 $alumno,                           // $alumno
                 $oferta,                           // $oferta
-                $res['solicitud_finalizada'] // $finalizado
+                $res['solicitud_finalizada']       // $finalizado
             );
         }
 
@@ -119,7 +119,7 @@ class solicitudRepo implements RepoInterface
          WHERE s.id = :id'
         );
 
-        $stmt->bindParam(':id', $id);
+        $stmt->bindValue(':id', $id);
         $stmt->execute();
 
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -179,17 +179,17 @@ class solicitudRepo implements RepoInterface
              WHERE id = :id'
             );
 
-            $stmt->bindParam(':alumno_id', $solicitud->alumno->id);
-            $stmt->bindParam(':oferta_id', $solicitud->oferta->id);
-            $stmt->bindParam(':fecha_solicitud', $solicitud->fechaCreacion);
-            $stmt->bindParam(':finalizado', $solicitud->finalizado);
-            $stmt->bindParam(':id', $solicitud->id);
+            $stmt->bindValue(':alumno_id', $solicitud->alumno->id);
+            $stmt->bindValue(':oferta_id', $solicitud->oferta->id);
+            $stmt->bindValue(':fecha_solicitud', $solicitud->fechaCreacion);
+            $stmt->bindValue(':finalizado', $solicitud->finalizado);
+            $stmt->bindValue(':id', $solicitud->id);
 
             $stmt->execute();
 
             $conn->commit();
             $salida = true;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $conn->rollBack();
             error_log("Error al actualizar solicitud: " . $e->getMessage());
             $salida = false;
@@ -209,12 +209,12 @@ class solicitudRepo implements RepoInterface
             $conn->beginTransaction();
 
             $stmt = $conn->prepare('DELETE FROM SOLICITUD WHERE id = :id');
-            $stmt->bindParam(':id', $id);
+            $stmt->bindValue(':id', $id);
             $stmt->execute();
 
             $conn->commit();
             $salida = true;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             $conn->rollBack();
             error_log("Error al borrar solicitud: " . $e->getMessage());
             $salida = false;
