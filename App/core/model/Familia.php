@@ -2,7 +2,7 @@
 
 namespace App\core\model;
 
-class Ciclo
+class Familia
 {
     private $id;
     private $nombre;

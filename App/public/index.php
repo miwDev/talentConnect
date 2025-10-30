@@ -17,61 +17,45 @@ require __DIR__ . '/../core/helper/Autoloader.php';
 
 // index.php
 
-use App\core\data\OfertaRepo;
-use App\core\data\SolicitudRepo;
-use App\core\model\Alumno;
-use App\core\model\Empresa;
-use App\core\model\Oferta;
-use App\core\model\Solicitud;
+use App\core\data\FamiliaRepo;
+use App\core\data\CicloRepo;
+use App\core\model\Familia;
+use App\core\model\Ciclo;
 
 // ===========================================
-// DATOS BASE: empresa y alumno existentes
+// 3️⃣ CREAR UNA FAMILIA
 // ===========================================
-
-// Sustituye estos IDs por los que insertaste antes
-$empresa = new Empresa(1, null, null, 'TecnoSoft SL', null, null, null, null, null, null, null, 1);
-$alumno = new Alumno(2, null, null, 'Juan', 'Pérez', null, null, null, null, null, null);
-
-// ===========================================
-// 1️⃣ CREAR UNA OFERTA
-// ===========================================
-
-$oferta = new Oferta(
-    null,                // id
-    $empresa,            // empresa (objeto Empresa)
-    null,                // fecha_creacion (la pone la BD con CURRENT_DATE)
-    '2025-12-31',        // fecha_fin
-    25000,               // salario
-    'Desarrollo de software en PHP y JavaScript', // descripción
-    'Programador Junior' // título
+$familia = new Familia(
+    null,         // id
+    'Informática' // nombre
 );
 
-$ofertaId = OfertaRepo::save($oferta);
+$familiaId = FamiliaRepo::save($familia);
 
-echo "<h2>Resultado SAVE Oferta:</h2>";
-var_dump($ofertaId);
+echo "<h2>Resultado SAVE Familia:</h2>";
+var_dump($familiaId);
 
+if ($familiaId) {
+    $familia->__set('id', $familiaId);
 
-// ===========================================
-// 2️⃣ CREAR UNA SOLICITUD A ESA OFERTA
-// ===========================================
+    // ===========================================
+    // 4️⃣ CREAR CICLOS ASOCIADOS A ESA FAMILIA
+    // ===========================================
 
-if ($ofertaId) {
-    // Asignamos el ID devuelto a la oferta
-    $oferta->__set('id', $ofertaId);
+    $ciclos = [
+        new Ciclo(null, 'Desarrollo de Aplicaciones Web', 'medio', $familia),
+        new Ciclo(null, 'Administración de Sistemas', 'superior', $familia),
+        new Ciclo(null, 'Ciberseguridad', 'especializacion', $familia)
+    ];
 
-    $solicitud = new Solicitud(
-        null,        // id
-        null,        // fecha_creacion (la pone la BD con CURRENT_DATE)
-        $alumno,     // alumno (objeto Alumno)
-        $oferta,     // oferta (objeto Oferta)
-        0        // finalizado (0 = no finalizado)
-    );
-
-    $solicitudId = SolicitudRepo::save($solicitud);
-
-    echo "<h2>Resultado SAVE Solicitud:</h2>";
-    var_dump($solicitudId);
+    foreach ($ciclos as $ciclo) {
+        $cicloId = CicloRepo::save($ciclo);
+        echo "<h3>Resultado SAVE Ciclo '{$ciclo->__get('nombre')}':</h3>";
+        var_dump($cicloId);
+        if ($cicloId) {
+            $ciclo->__set('id', $cicloId);
+        }
+    }
 } else {
-    echo "<p style='color:red'>❌ No se pudo crear la oferta. No se probará la solicitud.</p>";
+    echo "<p style='color:red'>❌ No se pudo crear la familia. No se crearán ciclos.</p>";
 }
