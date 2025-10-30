@@ -3,7 +3,6 @@
 namespace App\core\data;
 
 use App\core\model\Empresa;
-
 use PDO;
 use PDOException;
 use Exception;
@@ -19,32 +18,31 @@ class EmpresaRepo implements RepoInterface
         try {
             $conn->beginTransaction();
 
-            $queryUser = 'INSERT INTO USER (user_name, password, role_id)
+            $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
                           VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
-            $stmtUser->bindParam(':username', $empresa->username);
-            $stmtUser->bindParam(':pass', $empresa->password);
+            $stmtUser->bindValue(':username', $empresa->username);
+            $stmtUser->bindValue(':pass', $empresa->password);
             $stmtUser->bindValue(':role_id', 3);
             $stmtUser->execute();
 
             $userId = $conn->lastInsertId();
-            $empresa->user_id = $userId;
 
             $queryEmpresa = 'INSERT INTO EMPRESA 
-                                (nomb, telef, direccion, nombre_pers, tel_pers, logo, user_id, validacion, provincia, localidad)
+                                (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad)
                              VALUES 
                                 (:nomb, :telef, :direccion, :nom_pers, :telf_pers, :logo, :user_id, :validacion, :provincia, :localidad)';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
-            $stmtEmpresa->bindParam(':nomb', $empresa->nombre);
-            $stmtEmpresa->bindParam(':telef', $empresa->telefono);
-            $stmtEmpresa->bindParam(':direccion', $empresa->direccion);
-            $stmtEmpresa->bindParam(':nom_pers', $empresa->nombrePersona);
-            $stmtEmpresa->bindParam(':telf_pers', $empresa->telPersona);
-            $stmtEmpresa->bindParam(':logo', $empresa->logo);
-            $stmtEmpresa->bindParam(':user_id', $empresa->user_id);
-            $stmtEmpresa->bindParam(':provincia', $empresa->provincia);
-            $stmtEmpresa->bindParam(':localidad', $empresa->localidad);
-            $stmtEmpresa->bindParam(':validacion', $empresa->validacion);
+            $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
+            $stmtEmpresa->bindValue(':telef', $empresa->telefono);
+            $stmtEmpresa->bindValue(':direccion', $empresa->direccion);
+            $stmtEmpresa->bindValue(':nom_pers', $empresa->nombrePersona);
+            $stmtEmpresa->bindValue(':telf_pers', $empresa->telPersona);
+            $stmtEmpresa->bindValue(':logo', $empresa->logo);
+            $stmtEmpresa->bindValue(':user_id', $userId);
+            $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
+            $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
+            $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
             $stmtEmpresa->execute();
 
             $empresaId = $conn->lastInsertId();
@@ -66,12 +64,12 @@ class EmpresaRepo implements RepoInterface
         $query = $conn->prepare(
             'SELECT e.id AS empresa_id,
                     u.user_name AS username,
-                    u.password AS pass,
-                    e.nomb AS nombre,
-                    e.telef AS telefono,
+                    u.passwrd AS pass,
+                    e.nombre AS nombre,
+                    e.telefono AS telefono,
                     e.direccion AS direccion,
-                    e.nombre_pers AS nombrePersona,
-                    e.tel_pers AS telPersona,
+                    e.nombre_persona AS nombrePersona,
+                    e.telefono_persona AS telPersona,
                     e.logo AS logo,
                     e.validacion AS validacion,
                     e.provincia AS provincia,
@@ -110,11 +108,11 @@ class EmpresaRepo implements RepoInterface
         $query = 'SELECT e.id AS empresa_id,
                          u.user_name AS username,
                          u.password AS pass,
-                         e.nomb AS nombre,
-                         e.telef AS telefono,
+                         e.nombre AS nombre,
+                         e.telefono AS telefono,
                          e.direccion AS direccion,
-                         e.nombre_pers AS nombrePersona,
-                         e.tel_pers AS telPersona,
+                         e.nombre_persona AS nombrePersona,
+                         e.telefono_persona AS telPersona,
                          e.logo AS logo,
                          e.validacion AS validacion,
                          e.provincia AS provincia,
@@ -124,7 +122,7 @@ class EmpresaRepo implements RepoInterface
                   WHERE e.id = :id';
 
         $stmt = $conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -159,37 +157,37 @@ class EmpresaRepo implements RepoInterface
             $conn->beginTransaction();
 
             $queryEmpresa = 'UPDATE EMPRESA
-                             SET nomb = :nomb,
-                                 telef = :telef,
+                             SET nombre = :nomb,
+                                 telefono = :telef,
                                  direccion = :direccion,
-                                 nombre_pers = :nom_pers,
-                                 tel_pers = :telf_pers,
+                                 nombre_persona = :nom_pers,
+                                 telefono_persona = :telf_pers,
                                  logo = :logo,
                                  validacion = :validacion,
                                  provincia = :provincia,
                                  localidad = :localidad
                              WHERE id = :id';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
-            $stmtEmpresa->bindParam(':nomb', $empresa->nombre);
-            $stmtEmpresa->bindParam(':telef', $empresa->telefono);
-            $stmtEmpresa->bindParam(':direccion', $empresa->direccion);
-            $stmtEmpresa->bindParam(':nom_pers', $empresa->nombrePersona);
-            $stmtEmpresa->bindParam(':telf_pers', $empresa->telPersona);
-            $stmtEmpresa->bindParam(':logo', $empresa->logo);
-            $stmtEmpresa->bindParam(':validacion', $empresa->validacion);
-            $stmtEmpresa->bindParam(':provincia', $empresa->provincia);
-            $stmtEmpresa->bindParam(':localidad', $empresa->localidad);
-            $stmtEmpresa->bindParam(':id', $empresa->id);
+            $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
+            $stmtEmpresa->bindValue(':telef', $empresa->telefono);
+            $stmtEmpresa->bindValue(':direccion', $empresa->direccion);
+            $stmtEmpresa->bindValue(':nom_pers', $empresa->nombrePersona);
+            $stmtEmpresa->bindValue(':telf_pers', $empresa->telPersona);
+            $stmtEmpresa->bindValue(':logo', $empresa->logo);
+            $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
+            $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
+            $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
+            $stmtEmpresa->bindValue(':id', $empresa->id);
             $stmtEmpresa->execute();
 
             $queryUser = 'UPDATE USER
                           SET user_name = :username,
-                              password = :pass
+                              passwrd = :pass
                           WHERE id = :user_id';
             $stmtUser = $conn->prepare($queryUser);
-            $stmtUser->bindParam(':username', $empresa->username);
-            $stmtUser->bindParam(':pass', $empresa->password);
-            $stmtUser->bindParam(':user_id', $empresa->user_id);
+            $stmtUser->bindValue(':username', $empresa->username);
+            $stmtUser->bindValue(':pass', $empresa->password);
+            $stmtUser->bindValue(':user_id', $empresa->user_id);
             $stmtUser->execute();
 
             $conn->commit();
@@ -212,13 +210,13 @@ class EmpresaRepo implements RepoInterface
             $conn->beginTransaction();
 
             $stmt = $conn->prepare('SELECT user_id FROM EMPRESA WHERE id = :empresa_id');
-            $stmt->bindParam(':empresa_id', $empresa_id);
+            $stmt->bindValue(':empresa_id', $empresa_id);
             $stmt->execute();
             $user_id = $stmt->fetchColumn();
 
             if ($user_id) {
                 $stmtUser = $conn->prepare('DELETE FROM USER WHERE id = :user_id');
-                $stmtUser->bindParam(':user_id', $user_id);
+                $stmtUser->bindValue(':user_id', $user_id);
                 $stmtUser->execute();
 
                 $conn->commit();

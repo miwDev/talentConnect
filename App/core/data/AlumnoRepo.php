@@ -27,7 +27,6 @@ class AlumnoRepo implements RepoInterface
             $stmtUser->execute();
 
             $userId = $conn->lastInsertId();
-            $alumno->user_id = $userId;
 
             $queryAlumno = 'INSERT INTO ALUMNO 
                         (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
@@ -39,7 +38,7 @@ class AlumnoRepo implements RepoInterface
             $stmtAlumno->bindValue(':direccion', $alumno->direccion);
             $stmtAlumno->bindValue(':foto', $alumno->foto);
             $stmtAlumno->bindValue(':cv', $alumno->cv);
-            $stmtAlumno->bindValue(':user_id', $alumno->user_id);
+            $stmtAlumno->bindValue(':user_id', $userId);
             $stmtAlumno->bindValue(':provincia', $alumno->provincia);
             $stmtAlumno->bindValue(':localidad', $alumno->localidad);
             $stmtAlumno->execute();
