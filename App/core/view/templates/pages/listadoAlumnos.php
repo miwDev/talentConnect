@@ -12,6 +12,7 @@ $this->layout('layout/layout', [
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
+<script src="/assets/js/elements.js"></script>
 <script src="/assets/js/listaAlumnoLogic.js"></script>
 <?php $this->stop() ?>
 
@@ -37,7 +38,7 @@ $this->layout('layout/layout', [
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Email</th>
-                    <th class="actions-column hidden">Acciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>

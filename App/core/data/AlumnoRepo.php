@@ -22,7 +22,7 @@ class AlumnoRepo implements RepoInterface
                       VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $alumno->username);
-            $stmtUser->bindValue(':pass', $alumno->pass);
+            $stmtUser->bindValue(':pass', $alumno->password);
             $stmtUser->bindValue(':role_id', 2);
             $stmtUser->execute();
 
@@ -181,7 +181,7 @@ class AlumnoRepo implements RepoInterface
 
             $queryUser = 'UPDATE USER
                     SET user_name = :username,
-                        password = :pass
+                        passwrd = :pass
                     WHERE id = :user_id';
 
             $stmtUser = $conn->prepare($queryUser);

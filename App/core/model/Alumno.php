@@ -15,6 +15,7 @@ class Alumno
     private $direccion;
     private $foto;
     private $cv;
+    private $user_id;
 
     // arrays
 

@@ -1,7 +1,6 @@
 .list-container {
     background-color: #ffffff;
     border: 2px solid #2A63B4;
-    border-radius: 16px;
     padding: 30px;
     margin: 40px auto;
     max-width: 1200px;
@@ -36,7 +35,6 @@ h1 {
 .search-section input[type="text"] {
     padding: 12px 18px;
     border: 2px solid #e2e8f0;
-    border-radius: 8px;
     font-family: 'Geist Sans', sans-serif;
     flex: 1;
     font-size: 1em;
@@ -53,7 +51,6 @@ h1 {
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 8px;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
     font-weight: 500;
@@ -78,7 +75,6 @@ h1 {
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 8px;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
     font-weight: 500;
@@ -154,7 +150,6 @@ tbody td {
 .action-btn {
     padding: 8px 16px;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
     font-size: 0.85em;
@@ -191,45 +186,154 @@ tbody tr:nth-child(even):hover {
     background: #f1f5f9;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .list-container {
-        margin: 20px;
-        padding: 20px;
-    }
-    
-    h1 {
-        font-size: 2em;
-    }
-    
-    .search-section {
-        max-width: 100%;
-        flex-direction: column;
-    }
-    
-    .search-section input[type="text"] {
-        width: 100%;
-    }
-    
-    .search-btn {
-        width: 100%;
-    }
-    
-    thead th, tbody td {
-        padding: 12px 15px;
-    }
-    
-    .actions-column {
-        width: 120px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .action-btn {
-        padding: 6px 12px;
-        font-size: 0.8em;
-    }
+/* ESTILO MODAL */
+
+.velo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(200, 200, 200, .7);
+    z-index: 1005;
+}
+
+.modal {
+    position: fixed;
+    border: 2px solid #2A63B4;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 60%;
+    background: white;
+    z-index: 1006;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    box-sizing: border-box;;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilos para el formulario de registro dentro del modal */
+.modal h2 {
+    color: #2A63B4;
+    font-family: 'Geist Sans', sans-serif;
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+#registroForm {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex: 1;
+    justify-content: center;
+}
+
+/* Estilos para los campos del formulario */
+#registroForm div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#registroForm label {
+    font-family: 'Geist Sans', sans-serif;
+    font-weight: 500;
+    color: #333;
+    font-size: 1em;
+}
+
+#registroForm input[type="text"],
+#registroForm input[type="email"] {
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#registroForm input[type="text"]:focus,
+#registroForm input[type="email"]:focus {
+    outline: none;
+    border-color: #2A63B4;
+    box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Estilo para el botón Registrar */
+#btnRegistrar {
+    padding: 18px 30px;
+    background: #2A63B4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+#btnRegistrar:hover {
+    background: #1e4a8a;
+    transform: translateY(-2px);
+}
+
+/* Estilos para los botones del modal de edición */
+#btnConfirmar {
+    padding: 15px 25px;
+    background: #059669;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+#btnConfirmar:hover {
+    background: #047857;
+    transform: translateY(-2px);
+}
+
+#btnCancelar {
+    padding: 15px 25px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+#btnCancelar:hover {
+    background: #b91c1c;
+    transform: translateY(-2px);
+}
+
+/* Contenedor para los botones en el formulario de edición */
+.button-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Labels del formulario */
+#registroForm label {
+    font-family: 'Geist Sans', sans-serif;
+    font-weight: 500;
+    color: #333;
+    font-size: 1em;
+    margin-bottom: 5px;
 }

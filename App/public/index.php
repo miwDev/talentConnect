@@ -1,6 +1,8 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../core/helper/Autoloader.php';
+
 
 $templatesPath = __DIR__ . '/../core/view/templates';
 
