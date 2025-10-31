@@ -16,8 +16,10 @@
     <header>
         <div class="header-banner" id="hBanner">
             <div id="logo">
-                <img id="logo" src="/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
-                <p>TALENT </br> CONNECT</p>
+                <a href="?menu=home">
+                    <img id="logo" src="/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
+                    <p>TALENT </br> CONNECT</p>
+                </a>
             </div>
             <div id="nav-and-user">
                 <div id="nav">

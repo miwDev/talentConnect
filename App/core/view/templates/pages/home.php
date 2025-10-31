@@ -2,9 +2,8 @@
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Inicio',
     'navItems' => [
-        '<a href="#" class="menu-enlace">HOME</a>',
-        '<a href="/login" class="menu-enlace">SIGN IN</a>',
-        '<a href="/register" class="menu-enlace">SIGN UP</a>'
+        '<a href="?menu=login" class="menu-enlace">SIGN IN</a>',
+        '<a href="?menu=alumnos" class="menu-enlace">SIGN UP</a>'
     ]
 ]);
 ?>

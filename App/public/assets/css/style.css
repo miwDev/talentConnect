@@ -102,6 +102,16 @@ header {
     font-weight: 650;
 }
 
+#logo a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    padding: 0.3em;
+    text-decoration: none;
+    color: inherit;
+}
+
 #nav-and-user {
     display: flex;
     align-items: center;
