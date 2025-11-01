@@ -21,8 +21,10 @@ switch ($method) {
     case 'POST':
         break;
     case 'PUT':
+        editAlumno($body_content);
         break;
     case 'DELETE':
+        deleteAlumno($body_content);
         break;
     default:
         http_response_code(405);
@@ -39,3 +41,28 @@ function getFullList()
 }
 
 function getSizedList() {}
+
+function deleteAlumno($body)
+{
+    $data = json_decode($body, true);
+    $id = $data['id'];
+    if (AlumnoRepo::deleteById($id)) {
+        http_response_code(200);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false]);
+    };
+}
+
+function editAlumno($body)
+{
+    $data = json_decode($body, true);
+    if (AlumnoRepo::updateDTO($data)) {
+        http_response_code(200);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false]);
+    }
+}

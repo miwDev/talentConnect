@@ -21,7 +21,6 @@ window.addEventListener("load", function(){
             for(let i = 0; i < size; i++){
             let fila = document.createElement("tr");
             
-            // Columnas de datos
             let c1 = document.createElement("td");
             let c2 = document.createElement("td");
             let c3 = document.createElement("td");
@@ -30,47 +29,61 @@ window.addEventListener("load", function(){
             
             c1.innerHTML = json[i].id;
             c2.innerHTML = json[i].nombre;
-            c3.innerHTML = json[i].apellidos;
+            c3.innerHTML = json[i].apellido;
             c4.innerHTML = json[i].email;
             
-            // Crear contenedor para los botones
+
             let buttonContainer = document.createElement("div");
             buttonContainer.className = "action-buttons";
             
-            // Botón Editar
+
             let editBtn = document.createElement("button");
-            editBtn.innerHTML = "E";
+            editBtn.innerHTML = "EDIT";
             editBtn.className = "action-btn edit-btn";
             
-            // Botón Eliminar
+
             let deleteBtn = document.createElement("button");
-            deleteBtn.innerHTML = "X";
+            deleteBtn.innerHTML = "DELETE";
             deleteBtn.className = "action-btn delete-btn";
 
             deleteBtn.addEventListener("click", (function(rowToDelete) {
 
-                // falta logica de actualizado en la api
                 return function() {
-                    tbody.removeChild(rowToDelete);
-                }
+                const c1Content = rowToDelete.cells[0].textContent;
+                
+                fetch('/API/ApiAlumno.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: c1Content })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        tbody.removeChild(rowToDelete);
+                    }else{
+                        alert("Error de borrado");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
             })(fila));
 
-             editBtn.addEventListener("click", (function(rowToDelete) {
+             editBtn.addEventListener("click", (function(rowToEdit) {
                 return function() {
                     crearModal();
                     const modalContent = document.getElementById("modalContent");
-
-                    // Título del modal
                     const titulo = document.createElement("h2");
                     titulo.textContent = "Editar Usuario";
-
-                    // Crear formulario
-                    const form = document.createElement("form");
-                    form.id = "registroForm";
                     
-                    // Función para crear campos
+                    const form = document.createElement("form");
+                    form.id = "editForm";
+                    
                     function crearCampo(labelText, inputType, inputId, required = true) {
                         const div = document.createElement("div");
+                        div.className = "form-field";
+                        
                         const label = document.createElement("label");
                         label.textContent = labelText;
                         label.htmlFor = inputId;
@@ -81,46 +94,92 @@ window.addEventListener("load", function(){
                         input.name = inputId;
                         input.required = required;
                         
+                        const errorDiv = document.createElement("div");
+                        errorDiv.className = "error-message";
+                        errorDiv.id = `error-${inputId}`;
+                        
                         div.appendChild(label);
                         div.appendChild(input);
+                        div.appendChild(errorDiv);
+                        
                         return div;
                     }
+                    
 
-                    // Crear campos del formulario
+                    const formGrid = document.createElement("div");
+                    formGrid.className = "form-grid";
+                    
                     const divNombre = crearCampo("Nombre:", "text", "nombre");
                     const divApellido = crearCampo("Apellido:", "text", "apellido");
                     const divEmail = crearCampo("Email:", "email", "email");
 
-                    // Botón Guardar y cancelar
+                    divNombre.children[1].value = rowToEdit.cells[1].textContent;
+                    divApellido.children[1].value = rowToEdit.cells[2].textContent;
+                    divEmail.children[1].value = rowToEdit.cells[3].textContent;
+                    
+
+                    formGrid.appendChild(divNombre);
+                    formGrid.appendChild(divApellido);
+                    formGrid.appendChild(divEmail);
+                    
+
+                    const buttonContainer = document.createElement("div");
+                    buttonContainer.className = "button-container";
+                    
                     const btnConfirmar = document.createElement("button");
                     btnConfirmar.type = "submit";
-                    btnConfirmar.textContent = "confirmar";
+                    btnConfirmar.textContent = "Confirmar";
                     btnConfirmar.id = "btnConfirmar";
+                    
+                    
+                    buttonContainer.appendChild(btnConfirmar);
+                    
 
-                    const btnCancelar = document.createElement("button");
-                    btnCancelar.type = "submit";
-                    btnCancelar.textContent = "cancelar";
-                    btnCancelar.id = "btnCancelar";
-
-                    // Agregar elementos al formulario
-                    form.appendChild(divNombre);
-                    form.appendChild(divApellido);
-                    form.appendChild(divEmail);
-                    form.appendChild(btnConfirmar);
-                    form.appendChild(btnCancelar);
-
-                    // Agregar al modal
+                    form.appendChild(formGrid);
+                    form.appendChild(buttonContainer);
+                    
                     modalContent.appendChild(titulo);
                     modalContent.appendChild(form);
+                    
 
+                    form.addEventListener("submit", function(e) {
+                        e.preventDefault();
+                        let nom = document.getElementById("nombre");
+                        let ape = document.getElementById("apellido");
+                        let email = document.getElementById("email");
+
+                        fetch('/API/ApiAlumno.php', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: rowToEdit.cells[0].textContent,
+                                                    nombre: nom.value,
+                                                    apellido: ape.value,
+                                                    email: email.value
+                                                    })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                rowToEdit.cells[1].textContent = nom.value;
+                                rowToEdit.cells[2].textContent = ape.value;
+                                rowToEdit.cells[3].textContent = email.value;
+
+                                window.cerrarModal();
+                            }else{
+                                alert("Error de edicion");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    });
                 };
             })(fila));
             
-            // Añadir botones al contenedor
+
             buttonContainer.appendChild(deleteBtn);
             buttonContainer.appendChild(editBtn);
             
-            // Añadir contenedor a la celda
             c5.appendChild(buttonContainer);
             
             fila.appendChild(c1);
@@ -132,22 +191,21 @@ window.addEventListener("load", function(){
             tbody.appendChild(fila);
         }
 
-        // Botón añadir alumno (funcionalidad original)
+
+
         btnAdd.addEventListener("click", function(){
         crearModal();
         const modalContent = document.getElementById("modalContent");
-
-        // Título del modal
         const titulo = document.createElement("h2");
         titulo.textContent = "Registro de Usuario";
-
-        // Crear formulario
+        
         const form = document.createElement("form");
         form.id = "registroForm";
         
-        // Función para crear campos
-        function crearCampo(labelText, inputType, inputId, required = true) {
+        function crearCampo(labelText, inputType, inputId, required = false) {
             const div = document.createElement("div");
+            div.className = "form-field";
+            
             const label = document.createElement("label");
             label.textContent = labelText;
             label.htmlFor = inputId;
@@ -158,36 +216,59 @@ window.addEventListener("load", function(){
             input.name = inputId;
             input.required = required;
             
+
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "error-message";
+            errorDiv.id = `error-${inputId}`;
+            
             div.appendChild(label);
             div.appendChild(input);
+            div.appendChild(errorDiv);
+            
             return div;
         }
+        
 
-        // Crear campos del formulario
-        const divNombre = crearCampo("Nombre:", "text", "nombre");
-        const divApellido = crearCampo("Apellido:", "text", "apellido");
-        const divEmail = crearCampo("Email:", "email", "email");
+        const formGrid = document.createElement("div");
+        formGrid.className = "form-grid";
+        
+        const divNombre = crearCampo("Nombre:", "text", "nombre", true);
+        const divApellido = crearCampo("Apellido:", "text", "apellido", true);
+        const divEmail = crearCampo("Email:", "email", "email", true);
+        const divTelefono = crearCampo("Teléfono:", "tel", "telefono", true);
+        const divProvincia = crearCampo("Provincia:", "text", "provincia");
+        const divLocalidad = crearCampo("Localidad:", "text", "localidad");
+        const divDireccion = crearCampo("Dirección:", "text", "direccion");
+        
 
-        // Botón Registrar
         const btnRegistrar = document.createElement("button");
         btnRegistrar.type = "submit";
         btnRegistrar.textContent = "Registrar Usuario";
         btnRegistrar.id = "btnRegistrar";
+        
 
-        // Agregar elementos al formulario
-        form.appendChild(divNombre);
-        form.appendChild(divApellido);
-        form.appendChild(divEmail);
+        formGrid.appendChild(divNombre);
+        formGrid.appendChild(divApellido);
+        formGrid.appendChild(divEmail);
+        formGrid.appendChild(divTelefono);
+        formGrid.appendChild(divProvincia);
+        formGrid.appendChild(divLocalidad);
+        formGrid.appendChild(divDireccion);
+        
+
+        form.appendChild(formGrid);
         form.appendChild(btnRegistrar);
+        
 
-        // Agregar al modal
         modalContent.appendChild(titulo);
         modalContent.appendChild(form);
+        
 
-        // Event listener
         form.addEventListener("submit", function(e) {
-            
+            e.preventDefault();
             console.log("Formulario enviado");
+            
+            // document.getElementById("error-nombre").textContent = "El nombre es requerido";
         });
     });
     }

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->e($title) ?></title>
+    <link rel="icon" type="image/png" href="/public/assets/images/logoDark.png" />
     <link rel="stylesheet" href="https://geistfont.vercel.app/geist.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
 

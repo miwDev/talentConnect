@@ -61,7 +61,6 @@ h1 {
 
 .search-btn:hover {
     background: #1e4a8a;
-    transform: translateY(-1px);
 }
 
 .add-button-container {
@@ -84,7 +83,6 @@ h1 {
 
 #add:hover {
     background: #047857;
-    transform: translateY(-2px);
 }
 
 .table-container {
@@ -117,11 +115,6 @@ thead th {
     width: 150px;
 }
 
-/* Clase para ocultar la columna de acciones */
-.hidden {
-    display: none;
-}
-
 tbody tr {
     border-bottom: 1px solid #f1f5f9;
 }
@@ -135,11 +128,6 @@ tbody td {
     color: #4a5568;
     font-size: 0.95em;
     vertical-align: middle;
-}
-
-/* Clase para ocultar las celdas de acciones */
-.action-cell {
-    display: none;
 }
 
 .action-buttons {
@@ -165,7 +153,6 @@ tbody td {
 
 .edit-btn:hover {
     background: #1e4a8a;
-    transform: translateY(-1px);
 }
 
 .delete-btn {
@@ -175,7 +162,6 @@ tbody td {
 
 .delete-btn:hover {
     background: #b91c1c;
-    transform: translateY(-1px);
 }
 
 tbody tr:nth-child(even) {
@@ -204,8 +190,8 @@ tbody tr:nth-child(even):hover {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
-    height: 60%;
+    width: 65%;
+    height: 75%;
     background: white;
     z-index: 1006;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -215,125 +201,167 @@ tbody tr:nth-child(even):hover {
     flex-direction: column;
 }
 
-/* Estilos para el formulario de registro dentro del modal */
-.modal h2 {
+/* CONTENIDO MODAL DE REGISTRO DE ALUMNO(ADMIN)*/
+/* Modal Content */
+#modalContent h2 {
     color: #2A63B4;
     font-family: 'Geist Sans', sans-serif;
-    margin-bottom: 40px;
-    text-align: center;
-    font-size: 2em;
+    font-size: 1.8em;
+    margin: 0 0 30px 0;
     font-weight: 600;
+    text-align: center;
 }
 
 #registroForm {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     flex: 1;
-    justify-content: center;
 }
 
-/* Estilos para los campos del formulario */
-#registroForm div {
+/* Contenedor de campos en cuadrícula */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Cada campo individual */
+#registroForm .form-field {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 #registroForm label {
     font-family: 'Geist Sans', sans-serif;
+    font-size: 0.95em;
+    color: #4a5568;
     font-weight: 500;
-    color: #333;
-    font-size: 1em;
+    margin-bottom: 2px;
 }
 
-#registroForm input[type="text"],
-#registroForm input[type="email"] {
-    padding: 15px;
-    border: 2px solid #e1e5e9;
+#registroForm input {
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
     font-family: 'Geist Sans', sans-serif;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.2s ease;
 }
 
-#registroForm input[type="text"]:focus,
-#registroForm input[type="email"]:focus {
+#registroForm input:focus {
     outline: none;
     border-color: #2A63B4;
     box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
-    transform: translateY(-2px);
 }
 
-/* Estilo para el botón Registrar */
+/* Espacio reservado para errores */
+.error-message {
+    min-height: 20px;
+    font-size: 0.85em;
+    color: #dc2626;
+    font-family: 'Geist Sans', sans-serif;
+    margin-top: 4px;
+}
+
+/* Botón registrar */
 #btnRegistrar {
-    padding: 18px 30px;
     background: #2A63B4;
     color: white;
     border: none;
+    padding: 14px 24px;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 20px;
+    font-weight: 500;
+    font-size: 1em;
+    margin-top: auto;
     transition: all 0.3s ease;
 }
 
 #btnRegistrar:hover {
     background: #1e4a8a;
-    transform: translateY(-2px);
 }
 
-/* Estilos para los botones del modal de edición */
-#btnConfirmar {
-    padding: 15px 25px;
-    background: #059669;
-    color: white;
+/* CONTENT MODAL DE EDICION*/
+
+#editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+#editForm .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#editForm label {
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 0.95em;
+    color: #4a5568;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+#editForm input {
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    font-family: 'Geist Sans', sans-serif;
+    font-size: 1em;
+    transition: border-color 0.2s ease;
+}
+
+#editForm input:focus {
+    outline: none;
+    border-color: #2A63B4;
+    box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
+}
+
+#editForm .form-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#editForm .form-grid > div:last-child {
+    grid-column: 1 / -1;
+}
+
+/* Contenedor de botones */
+.button-container {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.button-container button {
+    flex: 1;
+    padding: 14px 24px;
     border: none;
     cursor: pointer;
     font-family: 'Geist Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 1em;
     transition: all 0.3s ease;
-    flex: 1;
+}
+
+#btnConfirmar {
+    background: #2A63B4;
+    color: white;
 }
 
 #btnConfirmar:hover {
-    background: #047857;
-    transform: translateY(-2px);
+    background: green;
 }
 
 #btnCancelar {
-    padding: 15px 25px;
-    background: #dc2626;
+    background: #2A63B4;
     color: white;
-    border: none;
-    cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    flex: 1;
 }
 
 #btnCancelar:hover {
-    background: #b91c1c;
-    transform: translateY(-2px);
-}
-
-/* Contenedor para los botones en el formulario de edición */
-.button-container {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-/* Labels del formulario */
-#registroForm label {
-    font-family: 'Geist Sans', sans-serif;
-    font-weight: 500;
-    color: #333;
-    font-size: 1em;
-    margin-bottom: 5px;
+    background: tomato;
 }

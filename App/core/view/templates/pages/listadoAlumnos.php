@@ -27,6 +27,10 @@ $this->layout('layout/layout', [
     </div>
 
     <div class="add-button-container">
+        <input type="button" id="add" value="Carga Masiva">
+    </div>
+
+    <div class="add-button-container">
         <input type="button" id="add" value="Añadir alumno">
     </div>
 
