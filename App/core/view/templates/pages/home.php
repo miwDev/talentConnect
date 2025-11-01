@@ -3,7 +3,7 @@ $this->layout('layout/layout', [
     'title' => 'Talent Connect - Inicio',
     'navItems' => [
         '<a href="?menu=login" class="menu-enlace">SIGN IN</a>',
-        '<a href="?menu=alumnos" class="menu-enlace">SIGN UP</a>'
+        '<a href="?menu=regRedirect" class="menu-enlace">SIGN UP</a>'
     ]
 ]);
 ?>
@@ -57,14 +57,14 @@ $this->layout('layout/layout', [
         </div>
         <div class="s3-btn-container">
             <div class="btn-style">
-                <a href="#" class="a-section3">EMPRESA</a>
+                <a href="?menu=regEmpresa" class="a-section3">EMPRESA</a>
             </div>
             <div class="btn-style">
-                <a href="#" class="a-section3">ALUMNO</a>
+                <a href="?menu=regAlumno" class="a-section3">ALUMNO</a>
             </div>
         </div>
         <div class="s3-register-link">
-            <a class="register-link" href="#">¿Estas ya Registrado? clica aquí!</a>
+            <a class="register-link" href="?menu=login">¿Estas ya Registrado? clica aquí!</a>
         </div>
     </div>
 

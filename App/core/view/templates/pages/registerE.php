@@ -10,7 +10,7 @@ $this->layout('layout/layout', [
 <?php $this->start('pageContent') ?>
 <section id="login-section" class="main-section">
     <div class="login-center-box">
-        HOLA LOGIN
+        HOLA REGISTER EMPRESA
     </div>
 </section>
 <?php $this->stop() ?>
