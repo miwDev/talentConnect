@@ -6,10 +6,12 @@ window.addEventListener("load", function(){
     const btnAdd = document.getElementById("add");
 
 
-    // Rutas actualizadas
-    fetch("/mock/alumno.json")
+    fetch('/API/ApiAlumno.php',{
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    })
         .then((x)=>x.json())
-        .then((json)=>pintarTabla(json))
+        .then((json)=>console.log(json))
 
     function pintarTabla(json){
             console.log(json);

@@ -157,14 +157,14 @@ header {
 }
 
 .avatar {
-    content: url('/assets/images/genericAvatar.svg');
+    content: url('/public/assets/images/genericAvatar.svg');
     padding: 0;
     cursor: pointer;
     margin-right: 2em;
 }
 
 .avatar:hover {
-    content: url('/assets/images/genericAvatar2.svg');
+    content: url('/public/assets/images/genericAvatar2.svg');
     cursor: pointer;
 }
 

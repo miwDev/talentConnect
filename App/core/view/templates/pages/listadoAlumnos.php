@@ -8,12 +8,12 @@ $this->layout('layout/layout', [
 ?>
 
 <?php $this->start('css') ?>
-<link rel="stylesheet" type="text/css" href="/assets/css/listaAlumnos.css" />
+<link rel="stylesheet" type="text/css" href="/public/assets/css/listaAlumnos.css" />
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
-<script src="/assets/js/elements.js"></script>
-<script src="/assets/js/listaAlumnoLogic.js"></script>
+<script src="/public/assets/js/elements.js"></script>
+<script src="/public/assets/js/listaAlumnoLogic.js"></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>

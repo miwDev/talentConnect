@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->e($title) ?></title>
     <link rel="stylesheet" href="https://geistfont.vercel.app/geist.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
 
     <?= $this->section('css') ?>
     <?= $this->section('js') ?>
@@ -17,7 +17,7 @@
         <div class="header-banner" id="hBanner">
             <div id="logo">
                 <a href="?menu=home">
-                    <img id="logo" src="/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
+                    <img id="logo" src="/public/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
                     <p>TALENT </br> CONNECT</p>
                 </a>
             </div>
@@ -34,7 +34,7 @@
                     </nav>
                 </div>
                 <div id="userPicture">
-                    <img class="avatar" src="/assets/images/genericAvatar.svg" alt="avatar" width="75" height="75">
+                    <img class="avatar" src="/public/assets/images/genericAvatar.svg" alt="avatar" width="75" height="75">
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
     <footer>
         <div class="footer-container">
             <div class="footer-logo">
-                <img class="" src="/assets/images/footerLogo.png" alt="logo_placeholder" width="220" height="220">
+                <img class="" src="/public/assets/images/footerLogo.png" alt="logo_placeholder" width="220" height="220">
             </div>
             <div class="footer-items">
                 <div class="footer-social">

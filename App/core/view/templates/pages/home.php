@@ -11,7 +11,7 @@ $this->layout('layout/layout', [
 <?php $this->start('pageContent') ?>
 <section id="section0">
     <div class="banner-container">
-        <img class="banner-image" src="/assets/images/banner.png" alt="bannerPicture" height="800">
+        <img class="banner-image" src="/public/assets/images/banner.png" alt="bannerPicture" height="800">
         <div class="banner-text">
             <h1>TALENT CONNECT</h1>
             <h2>Donde el potencial se encuentra con el éxito</h2>
@@ -27,7 +27,7 @@ $this->layout('layout/layout', [
             <p class="h1-content" id="boldSubtitle">
                 Creamos oportunidades, simplificamos la contratación.
             </p>
-            <img class="section1-img" src="/assets/images/section1img.png" alt="s1Picture">
+            <img class="section1-img" src="/public/assets/images/section1img.png" alt="s1Picture">
         </div>
 
     </div>
@@ -40,7 +40,7 @@ $this->layout('layout/layout', [
             </h2>
         </div>
         <div class="companies-container">
-            <img class="placeholder" src="/assets/images/placeholder.png" alt="placeholder" width="2000" height="500">
+            <img class="placeholder" src="/public/assets/images/placeholder.png" alt="placeholder" width="2000" height="500">
         </div>
     </div>
 </section>
