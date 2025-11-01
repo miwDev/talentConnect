@@ -11,7 +11,7 @@ window.addEventListener("load", function(){
         headers: { 'Content-Type': 'application/json' },
     })
         .then((x)=>x.json())
-        .then((json)=>console.log(json))
+        .then((json)=>pintarTabla(json))
 
     function pintarTabla(json){
             console.log(json);

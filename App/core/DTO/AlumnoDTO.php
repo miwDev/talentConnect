@@ -6,10 +6,10 @@ namespace App\core\DTO;
 class AlumnoDTO
 {
 
-    private $id;
-    private $nombre;
-    private $apellido;
-    private $email;
+    public $id;
+    public $nombre;
+    public $apellido;
+    public $email;
 
     public function __construct($id, $nom, $ape, $email)
     {

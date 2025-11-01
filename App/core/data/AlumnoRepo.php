@@ -166,7 +166,7 @@ class AlumnoRepo implements RepoInterface
         $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($resultados as $res) {
-            $alumnos[] = new AlumnoDTO(
+            $alumnosDTO[] = new AlumnoDTO(
                 $res['alumno_id'],
                 $res['nombre'],
                 $res['ape'],
