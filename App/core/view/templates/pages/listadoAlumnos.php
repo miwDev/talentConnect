@@ -8,12 +8,12 @@ $this->layout('layout/layout', [
 ?>
 
 <?php $this->start('css') ?>
-<link rel="stylesheet" type="text/css" href="/assets/css/listaAlumnos.css" />
+<link rel="stylesheet" type="text/css" href="/public/assets/css/listaAlumnos.css" />
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
-<script src="/assets/js/elements.js"></script>
-<script src="/assets/js/listaAlumnoLogic.js"></script>
+<script src="/public/assets/js/elements.js"></script>
+<script src="/public/assets/js/listaAlumnoLogic.js"></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>
@@ -27,18 +27,22 @@ $this->layout('layout/layout', [
     </div>
 
     <div class="add-button-container">
-        <input type="button" id="add" value="Añadir alumno">
+        <input type="button" id="add" value="AÑADIR ALUMNO">
+    </div>
+
+    <div class="add-button-container">
+        <input type="button" id="add" value="CARGA MASIVA">
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Acciones</th>
+                    <th>ID <span class="static-arrow"></span></th>
+                    <th>Nombre <span class="static-arrow"></span></th>
+                    <th>Apellido <span class="static-arrow"></span></th>
+                    <th>Email <span class="static-arrow"></span></th>
+                    <th class="actions-column">Acciones</th>
                 </tr>
             </thead>
             <tbody>

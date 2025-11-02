@@ -7,40 +7,65 @@ $this->layout('layout/layout', [
 ]);
 ?>
 
+<?php $this->start('css') ?>
+<link rel="stylesheet" type="text/css" href="/public/assets/css/authorization.css" />
+<?php $this->stop() ?>
+
+<?php $this->start('js') ?>
+<?php $this->stop() ?>
+
 <?php $this->start('pageContent') ?>
 <section id="login-section" class="main-section">
-    <div class="login-center-box">
-        <div class="login-box">
-            <h2 class="h2-login">Iniciar Sesión</h2>
+    <div class="login-container">
+        <div>
+            <h2 class="h2-title">Iniciar <span class="h2-title-alter">Sesión</span></h2>
+        </div>
+        <div class="login-contents">
+            <div class="login-form-container">
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="username">Email</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
 
-            <!-- Hueco para errores generales del formulario -->
-            <div id="loginErrors" class="error-message"></div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
 
-            <form action="" method="post" class="login-form">
+                    <div id="login-error-display" class="error-message">
+                    </div>
 
-                <div class="form-group">
-                    <label for="user">Usuario:</label>
-                    <input type="text" name="user" id="user" required>
-                    <!-- Hueco para error específico del usuario -->
-                    <div id="userError" class="field-error"></div>
-                </div>
+                    <div class="form-actions">
+                        <button type="submit" class="login-btn">Entrar</button>
+                        <a href="#" class="forgot-password-link">¿Has olvidado tu contraseña?</a>
+                    </div>
+                </form>
+            </div>
+            <div class="login-info-card container">
+                <h3>Accede a todas las ventajas</h3>
 
-                <div class="form-group">
-                    <label for="pass">Contraseña:</label>
-                    <input type="password" name="pass" id="pass" required>
-                    <!-- Hueco para error específico de la contraseña -->
-                    <div id="passError" class="field-error"></div>
-                </div>
+                <p class="card-subtitle">
+                    Al crear tu cuenta y loguearte, desbloquearás herramientas esenciales para impulsar tu carrera profesional:
+                </p>
 
-                <div class="form-remember">
-                    <input type="checkbox" name="remember" id="remember">
-                    <label for="remember">Recordarme</label>
-                </div>
+                <ul class="advantages-list">
+                    <li>
+                        <p>Acceso a Ofertas Exclusivas</p>
+                    </li>
+                    <li>
+                        <p>Gestión Centralizada de Solicitudes</p>
+                    </li>
+                    <li>
+                        <p>Notificaciones en Tiempo Real</p>
+                    </li>
+                    <li>
+                        <p>Perfiles Prioritarios</p>
+                    </li>
+                </ul>
 
-                <input type="submit" name="signIn" id="signIn" value="ACCEDER" class="btn-primary">
-
-                <a href="#" class="register-link-login">¿Olvidaste tu contraseña?</a>
-            </form>
+                <a href="?menu=regRedirect" class="btn-register-link a-section3">¡Regístrate Ahora!</a>
+            </div>
         </div>
     </div>
 </section>

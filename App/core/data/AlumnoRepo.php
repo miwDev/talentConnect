@@ -3,6 +3,7 @@
 namespace App\core\data;
 
 use App\core\model\Alumno;
+use App\core\DTO\AlumnoDTO;
 use PDO;
 use PDOException;
 use Exception;
@@ -146,8 +147,44 @@ class AlumnoRepo implements RepoInterface
         return $alumno;
     }
 
+    public static function findAllDTO()
+    {
+        $conn = DBC::getConnection();
+        $alumnosDTO = [];
+
+        $query = $conn->prepare(
+            'SELECT a.id AS alumno_id,
+                u.user_name AS username,
+                a.nombre AS nombre,
+                a.apellido AS ape
+         FROM ALUMNO a
+         JOIN USER u 
+            ON a.user_id = u.id'
+        );
+
+        $query->execute();
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resultados as $res) {
+            $alumnosDTO[] = new AlumnoDTO(
+                $res['alumno_id'],
+                $res['nombre'],
+                $res['ape'],
+                $res['username']
+            );
+        }
+
+        return $alumnosDTO;
+    }
+
+    public static function findDTOBySizePage($size, $page)
+    {
+        return true;
+    }
+
     // UPDATE
-    public static function updateById($alumno)
+    // UPDATE
+    public static function update($alumno)
     {
         $conn = DBC::getConnection();
         $salida = false;
@@ -155,16 +192,28 @@ class AlumnoRepo implements RepoInterface
         try {
             $conn->beginTransaction();
 
+            // Get the user_id first using the alumno's id
+            $queryGetUserId = 'SELECT user_id FROM ALUMNO WHERE id = :alumno_id';
+            $stmtGetUserId = $conn->prepare($queryGetUserId);
+            $stmtGetUserId->bindValue(':alumno_id', $alumno->id);
+            $stmtGetUserId->execute();
+            $user_id = $stmtGetUserId->fetchColumn();
+
+            if (!$user_id) {
+                throw new Exception("No se encontró el user_id para el alumno con id: " . $alumno->id);
+            }
+
+            // Update ALUMNO table
             $queryAlumno = 'UPDATE ALUMNO
-                            SET nombre = :nombre,
-                                apellido = :apellido,
-                                telefono = :telefono,
-                                direccion = :direccion,
-                                foto = :foto,
-                                cv = :cv,
-                                provincia = :provincia,
-                                localidad = :localidad
-                            WHERE id = :id';
+                        SET nombre = :nombre,
+                            apellido = :apellido,
+                            telefono = :telefono,
+                            direccion = :direccion,
+                            foto = :foto,
+                            cv = :cv,
+                            provincia = :provincia,
+                            localidad = :localidad
+                        WHERE id = :id';
 
             $stmtAlumno = $conn->prepare($queryAlumno);
             $stmtAlumno->bindValue(':nombre', $alumno->nombre);
@@ -178,23 +227,77 @@ class AlumnoRepo implements RepoInterface
             $stmtAlumno->bindValue(':id', $alumno->id);
             $stmtAlumno->execute();
 
+            // Update USER table using the retrieved user_id
             $queryUser = 'UPDATE USER
-                    SET user_name = :username,
-                        passwrd = :pass
-                    WHERE id = :user_id';
+                SET user_name = :username,
+                    passwrd = :pass
+                WHERE id = :user_id';
 
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $alumno->username);
-            $stmtUser->bindValue(':pass', $alumno->pass);
-            $stmtUser->bindValue(':user_id', $alumno->user_id);
+            $stmtUser->bindValue(':pass', $alumno->password);
+            $stmtUser->bindValue(':user_id', $user_id);
             $stmtUser->execute();
 
             $conn->commit();
-
             $salida = true;
         } catch (PDOException $e) {
             $conn->rollBack();
             error_log("Error al actualizar Alumno y User: " . $e->getMessage());
+            $salida = false;
+        } catch (Exception $e) {
+            $conn->rollBack();
+            error_log("Error: " . $e->getMessage());
+            $salida = false;
+        }
+
+        return $salida;
+    }
+
+
+    // UPDATE - Only DTO fields (for web interface edits)
+    public static function updateDTO($alumnoDTO)
+    {
+        $conn = DBC::getConnection();
+        $salida = false;
+
+        try {
+            $conn->beginTransaction();
+
+            $queryAlumno = 'UPDATE ALUMNO
+                        SET nombre = :nombre,
+                            apellido = :apellido
+                        WHERE id = :id';
+
+            $stmtAlumno = $conn->prepare($queryAlumno);
+            $stmtAlumno->bindValue(':nombre', $alumnoDTO['nombre']);
+            $stmtAlumno->bindValue(':apellido', $alumnoDTO['apellido']);
+            $stmtAlumno->bindValue(':id', $alumnoDTO['id']);
+            $stmtAlumno->execute();
+
+            $queryGetUserId = 'SELECT user_id FROM ALUMNO WHERE id = :alumno_id';
+            $stmtGetUserId = $conn->prepare($queryGetUserId);
+            $stmtGetUserId->bindValue(':alumno_id', $alumnoDTO['id']);
+            $stmtGetUserId->execute();
+            $user_id = $stmtGetUserId->fetchColumn();
+
+            if ($user_id) {
+
+                $queryUser = 'UPDATE USER
+                    SET user_name = :username
+                    WHERE id = :user_id';
+
+                $stmtUser = $conn->prepare($queryUser);
+                $stmtUser->bindValue(':username', $alumnoDTO['email']);
+                $stmtUser->bindValue(':user_id', $user_id);
+                $stmtUser->execute();
+            }
+
+            $conn->commit();
+            $salida = true;
+        } catch (PDOException $e) {
+            $conn->rollBack();
+            error_log("Error al actualizar Alumno DTO: " . $e->getMessage());
             $salida = false;
         }
 

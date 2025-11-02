@@ -2,18 +2,20 @@
 
 namespace App\core\controller;
 
-use App\core\controller\AlumnoController;
 use League\Plates\Engine;
+use App\core\controller\LandingController;
+use App\core\controller\AuthController;
+use App\core\controller\AlumnoController;
 
 class Router
 {
     private $templatesPath;
-    private $templates;
+    private $engine;
 
     public function __construct()
     {
         $this->templatesPath = __DIR__ . '/../../core/view/templates';
-        $this->templates = new Engine($this->templatesPath);
+        $this->engine = new Engine($this->templatesPath);
     }
 
     public function router()
@@ -26,20 +28,30 @@ class Router
 
         switch ($menu) {
             case 'home':
-                echo $this->templates->render('pages/home');
+                $landing = new LandingController();
+                $landing->renderLanding($this->engine);
                 break;
 
             case 'login':
-                echo $this->templates->render('pages/login');
+                $Auth = new AuthController();
+                $Auth->renderLogin($this->engine);
+                break;
+            case 'regRedirect':
+                $Auth = new AuthController();
+                $Auth->renderRegRedirect($this->engine);
+                break;
+            case 'regEmpresa':
+                $Auth = new AuthController();
+                $Auth->renderRegEmpresa($this->engine);
+                break;
+            case 'regAlumno':
+                $Auth = new AuthController();
+                $Auth->renderRegAlumno($this->engine);
                 break;
 
-            case 'alumnos':
-                echo $this->templates->render('pages/listadoAlumnos');
-                break;
-
-            default:
-                http_response_code(404);
-                echo "Página no encontrada";
+            case 'listado':
+                $alumnoManage = new AlumnoController();
+                $alumnoManage->renderList($this->engine);
                 break;
         }
     }
