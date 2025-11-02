@@ -1,72 +1,96 @@
 <?php
+// Esto asume que tienes un layout.php que maneja el esqueleto de la página.
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Inicio',
     'navItems' => [
-        '<a href="?menu=login" class="menu-enlace">SIGN IN</a>',
-        '<a href="?menu=regRedirect" class="menu-enlace">SIGN UP</a>'
+        '<a id="login" href="?menu=login" class="menu-enlace">Iniciar sesión</a>',
+        '<a id="registro" href="?menu=regRedirect" class="menu-enlace">Inscribirse</a>'
     ]
 ]);
 ?>
 
 <?php $this->start('pageContent') ?>
-<section id="section0">
-    <div class="banner-container">
-        <img class="banner-image" src="/public/assets/images/banner.png" alt="bannerPicture" height="800">
-        <div class="banner-text">
-            <h1>TALENT CONNECT</h1>
-            <h2>Donde el potencial se encuentra con el éxito</h2>
-        </div>
-    </div>
-</section>
-<section id="section1">
-    <div class="section-container">
-        <h1>
-            CONECTAMOS EL MEJOR TALENTO CON LAS EMPRESAS LÍDERES
-        </h1>
-        <div id="section1-content">
-            <p class="h1-content" id="boldSubtitle">
-                Creamos oportunidades, simplificamos la contratación.
-            </p>
-            <img class="section1-img" src="/public/assets/images/section1img.png" alt="s1Picture">
-        </div>
-
-    </div>
-</section>
-<section id="section2">
-    <div class="section-container">
-        <div>
-            <h2>
-                Nuestras empresas
-            </h2>
-        </div>
-        <div class="companies-container">
-            <img class="placeholder" src="/public/assets/images/placeholder.png" alt="placeholder" width="2000" height="500">
-        </div>
-    </div>
-</section>
-<section id="section3">
-
-    <div class="s3-container">
-        <div class="s3-header">
-            <h3>
-                ¿Aún no te conectas a Talent Connect?
-            </h3>
-            <p class="s3-subtitle">
-                Tanto si buscas tu primer empleo como si buscas el talento que impulse tu empresa, ¡Es hora de unirte a la red!
-            </p>
-        </div>
-        <div class="s3-btn-container">
-            <div class="btn-style">
-                <a href="?menu=regEmpresa" class="a-section3">EMPRESA</a>
-            </div>
-            <div class="btn-style">
-                <a href="?menu=regAlumno" class="a-section3">ALUMNO</a>
+<div class="main-container">
+    <section id="section0">
+        <div class="banner-container">
+            <img class="banner-image" src="/public/assets/images/banner.png" alt="bannerPicture" height="800">
+            <div class="banner-text">
+                <h1>TALENT CONNECT</h1>
+                <h2>Donde el potencial se encuentra con el éxito</h2>
             </div>
         </div>
-        <div class="s3-register-link">
-            <a class="register-link" href="?menu=login">¿Estas ya Registrado? clica aquí!</a>
-        </div>
-    </div>
+    </section>
 
-</section>
+    <section id="section1">
+        <h2 class="section1-title">
+            Tu futuro <span class="highlight">comienza aquí</span>
+        </h2>
+        <div class="section-container">
+            <div class="feature-card">
+                <div class="feature-image-container">
+                    <img src="/public/assets/images/section1img.png" alt="Feature 1: Creamos oportunidades">
+                </div>
+                <div class="feature-text">
+                    <h3>Creamos oportunidades</h3>
+                    <p>
+                        Conectamos profesionales talentosos con las mejores empresas del mercado.
+                        Nuestra plataforma facilita el encuentro entre el talento excepcional y
+                        las oportunidades que realmente marcan la diferencia en tu carrera.
+                    </p>
+                </div>
+            </div>
+
+            <div class="feature-card feature-card-reverse">
+                <div class="feature-image-container">
+                    <img src="/public/assets/images/section1img.png" alt="Feature 2: Simplificamos la contratación">
+                </div>
+                <div class="feature-text">
+                    <h3>Simplificamos la contratación</h3>
+                    <p>
+                        Hacemos que el proceso de reclutamiento sea más eficiente y efectivo.
+                        Las empresas encuentran candidatos cualificados rápidamente, mientras
+                        los profesionales descubren oportunidades que se ajustan a su perfil.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="section2">
+        <div class="section-container">
+            <div>
+                <h2>
+                    Nuestras empresas
+                </h2>
+            </div>
+            <div class="companies-container">
+                <h1 class="placeholder" style="color: #FFFFE9;">carrusel en proceso</h1>
+            </div>
+        </div>
+    </section>
+
+    <section id="section3">
+        <div class="s3-container">
+            <div class="s3-header">
+                <h3>
+                    ¿Aún no te conectas a Talent Connect?
+                </h3>
+                <p class="s3-subtitle">
+                    Tanto si buscas tu primer empleo como si buscas el talento que impulse tu empresa, <span class="s3-subtitle-alter">¡Es hora de unirte a la red!</span>
+                </p>
+            </div>
+            <div class="s3-btn-container">
+                <div class="btn-style">
+                    <a href="?menu=regEmpresa" class="a-section3">EMPRESA</a>
+                </div>
+                <div class="btn-style">
+                    <a href="?menu=regAlumno" class="a-section3">ALUMNO</a>
+                </div>
+            </div>
+            <div class="s3-register-link">
+                <a class="register-link" href="?menu=login">¿Estás ya Registrado? <span class="s3-register-alter">¡Es hora de unirte a la red!</span></a>
+            </div>
+        </div>
+    </section>
+</div>
 <?php $this->stop() ?>

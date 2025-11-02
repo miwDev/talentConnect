@@ -1,0 +1,441 @@
+/* ================================================= */
+/* 1. ESTILOS BASE Y CONTENEDOR PRINCIPAL (PAGE/BODY)*/
+/* ================================================= */
+
+body{
+    /* Fondo principal de la aplicación */
+    background-color: #16443D;
+}
+
+.login-container{
+    /* Estilos de la caja principal (fondo claro, borde, centrado) */
+    background-color: #FFFFE9;
+    margin: 60px auto;
+    max-width: 1200px;
+    border: 3px solid #191919;
+    border-radius: 2em;
+    padding: 15px;
+}
+
+/* ================================================= */
+/* 2. TIPOGRAFÍA Y ENCABEZADOS */
+/* ================================================= */
+
+.h2-title{
+    /* Estilo del título principal (Iniciar Sesión / Registro) */
+    font-size: 2.5em;
+    font-weight: 800;
+    margin-top: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #191919;
+    text-align: left;
+}
+
+.h2-title-alter{
+    /* Color de acento para la palabra resaltada en el título */
+    color: #EBD3FD;
+}
+
+/* ================================================= */
+/* 3. CONTENEDOR FLEX (FORMULARIO Y TARJETA) */
+/* ================================================= */
+
+.login-contents{
+    /* Configuración Flexbox que alinea el formulario y la tarjeta */
+    display: flex;
+    align-items: stretch;
+    gap: 40px;
+    width: 100%;
+}
+
+/* ================================================= */
+/* 4. ESTILOS DEL CONTENEDOR DEL FORMULARIO */
+/* ================================================= */
+
+.login-form-container{
+    /* Contenedor del formulario dentro del flexbox */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.form-group{
+    /* Espacio vertical entre cada par Label/Input */
+    margin-bottom: 1.5em;
+}
+
+.form-group label{
+    /* Estilos de las etiquetas (Email, Contraseña) */
+    display: block;
+    margin-bottom: 0.5em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3em;
+    font-weight: 500;
+    color: #191919;
+}
+
+.form-group input {
+    /* Estilos base de los campos de texto */
+    width: 100%;
+    padding: 0.6em;
+    box-sizing: border-box;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    font-size: 1em;
+}
+
+.form-group input:focus{
+    /* Estilo al enfocar (quitar outline y borde de acento) */
+    outline: none;
+    border: 3px solid #EBD3FD
+}
+
+.form-actions {
+    /* Contenedor para botón y enlace (para alinear) */
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 2em;
+}
+
+/* ================================================= */
+/* 5. ESTILOS DE BOTONES Y ENLACES DE ACCIÓN */
+/* ================================================= */
+
+.login-btn {
+    /* Estilo principal del botón "Entrar" */
+    background-color: #EBD3FD; 
+    color: #191919;
+    padding: 0.6em 3em;
+    box-sizing: border-box; 
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3em;
+    font-weight: 500;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+.login-btn:hover {
+    /* Efecto hover del botón */
+    background-color: #d7b4f2;
+}
+
+.forgot-password-link {
+    /* Estilo del enlace "¿Olvidaste tu contraseña?" */
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1em;
+    color: #191919;
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    /* Efecto hover del enlace */
+    color: #EBD3FD;
+}
+
+/* ================================================= */
+/* 6. ESTILOS DE LA TARJETA LATERAL (LOGIN INFO) */
+/* ================================================= */
+
+.login-info-card {
+    /* Contenedor principal de la tarjeta (fondo oscuro, borde a borde) */
+    flex: 1;
+    background-color: #191919;
+    border-radius: 2em; 
+    padding: 2.5em;
+    box-shadow: 0 0.5em 1em rgba(25, 25, 25, 0.1); 
+    display: flex;
+    flex-direction: column;
+}
+
+.login-info-card h3 {
+    /* Título dentro de la tarjeta */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    color: #FFFFE9;
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    border-bottom: 2px solid lightgray; 
+    padding-bottom: 0.5em;
+}
+
+.card-subtitle {
+    /* Subtítulo o texto introductorio de la tarjeta */
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #EBD3FD;
+    margin-bottom: 1.5em;
+    line-height: 1.5;
+}
+
+.advantages-list {
+    /* Lista de ventajas */
+    padding: 0;
+    margin: 0 0 2em 0;
+    list-style: none;
+}
+
+.advantages-list li {
+    /* Item individual de la lista */
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5em;
+}
+
+.advantages-list li::before {
+    /* Iconos o viñetas personalizadas de la lista (el círculo de color) */
+    font-size: 1.5em;
+    color: #16443D;
+    background-color: #EBD3FD;
+    border-radius: 50%;
+    width: 1.2em;
+    height: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1em;
+    flex-shrink: 0;
+}
+
+.advantages-list p {
+    /* Párrafos dentro de la lista */
+    margin: 0;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1em;
+    color: #FFFFE9;
+}
+
+.advantages-list strong {
+    /* Texto en negrita dentro de la lista */
+    color: #FFFFE9;
+}
+
+.btn-register-link {
+    /* Botón de "Regístrate Ahora" dentro de la tarjeta */
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    padding: 1em 0;
+    text-align: center;
+    background-color: #EBD3FD;
+    color: #191919;
+    text-decoration: none;
+    border-radius: 0.6875em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    margin-top: auto;
+}
+
+.btn-register-link:hover {
+    /* Efecto hover del botón de registro */
+    background-color: #d7b4f2;
+}
+
+/* ================================================= */
+/* 7. ESTILOS DE MENSAJES DE ERROR */
+/* ================================================= */
+
+.error-message {
+    /* Estilos para el div invisible de errores */
+    color: #d32f2f;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    margin-top: 1em;
+    text-align: center;
+    padding: 1em;
+}
+
+/* ================================================= */
+/* 8. ESTILOS DE LA PÁGINA DE SELECCIÓN DE REGISTRO */
+/* ================================================= */
+
+.register-redirect-container {
+    /* Modificación del contenedor principal para la página de selección */
+    max-width: 650px; 
+    padding: 60px 40px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registration-header {
+    /* Encabezado y subtítulo de la página de selección */
+    text-align: center;
+    width: 100%;
+}
+
+.registration-header .h2-title {
+    /* Ajuste del título para centrar en esta página */
+    margin-bottom: 0.5em; 
+    text-align: center; 
+}
+
+.registration-subtitle {
+    /* Subtítulo descriptivo */
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    margin-bottom: 2em;
+}
+
+.registration-choices {
+    /* Contenedor de los dos botones (Alumno/Empresa) */
+    display: flex;
+    width: 80%; 
+    gap: 1.5em; 
+    margin-bottom: 2em;
+}
+
+.choice-btn {
+    /* Estilo de los botones Alumno/Empresa */
+    width: 75%; 
+    padding: 1em;
+}
+
+.back-link {
+    /* Contenedor del enlace "Volver al inicio" */
+    font-size: 1.1em;
+}
+
+/* ================================================= */
+/* 9. ESTILOS ESPECÍFICOS DE REGISTRO ALUMNO */
+/* ================================================= */
+
+.register-contents {
+    align-items: stretch;
+}
+
+.register-form-container {
+    padding: 20px;
+}
+
+/* Estilos para las filas de 2 columnas */
+.form-row {
+    display: flex;
+    gap: 20px; 
+    margin-bottom: 1.5em; 
+}
+
+.half-width {
+    flex: 1; 
+}
+
+/* Estilos para los Selects */
+.form-select {
+    width: 100%;
+    padding: 0.6em;
+    box-sizing: border-box;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    font-size: 1em;
+    background-color: #FFFFE9;
+}
+
+.form-select:focus {
+    outline: none;
+    border: 3px solid #EBD3FD;
+}
+
+/* --- Estilos de la Tarjeta de Avatar --- */
+
+.register-avatar-card {
+    flex: 0 0 300px; 
+    max-width: 300px;
+    padding: 30px;
+    align-items: center; 
+    text-align: center;
+}
+
+.avatar-upload-area {
+    width: 100%;
+    padding: 20px;
+}
+
+.generic-avatar {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 50%;
+    border: 5px solid #EBD3FD;
+    margin-bottom: 20px;
+}
+
+.register-avatar-card .company-logo {
+    border-radius: 0.6875em;
+    max-width: 250px; 
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.avatar-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.avatar-btn {
+    /* Botones de cámara/subida de archivo */
+    font-size: 1.1em;
+    padding: 0.8em;
+}
+
+/* Añade esto a tu CSS existente */
+
+.cv-upload {
+    /* Espacio entre los botones de avatar y el botón de CV */
+    margin-top: 10px; 
+}
+
+.cv-btn {
+    /* Darle un color ligeramente diferente para distinguirlo del botón de foto si lo deseas, 
+       o simplemente mantener el color base (.login-btn) */
+    background-color: #f0f0f0; /* Fondo más claro opcional */
+    color: #191919;
+    border: 3px solid #191919;
+}
+.cv-btn:hover {
+    background-color: #d7b4f2; /* Mantiene el hover de acento */
+}
+
+.back-to-login {
+    margin-top: auto; /* Empuja el enlace hacia abajo */
+    width: 100%;
+    text-align: center;
+    color: #FFFFE9;
+}
+
+.back-to-login a {
+    color: #EBD3FD; /* Cambiar el color del enlace en la tarjeta oscura */
+}
+
+/* ================================================= */
+/* 10. ESTILOS DE MENSAJES DE ERROR POR CAMPO */
+/* ================================================= */
+
+.input-error-message {
+    /* Estilo del texto de error */
+    display: block; /* Asegura que ocupe su propia línea */
+    color: #d32f2f;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85em;
+    margin-top: 5px;
+    
+    /* 💥 CLAVE: Reserva el espacio vertical para el mensaje */
+    min-height: 1.2em; 
+    
+    /* El texto debe ser invisible si el span está vacío */
+    visibility: hidden; 
+}
+
+/* Regla para hacer el mensaje visible solo cuando tiene contenido */
+.input-error-message:not(:empty) {
+    visibility: visible;
+}

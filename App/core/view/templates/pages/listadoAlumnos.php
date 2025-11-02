@@ -27,22 +27,22 @@ $this->layout('layout/layout', [
     </div>
 
     <div class="add-button-container">
-        <input type="button" id="add" value="Carga Masiva">
+        <input type="button" id="add" value="AÑADIR ALUMNO">
     </div>
 
     <div class="add-button-container">
-        <input type="button" id="add" value="Añadir alumno">
+        <input type="button" id="add" value="CARGA MASIVA">
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Acciones</th>
+                    <th>ID <span class="static-arrow"></span></th>
+                    <th>Nombre <span class="static-arrow"></span></th>
+                    <th>Apellido <span class="static-arrow"></span></th>
+                    <th>Email <span class="static-arrow"></span></th>
+                    <th class="actions-column">Acciones</th>
                 </tr>
             </thead>
             <tbody>

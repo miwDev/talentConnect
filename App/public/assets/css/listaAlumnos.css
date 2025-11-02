@@ -1,27 +1,51 @@
+/*
+ * ESTILOS REESTILIZADOS PARA LA PANTALLA DE LISTADO DE ALUMNOS
+ * BASADO EN LA ESTÉTICA DE LA PANTALLA DE LOGIN/REGISTRO
+ *
+ * Colores:
+ * Fondo Principal: #16443D
+ * Contenedor/Fondo Claro: #FFFFE9
+ * Bordes/Oscuro: #191919
+ * Acento/Botón Principal: #EBD3FD
+ * Acento Hover: #d7b4f2
+ */
+
+/* ================================================= */
+/* 1. ESTILOS BASE Y CONTENEDOR PRINCIPAL */
+/* ================================================= */
+
+body {
+    /* Fondo principal de la aplicación (16443D) */
+    background-color: #16443D;
+}
+
 .list-container {
-    background-color: #ffffff;
-    border: 2px solid #2A63B4;
+    /* Estilos de la caja principal: Fondo claro, borde oscuro, border-radius grande */
+    background-color: #FFFFE9;
+    border: 3px solid #191919;
+    border-radius: 2em; /* 2em = 32px */
     padding: 30px;
     margin: 40px auto;
     max-width: 1200px;
-    box-shadow: 0 8px 32px rgba(42, 99, 180, 0.1);
-    font-family: 'Geist Sans', sans-serif;
+    box-shadow: 0 5px 15px rgba(25, 25, 25, 0.2); 
+    font-family: 'Poppins', sans-serif;
 }
 
-main {
-    background-color: #2A63B4;
-}
+/* ================================================= */
+/* 2. TIPOGRAFÍA Y SECCIÓN DE BÚSQUEDA */
+/* ================================================= */
 
 .header-section {
     margin-bottom: 25px;
 }
 
 h1 {
-    font-family: 'Geist Sans', sans-serif;
+    /* Estilo h2-title adaptado: Poppins, font-weight 800, color oscuro */
+    font-family: 'Poppins', sans-serif;
     font-size: 2.5em;
-    color: #2A63B4;
+    color: #191919;
     margin: 0 0 20px 0;
-    font-weight: 600;
+    font-weight: 800;
     text-align: left;
 }
 
@@ -33,34 +57,43 @@ h1 {
 }
 
 .search-section input[type="text"] {
-    padding: 12px 18px;
-    border: 2px solid #e2e8f0;
-    font-family: 'Geist Sans', sans-serif;
+    /* Estilo de .form-group input: Borde 3px oscuro, padding, border-radius */
+    padding: 0.6em;
+    border: 3px solid #191919;
+    font-family: 'Poppins', sans-serif;
     flex: 1;
     font-size: 1em;
+    border-radius: 0.6875em; /* 11px */
 }
 
 .search-section input[type="text"]:focus {
+    /* Estilo al enfocar: Borde de acento */
     outline: none;
-    border-color: #2A63B4;
-    box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
+    border: 3px solid #EBD3FD;
+    box-shadow: none;
 }
 
+/* ================================================= */
+/* 3. BOTONES DE ACCIÓN PRINCIPALES (Buscar, Añadir) */
+/* ================================================= */
+
 .search-btn {
-    background: #2A63B4;
-    color: white;
-    border: none;
-    padding: 12px 24px;
+    /* Estilo de .login-btn: Fondo de acento, texto oscuro, borde oscuro */
+    background-color: #EBD3FD; 
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 0.6em 1.5em; 
     cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
-    font-size: 1em;
-    transition: all 0.3s ease;
+    font-size: 1.1em;
     white-space: nowrap;
+    border-radius: 0.6875em;
 }
 
 .search-btn:hover {
-    background: #1e4a8a;
+    /* Efecto hover de acento */
+    background-color: #d7b4f2;
 }
 
 .add-button-container {
@@ -70,65 +103,94 @@ h1 {
 }
 
 #add {
-    background: #059669;
-    color: white;
-    border: none;
-    padding: 12px 24px;
+    /* Mismo estilo que .search-btn y .login-btn (Acento) */
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 0.6em 1.5em; 
     cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
-    font-size: 1em;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
     transition: all 0.3s ease;
 }
 
 #add:hover {
-    background: #047857;
+    /* Efecto hover de acento */
+    background: #d7b4f2;
 }
 
+/* ================================================= */
+/* 4. TABLA Y ACCIONES */
+/* ================================================= */
+
 .table-container {
-    background: white;
+    background: #FFFFE9;
     overflow: hidden;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 0.6875em; /* Bordes redondeados pequeños para la tabla interna */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Libre Baskerville', serif; /* Usamos Libre Baskerville para el cuerpo */
 }
 
 thead {
-    background: #2A63B4;
+    /* Fondo Oscuro, como la tarjeta lateral (191919) */
+    background: #16443D;
 }
 
 thead th {
-    color: white;
+    /* Texto Claro, como la tarjeta lateral (FFFFE9) */
+    color: #FFFFE9;
     padding: 18px 20px;
     text-align: left;
     font-weight: 600;
     font-size: 0.95em;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.actions-column {
-    width: 150px;
+/* Efecto hover en el header (ligeramente más claro que el fondo oscuro) */
+thead th:hover {
+    background: #333333; 
 }
 
+/* Celdas del cuerpo */
 tbody tr {
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #E5E7EB;
+    /* Nuevo: Fila impar (Odd) usa blanco puro */
+    background: #FFFFFF;
 }
 
 tbody tr:hover {
-    background: #f8fafc;
+    /* Nuevo: Color de hover general (sutil toque de acento) */
+    background: #E0E0F0;
 }
 
 tbody td {
     padding: 16px 20px;
-    color: #4a5568;
+    color: #191919;
     font-size: 0.95em;
     vertical-align: middle;
 }
+
+tbody tr:nth-child(even) {
+    /* Nuevo: Fila par (Even) usa un gris muy claro con un toque de acento (no es el color del fondo) */
+    background: #EDEDF8;
+}
+
+tbody tr:nth-child(even):hover {
+    /* Nuevo: Mismo color de hover para pares */
+    background: #E0E0F0;
+}
+
+/* Botones de acción (Editar/Eliminar) */
 
 .action-buttons {
     display: flex;
@@ -136,43 +198,65 @@ tbody td {
 }
 
 .action-btn {
+    /* Estilo base de los botones pequeños: borde 3px oscuro, font Poppins, radius pequeño */
     padding: 8px 16px;
-    border: none;
+    border: 3px solid #191919;
     cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.85em;
     font-weight: 500;
-    transition: all 0.2s ease;
+    border-radius: 0.6875em;
     flex: 1;
 }
 
 .edit-btn {
-    background: #2A63B4;
-    color: white;
+    /* Editar usa el color de acento */
+    background: #EBD3FD;
+    color: #191919;
 }
 
 .edit-btn:hover {
-    background: #1e4a8a;
+    background: #d7b4f2;
 }
 
 .delete-btn {
-    background: #dc2626;
-    color: white;
+    /* Eliminar usa el color de peligro (d32f2f de tu error-message) */
+    background: #d32f2f;
+    color: #FFFFE9; /* Texto claro */
 }
 
 .delete-btn:hover {
-    background: #b91c1c;
+    background: #a82424;
 }
 
-tbody tr:nth-child(even) {
-    background: #fafbfc;
+/* Flechas de ordenación (no se modifican los URLs) */
+.static-arrow, .arrow-up, .arrow-down {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
 }
 
-tbody tr:nth-child(even):hover {
-    background: #f1f5f9;
+.static-arrow {
+    background-image: url('/public/assets/images/StaticArrow.svg');
 }
 
-/* ESTILO MODAL */
+.arrow-up {
+    background-image: url('/public/assets/images/ArrowUp.svg');
+}
+
+.arrow-down {
+    background-image: url('/public/assets/images/ArrowDown.svg');
+}
+
+
+/* ================================================= */
+/* 5. ESTILO MODAL (Registro/Edición) */
+/* ================================================= */
 
 .velo {
     position: fixed;
@@ -180,46 +264,41 @@ tbody tr:nth-child(even):hover {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(200, 200, 200, .7);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 1005;
 }
 
 .modal {
     position: fixed;
-    border: 2px solid #2A63B4;
+    /* Mismo estilo de contenedor principal: Fondo claro, borde 3px oscuro, radius grande */
+    border: 3px solid #191919;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     width: 65%;
     height: 75%;
-    background: white;
+    background: #FFFFE9;
     z-index: 1006;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     padding: 40px;
-    box-sizing: border-box;;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    border-radius: 2em;
 }
 
-/* CONTENIDO MODAL DE REGISTRO DE ALUMNO(ADMIN)*/
-/* Modal Content */
+/* Contenido Modal - Título, Campos e Inputs */
+
 #modalContent h2 {
-    color: #2A63B4;
-    font-family: 'Geist Sans', sans-serif;
+    /* Título del modal: Poppins, oscuro, negrita */
+    color: #191919;
+    font-family: 'Poppins', sans-serif;
     font-size: 1.8em;
     margin: 0 0 30px 0;
-    font-weight: 600;
+    font-weight: 800;
     text-align: center;
 }
 
-#registroForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    flex: 1;
-}
-
-/* Contenedor de campos en cuadrícula */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -227,110 +306,68 @@ tbody tr:nth-child(even):hover {
     margin-bottom: 20px;
 }
 
-/* Cada campo individual */
-#registroForm .form-field {
+#registroForm .form-field, #editForm .form-field {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-#registroForm label {
-    font-family: 'Geist Sans', sans-serif;
-    font-size: 0.95em;
-    color: #4a5568;
+#registroForm label, #editForm label {
+    /* Estilo Label de autenticación: Poppins, 1.3em, oscuro */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em; /* Ligeramente más pequeño para formularios internos */
+    color: #191919;
     font-weight: 500;
     margin-bottom: 2px;
 }
 
-#registroForm input {
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    font-family: 'Geist Sans', sans-serif;
+#registroForm input, #editForm input {
+    /* Estilo Input de autenticación */
+    padding: 0.6em;
+    border: 3px solid #191919;
+    font-family: 'Libre Baskerville', serif;
     font-size: 1em;
-    transition: border-color 0.2s ease;
+    border-radius: 0.6875em;
 }
 
-#registroForm input:focus {
+#registroForm input:focus, #editForm input:focus {
+    /* Foco de acento */
     outline: none;
-    border-color: #2A63B4;
-    box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
+    border: 3px solid #EBD3FD;
+    box-shadow: none;
 }
 
 /* Espacio reservado para errores */
 .error-message {
     min-height: 20px;
     font-size: 0.85em;
-    color: #dc2626;
-    font-family: 'Geist Sans', sans-serif;
+    color: #d32f2f;
+    font-family: 'Poppins', sans-serif;
     margin-top: 4px;
 }
 
-/* Botón registrar */
+/* Botones dentro de los modales */
+
 #btnRegistrar {
-    background: #2A63B4;
-    color: white;
-    border: none;
-    padding: 14px 24px;
+    /* Botón Registrar: Acento */
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 4px 14px;
     cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
-    font-size: 1em;
+    font-size: 1.1em;
     margin-top: auto;
-    transition: all 0.3s ease;
+    border-radius: 0.6875em;
 }
 
 #btnRegistrar:hover {
-    background: #1e4a8a;
+    background: #d7b4f2;
 }
 
-/* CONTENT MODAL DE EDICION*/
+/* Botones de Confirmar/Cancelar Edición */
 
-#editForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    flex: 1;
-}
-
-#editForm .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-#editForm label {
-    font-family: 'Geist Sans', sans-serif;
-    font-size: 0.95em;
-    color: #4a5568;
-    font-weight: 500;
-    margin-bottom: 2px;
-}
-
-#editForm input {
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    font-family: 'Geist Sans', sans-serif;
-    font-size: 1em;
-    transition: border-color 0.2s ease;
-}
-
-#editForm input:focus {
-    outline: none;
-    border-color: #2A63B4;
-    box-shadow: 0 0 0 3px rgba(42, 99, 180, 0.1);
-}
-
-#editForm .form-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-#editForm .form-grid > div:last-child {
-    grid-column: 1 / -1;
-}
-
-/* Contenedor de botones */
 .button-container {
     display: flex;
     gap: 12px;
@@ -338,30 +375,63 @@ tbody tr:nth-child(even):hover {
 }
 
 .button-container button {
+    /* Base de los botones de acción */
     flex: 1;
     padding: 14px 24px;
-    border: none;
+    border: 3px solid #191919;
     cursor: pointer;
-    font-family: 'Geist Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 500;
-    font-size: 1em;
-    transition: all 0.3s ease;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
 }
 
 #btnConfirmar {
-    background: #2A63B4;
-    color: white;
+    /* Confirmar: Fondo de acento */
+    background: #EBD3FD;
+    color: #191919;
 }
 
 #btnConfirmar:hover {
-    background: green;
+    background: #d7b4f2;
 }
 
 #btnCancelar {
-    background: #2A63B4;
-    color: white;
+    /* Cancelar: Fondo Oscuro para distinguirlo, con texto claro */
+    background: #191919;
+    color: #FFFFE9;
 }
 
 #btnCancelar:hover {
-    background: tomato;
+    background: #333333;
+}
+
+#cerrarModal {
+    
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    
+    width: 38px;
+    height: 38px;
+    line-height: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800; 
+    font-size: 1.2em;
+    z-index: 1007; 
+    transition: background 0.2s ease;
+}
+
+#cerrarModal:hover {
+    background: #d7b4f2;
 }

@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->e($title) ?></title>
     <link rel="icon" type="image/png" href="/public/assets/images/logoDark.png" />
-    <link rel="stylesheet" href="https://geistfont.vercel.app/geist.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
 
     <?= $this->section('css') ?>
@@ -18,7 +21,7 @@
         <div class="header-banner" id="hBanner">
             <div id="logo">
                 <a href="?menu=home">
-                    <img id="logo" src="/public/assets/images/logoDark.png" alt="logo_placeholder" width="120" height="120">
+                    <img id="logo" src="/public/assets/images/logoDark.svg" alt="logo_placeholder" width="120" height="120">
                     <p>TALENT </br> CONNECT</p>
                 </a>
             </div>
@@ -34,9 +37,6 @@
                         </ul>
                     </nav>
                 </div>
-                <div id="userPicture">
-                    <img class="avatar" src="/public/assets/images/genericAvatar.svg" alt="avatar" width="75" height="75">
-                </div>
             </div>
         </div>
     </header>
@@ -48,7 +48,7 @@
     <footer>
         <div class="footer-container">
             <div class="footer-logo">
-                <img class="" src="/public/assets/images/footerLogo.png" alt="logo_placeholder" width="220" height="220">
+                <img class="footer-logo" src="/public/assets/images/logoClear.svg" width="200px" height="200px">
             </div>
             <div class="footer-items">
                 <div class="footer-social">

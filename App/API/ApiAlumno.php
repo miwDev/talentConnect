@@ -4,8 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../core/helper/Autoloader.php';
 
 use App\core\data\AlumnoRepo;
-use App\core\model\Alumno;
-use App\helper\Adapter;
+use App\core\helper\Adapter;
 
 $method = strtoupper($_SERVER["REQUEST_METHOD"] ?? 'GET');
 $body_content = file_get_contents('php://input');
@@ -19,6 +18,7 @@ switch ($method) {
         }
         break;
     case 'POST':
+        saveAlumno($body_content);
         break;
     case 'PUT':
         editAlumno($body_content);
@@ -28,7 +28,7 @@ switch ($method) {
         break;
     default:
         http_response_code(405);
-        echo json_encode(['error' => 'Error de Metodo']);
+        echo json_encode(['success' => false]);
         break;
 }
 
@@ -41,6 +41,25 @@ function getFullList()
 }
 
 function getSizedList() {}
+
+function saveAlumno($body)
+{
+    $decodedBody = json_decode($body, true);
+    $alumno = Adapter::DTOtoAlumno($decodedBody);
+    $dbResponse = AlumnoRepo::save($alumno);
+
+    if ($dbResponse !== false) {
+        http_response_code(200);
+        $alumnoDTO = Adapter::alumnoToDTO($dbResponse);
+        echo json_encode([
+            'success' => true,
+            'alumno' => $alumnoDTO
+        ]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false]);
+    }
+}
 
 function deleteAlumno($body)
 {
@@ -62,7 +81,7 @@ function editAlumno($body)
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {
-        http_response_code(404);
+        http_response_code(400);
         echo json_encode(['success' => false]);
     }
 }
