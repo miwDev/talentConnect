@@ -147,42 +147,11 @@ class AlumnoRepo implements RepoInterface
         return $alumno;
     }
 
-    public static function findAllDTO()
-    {
-        $conn = DBC::getConnection();
-        $alumnosDTO = [];
-
-        $query = $conn->prepare(
-            'SELECT a.id AS alumno_id,
-                u.user_name AS username,
-                a.nombre AS nombre,
-                a.apellido AS ape
-         FROM ALUMNO a
-         JOIN USER u 
-            ON a.user_id = u.id'
-        );
-
-        $query->execute();
-        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($resultados as $res) {
-            $alumnosDTO[] = new AlumnoDTO(
-                $res['alumno_id'],
-                $res['nombre'],
-                $res['ape'],
-                $res['username']
-            );
-        }
-
-        return $alumnosDTO;
-    }
-
     public static function findDTOBySizePage($size, $page)
     {
         return true;
     }
 
-    // UPDATE
     // UPDATE
     public static function update($alumno)
     {

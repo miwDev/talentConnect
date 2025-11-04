@@ -3,7 +3,9 @@
 namespace App\core\helper;
 
 use App\core\data\AlumnoRepo;
+use App\core\data\EmpresaRepo;
 use App\core\DTO\AlumnoDTO;
+use App\core\DTO\EmpresaDTO;
 use App\core\model\Alumno;
 
 class Adapter
@@ -11,22 +13,37 @@ class Adapter
 
     static public function DTOtoAlumno($data)
     {
-        $alumno = new Alumno( // will verify from JS that nothing is empty except the nulls
+        $alumno = new Alumno(
             null,
             $data['username'],
-            "temporalPass", // will be changed when the user checks the confirmation email
+            "temporalPass",
             $data['nombre'],
             $data['apellido'],
             $data['telefono'],
             $data['direccion'],
-            null, // awaiting for the user to put it
-            null, // **
+            null,
+            null,
             $data['provincia'],
             $data['localidad']
-            // confirmedUser = 0;
         );
 
         return $alumno;
+    }
+
+    static public function AllAlumnoToDTO($alumnos)
+    {
+        $alumnosDTO = [];
+
+        foreach ($alumnos as $alumno) {
+            $alumnosDTO[] = new AlumnoDTO(
+                $alumno->id,
+                $alumno->nombre,
+                $alumno->apellido,
+                $alumno->username
+            );
+        }
+
+        return $alumnosDTO;
     }
 
     static public function alumnoToDTO($id)
@@ -41,5 +58,52 @@ class Adapter
         );
 
         return $alumnoDTO;
+    }
+
+    static public function AllEmpresasToDTO($empresas)
+    {
+        $empresasDTO = [];
+
+        foreach ($empresas as $empresa) {
+            $empresasDTO[] = new EmpresaDTO(
+                $empresa->id,
+                $empresa->nombre,
+                $empresa->username,
+                $empresa->telefono,
+                $empresa->validacion
+            );
+        }
+        return $empresasDTO;
+    }
+
+    static public function empresaToDTO($id)
+    {
+        $empresa = EmpresaRepo::findById($id);
+
+        $empresaDTO = new EmpresaDTO(
+            $empresa->id,
+            $empresa->nombre,
+            $empresa->username,
+            $empresa->telefono,
+            $empresa->validacion,
+        );
+
+        return $empresaDTO;
+    }
+
+    static public function empresaEditDTO($id, $postData)
+    {
+        $empresaEdit = EmpresaRepo::findById($id);
+
+        if (!$empresaEdit) {
+            return false;
+        }
+
+        // Update only the fields that are in the form
+        $empresaEdit->nombre = $postData['nombre'];
+        $empresaEdit->username = $postData['email'];
+        $empresaEdit->telefono = $postData['telefono'];
+
+        return EmpresaRepo::update($empresaEdit);
     }
 }

@@ -14,7 +14,7 @@ switch ($method) {
         if ($body_content == "" || empty($body_content)) {
             getFullList();
         } else {
-            getSizedList();
+            getSizedList(); // listados paginados
         }
         break;
     case 'POST':
@@ -36,8 +36,9 @@ function getFullList()
 {
     header('Content-Type: application/json');
     http_response_code(200);
-    $alumnos = AlumnoRepo::findAllDTO();
-    echo json_encode($alumnos);
+    $alumnos = AlumnoRepo::findAll();
+    $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
+    echo json_encode($alumnosDTO);
 }
 
 function getSizedList() {}

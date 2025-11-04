@@ -8,7 +8,7 @@ $this->layout('layout/layout', [
 ?>
 
 <?php $this->start('css') ?>
-<link rel="stylesheet" type="text/css" href="/public/assets/css/listaAlumnos.css" />
+<link rel="stylesheet" type="text/css" href="/public/assets/css/listadosAdmin.css" />
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>

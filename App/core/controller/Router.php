@@ -49,9 +49,14 @@ class Router
                 $Auth->renderRegAlumno($this->engine);
                 break;
 
-            case 'listado':
+            case 'admin-alumnos':
                 $alumnoManage = new AlumnoController();
                 $alumnoManage->renderList($this->engine);
+                break;
+
+            case 'admin-empresas':
+                $empresaManage = new EmpresaController();
+                $empresaManage->renderList($this->engine);
                 break;
         }
     }

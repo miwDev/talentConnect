@@ -82,6 +82,7 @@ class EmpresaRepo implements RepoInterface
         $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($resultados as $res) {
+            // Constructor order: id, username, pass, nombre, telefono, direccion, provincia, localidad, nombrePersona, telPersona, logo, validacion
             $empresas[] = new Empresa(
                 $res['empresa_id'],
                 $res['username'],
@@ -89,12 +90,12 @@ class EmpresaRepo implements RepoInterface
                 $res['nombre'],
                 $res['telefono'],
                 $res['direccion'],
+                $res['provincia'],
+                $res['localidad'],
                 $res['nombrePersona'],
                 $res['telPersona'],
                 $res['logo'],
-                $res['validacion'],
-                $res['provincia'],
-                $res['localidad']
+                $res['validacion']
             );
         }
 
@@ -107,7 +108,7 @@ class EmpresaRepo implements RepoInterface
 
         $query = 'SELECT e.id AS empresa_id,
                          u.user_name AS username,
-                         u.password AS pass,
+                         u.passwrd AS pass,
                          e.nombre AS nombre,
                          e.telefono AS telefono,
                          e.direccion AS direccion,
@@ -131,6 +132,7 @@ class EmpresaRepo implements RepoInterface
             return null;
         }
 
+        // Constructor order: id, username, pass, nombre, telefono, direccion, provincia, localidad, nombrePersona, telPersona, logo, validacion
         return new Empresa(
             $resultado['empresa_id'],
             $resultado['username'],
@@ -138,17 +140,22 @@ class EmpresaRepo implements RepoInterface
             $resultado['nombre'],
             $resultado['telefono'],
             $resultado['direccion'],
+            $resultado['provincia'],
+            $resultado['localidad'],
             $resultado['nombrePersona'],
             $resultado['telPersona'],
             $resultado['logo'],
-            $resultado['validacion'],
-            $resultado['provincia'],
-            $resultado['localidad']
+            $resultado['validacion']
         );
     }
 
+    public static function findBySizePage($size, $page)
+    {
+        return true;
+    }
+
     // UPDATE
-    public static function updateById($empresa)
+    public static function update($empresa)
     {
         $conn = DBC::getConnection();
         $salida = false;
@@ -180,6 +187,16 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->bindValue(':id', $empresa->id);
             $stmtEmpresa->execute();
 
+            $queryGetUserId = 'SELECT user_id FROM EMPRESA WHERE id = :empresa_id';
+            $stmtGetUserId = $conn->prepare($queryGetUserId);
+            $stmtGetUserId->bindValue(':empresa_id', $empresa->id);
+            $stmtGetUserId->execute();
+            $user_id = $stmtGetUserId->fetchColumn();
+
+            if (!$user_id) {
+                throw new \PDOException("No se pudo recuperar el user_id.");
+            }
+
             $queryUser = 'UPDATE USER
                           SET user_name = :username,
                               passwrd = :pass
@@ -187,12 +204,12 @@ class EmpresaRepo implements RepoInterface
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $empresa->username);
             $stmtUser->bindValue(':pass', $empresa->password);
-            $stmtUser->bindValue(':user_id', $empresa->user_id);
+            $stmtUser->bindValue(':user_id', $user_id);
             $stmtUser->execute();
 
             $conn->commit();
             $salida = true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conn->rollBack();
             $salida = false;
         }
