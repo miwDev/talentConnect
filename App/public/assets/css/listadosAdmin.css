@@ -102,7 +102,8 @@ h1 {
     margin-bottom: 20px;
 }
 
-#add {
+#add, 
+#cargaMasiva {
     /* Mismo estilo que .search-btn y .login-btn (Acento) */
     background: #EBD3FD;
     color: #191919;
@@ -116,7 +117,8 @@ h1 {
     transition: all 0.3s ease;
 }
 
-#add:hover {
+#add:hover,
+#cargaMasiva:hover {
     /* Efecto hover de acento */
     background: #d7b4f2;
 }
@@ -306,13 +308,26 @@ tbody tr:nth-child(even):hover {
     margin-bottom: 20px;
 }
 
+/*Grid especifico para carga masiva*/
+.form-gridCarga {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
 #registroForm .form-field, #editForm .form-field {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-#registroForm label, #editForm label {
+#cargaMasivaForm .form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+#registroForm label, #editForm label, #cargaMasivaForm label {
     /* Estilo Label de autenticación: Poppins, 1.3em, oscuro */
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em; /* Ligeramente más pequeño para formularios internos */
@@ -328,6 +343,16 @@ tbody tr:nth-child(even):hover {
     font-family: 'Libre Baskerville', serif;
     font-size: 1em;
     border-radius: 0.6875em;
+}
+
+#cargaMasivaForm input[type="file"] {
+
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1em;
+    padding: 0.6em; 
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    align-self: left;
 }
 
 #registroForm input:focus, #editForm input:focus {
@@ -348,7 +373,7 @@ tbody tr:nth-child(even):hover {
 
 /* Botones dentro de los modales */
 
-#btnRegistrar {
+#btnRegistrar, #btnEjemplo {
     /* Botón Registrar: Acento */
     background: #EBD3FD;
     color: #191919;
@@ -361,6 +386,17 @@ tbody tr:nth-child(even):hover {
     margin-top: auto;
     border-radius: 0.6875em;
 }
+
+/* ESTILO AÑADIDO PARA LA CUADRÍCULA 2X2 */
+#btnEjemplo {
+    width: 100%;
+    height: auto; /* Permite que el padding y contenido definan la altura */
+    align-self: start; /* Alinea el botón con la parte superior de su celda (por defecto) */
+    margin-top: 0; /* Anula el margin-top: auto; del estilo genérico */
+    padding: 0.6em 1.5em; /* Padding para que coincida con otros botones grandes */
+    box-sizing: border-box; /* Asegura que el padding no exceda el 100% de width */
+}
+/* FIN ESTILO AÑADIDO */
 
 #btnRegistrar:hover {
     background: #d7b4f2;
@@ -434,4 +470,189 @@ tbody tr:nth-child(even):hover {
 
 #cerrarModal:hover {
     background: #d7b4f2;
+}
+
+
+/* ================================================= */
+/* 7. ESTILOS EJEMPLO CSV DE CARGA MASIVA */
+/* ================================================= */
+
+.csv-example-container {
+    /* Mismos bordes y márgenes que antes */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 7px;
+    border: 3px solid #191919; /* Usando tu borde oscuro estándar */
+    background-color: #FFFFE9; /* Fondo claro de tus modales */
+    border-radius: 0.6875em; 
+}
+
+.csv-example-title {
+    /* Estilo para el título "Formato requerido:" */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #191919;
+    margin-bottom: 10px;
+}
+
+.csv-example-code {
+    /* Estilo para el bloque de código CSV (<pre>) */
+    font-family: monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #191919; /* Usando tu color de fondo principal para el texto */
+    background-color: #EDEDF8; /* Un gris muy claro para diferenciar el código */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.csv-example-note {
+    display: block;
+    text-align: right;
+    color: #505050;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+/* Estilos de los select */
+
+.form-select {
+    width: 100%;
+    padding: 0.6em;
+    box-sizing: border-box;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    font-size: 1em;
+    background-color: #FFFFE9;
+    font-family: 'Libre Baskerville', serif;
+}
+
+/* 6. ESTILO ESPECÍFICO DE LA FICHA DE VISUALIZACIÓN */
+
+#verForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Cuadrícula de Campos (Form-Grid) --- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px; 
+    margin-bottom: 40px;
+}
+
+/* --- Sección Superior (Logo, Nombre, Email/Apellido) --- */
+.form-grid .form-field:first-child {
+    grid-column: 1 / -1; 
+    display: flex;
+    align-items: center; 
+    gap: 40px; 
+    padding: 20px;
+    border: 2px solid #16443db6; 
+    border-radius: 1em;
+}
+
+.form-grid .form-field:first-child > div:first-child {
+    min-width: 150px;
+    height: 150px;
+    border: 3px solid #191919;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EDEDF8;
+}
+
+.form-grid .form-field:first-child img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.form-grid .form-field:first-child > div:nth-child(2),
+.form-grid .form-field:first-child > div:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 250px;
+}
+
+
+/* --- Estilos de Inputs para Visualización (Solo Lectura) --- */
+#verForm label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    color: #191919;
+    font-weight: 600; 
+    margin-bottom: 2px;
+}
+
+#verForm input[type="text"] {
+    padding: 0.8em; 
+    border: 3px solid #191919;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
+    color: #191919;
+}
+
+#verForm input[type="text"][readonly], 
+#verForm input[type="text"]:not([type='submit']) {
+    background-color: #EDEDF8;
+    border: 3px solid #E5E7EB;
+    box-shadow: none;
+    cursor: default;
+}
+
+#verForm input[type="text"][readonly]:focus,
+#verForm input[type="text"]:not([type='submit']):focus {
+    outline: none;
+    border: 3px solid #E5E7EB;
+}
+
+/* --- Botón Volver --- */
+.button-container {
+    display: flex;
+    justify-content: flex-end; 
+    padding-top: 20px;
+}
+
+#btnVolver {
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 14px 24px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
+    width: 200px; 
+}
+
+#btnVolver:hover {
+    background: #d7b4f2;
+}
+
+/* --- Responsividad Básica --- */
+@media (max-width: 900px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .form-grid .form-field:first-child {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .form-grid .form-field:first-child > div:first-child {
+        margin: 0 auto;
+    }
 }

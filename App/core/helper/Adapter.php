@@ -6,7 +6,11 @@ use App\core\data\AlumnoRepo;
 use App\core\data\EmpresaRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
+use App\core\DTO\CicloDTO;
 use App\core\model\Alumno;
+use App\core\model\Empresa;
+use App\core\model\Ciclo;
+
 
 class Adapter
 {
@@ -60,6 +64,26 @@ class Adapter
         return $alumnoDTO;
     }
 
+    static public function DTOtoEmpresa()
+    {
+        $empresa = new Empresa(
+            null,
+            $_POST['email'],
+            "temporalPass",
+            $_POST['nombre'],
+            $_POST['telefono'],
+            null, //direccion
+            null, //provincia
+            null, //localidad
+            null, //nombre persona
+            null, //telPersona
+            null, //logo
+            0
+        );
+
+        return $empresa;
+    }
+
     static public function AllEmpresasToDTO($empresas)
     {
         $empresasDTO = [];
@@ -105,5 +129,17 @@ class Adapter
         $empresaEdit->telefono = $postData['telefono'];
 
         return EmpresaRepo::update($empresaEdit);
+    }
+
+    static public function ciclosToDTO($ciclos)
+    {
+        $ciclosDTO = [];
+        foreach ($ciclos as $ciclo) {
+            $ciclosDTO[] = new CicloDTO(
+                $ciclo->id,
+                $ciclo->nombre
+            );
+        }
+        return $ciclosDTO;
     }
 }

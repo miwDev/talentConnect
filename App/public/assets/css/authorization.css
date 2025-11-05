@@ -337,11 +337,6 @@ body{
     background-color: #FFFFE9;
 }
 
-.form-select:focus {
-    outline: none;
-    border: 3px solid #EBD3FD;
-}
-
 /* --- Estilos de la Tarjeta de Avatar --- */
 
 .register-avatar-card {

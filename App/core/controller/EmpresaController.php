@@ -13,22 +13,30 @@ class EmpresaController
 
         if (isset($_POST["btnAdd"])) {
             echo $engine->render('pages/addEmpresa');
+        } elseif (isset($_POST["btnAddCompany"])) {
+            EmpresaRepo::save(Adapter::DTOtoEmpresa());
+            header($selfRoute);
+            exit();
         } elseif (isset($_POST["btnEdit"])) {
-
             $id = $_POST["btnEdit"];
             $empresaDTO = Adapter::empresaToDTO($id);
             echo $engine->render('pages/editEmpresa', [
                 'empresaEdit' => $empresaDTO
             ]);
             exit();
+        } elseif (isset($_POST["btnVerFicha"])) {
+            $id = $_POST["btnVerFicha"];
+            $empresa = EmpresaRepo::findById($id);
+            echo $engine->render('pages/verFichaEmpresa', [
+                'empresaVer' => $empresa
+            ]);
+            exit();
         } elseif (isset($_POST["btnAccept"])) {
-
             $id = $_POST["id"];
             Adapter::empresaEditDTO($id, $_POST);
             header($selfRoute);
             exit();
         } elseif (isset($_POST["btnCancel"])) {
-
             header($selfRoute);
             exit();
         } elseif (isset($_POST["btnBorrar"])) {

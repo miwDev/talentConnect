@@ -54,6 +54,7 @@ $this->layout('layout/layout', [
                             <form action="" method="post">
                                 <button type="submit" class="action-btn edit-btn" name="btnEdit" value="<?= $empresa->id ?>">Editar</button>
                                 <button type="submit" class="action-btn delete-btn" name="btnBorrar" value="<?= $empresa->id ?>">Eliminar</button>
+                                <button type="submit" class="action-btn edit-btn" name="btnVerFicha" value="<?= $empresa->id ?>">Ver Ficha</button>
                             </form>
                         </td>
                     </tr>

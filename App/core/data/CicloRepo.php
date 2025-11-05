@@ -3,6 +3,7 @@
 namespace App\core\data;
 
 use App\core\model\Ciclo;
+use App\core\model\Familia;
 
 use PDO;
 use PDOException;
@@ -91,7 +92,7 @@ class CicloRepo implements RepoInterface
 
             if ($res) {
                 $familia = new Familia($res['familia_id'], $res['familia_nom']);
-                $ciclo = new Ciclo(res["ciclo_id"], res["ciclo_nombre"], res["ciclo_nivel"], $familia);
+                $ciclo = new Ciclo($res["ciclo_id"], $res["ciclo_nombre"], $res["ciclo_nivel"], $familia);
             }
         } catch (\PDOException $e) {
         }
@@ -99,8 +100,49 @@ class CicloRepo implements RepoInterface
         return $ciclo;
     }
 
+    public static function findCiclosByFamily($id)
+    {
+        $conn = DBC::getConnection();
+        $ciclos = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT c.id AS ciclo_id, 
+                    c.nombre AS ciclo_nombre, 
+                    c.nivel AS ciclo_nivel, 
+                    f.id AS familia_id, 
+                    f.nombre AS familia_nombre
+            FROM CICLO c
+            JOIN FAMILIA f ON c.familia_id = f.id
+            WHERE c.familia_id = :id'
+            );
+
+            $query->bindValue(':id', $id, PDO::PARAM_INT);
+            $query->execute();
+
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($resultados as $res) {
+
+                $familia = new Familia($res['familia_id'], $res['familia_nombre']);
+
+
+                $ciclos[] = new Ciclo(
+                    $res['ciclo_id'],
+                    $res['ciclo_nombre'],
+                    $res['ciclo_nivel'],
+                    $familia
+                );
+            }
+        } catch (\PDOException $e) {
+            echo "<pre>Error al obtener ciclos: " . $e->getMessage() . "</pre>";
+        }
+
+        return $ciclos;
+    }
+
     // UPDATE
-    public static function updateById($ciclo)
+    public static function update($ciclo)
     {
         $conn = DBC::getConnection();
         $salida = false;

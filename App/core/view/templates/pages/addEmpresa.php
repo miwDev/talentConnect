@@ -47,7 +47,7 @@ $this->layout('layout/layout', [
         </div>
 
         <div class="button-container">
-            <input type="submit" name="btnAccept" value="Aceptar" id="btnConfirmar">
+            <input type="submit" name="btnAddCompany" value="Aceptar" id="btnConfirmar">
             <input type="submit" name="btnCancel" value="Cancelar" id="btnCancelar">
         </div>
     </form>

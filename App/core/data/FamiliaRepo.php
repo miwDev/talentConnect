@@ -85,7 +85,7 @@ class FamiliaRepo implements RepoInterface
     }
 
     // UPDATE
-    public static function updateById($familia)
+    public static function update($familia)
     {
         $conn = DBC::getConnection();
         $salida = false;

@@ -2,6 +2,65 @@ window.addEventListener("load", function(){
 
     const tbody = document.querySelector("tbody");
     const btnAdd = document.getElementById("add");
+    const btnCarga = document.getElementById("cargaMasiva");
+
+
+    function crearEmptyTable(cabecera){
+        const divTableC = document.createElement("div");
+        divTableC.id = "divTablaC";
+        divTableC.className = "form-field"
+
+        size = cabecera.length;
+
+        const tableC = document.createElement("table");
+
+        const theadC = document.createElement("thead");
+        theadC.id = "cargaThead";
+
+        for(let i = 0; i<size; i++){
+            th = document.createElement("th");
+            th.id = cabecera[i] + "Id";
+            th.textContent = cabecera[i]
+            theadC.appendChild(th);
+        }
+
+        const tbodyC = document.createElement("tbody");
+        tbodyC.id = "cargaTbody";
+
+        tableC.appendChild(theadC);
+        tableC.appendChild(tbodyC);
+
+        divTableC.appendChild(tableC);
+
+        return divTableC;
+        
+    }
+
+    function crearCampo(labelText, inputType, inputId, required = false) {
+                const div = document.createElement("div");
+                div.className = "form-field";
+                
+                const label = document.createElement("label");
+                label.textContent = labelText;
+                label.htmlFor = inputId;
+                
+                const input = document.createElement("input");
+                input.type = inputType;
+                input.id = inputId;
+                input.name = inputId;
+                input.required = required;
+                
+
+                const errorDiv = document.createElement("div");
+                errorDiv.className = "error-message";
+                errorDiv.id = `error-${inputId}`;
+                
+                div.appendChild(label);
+                div.appendChild(input);
+                div.appendChild(errorDiv);
+                
+                return div;
+            }
 
     function crearFilaTabla(id, nombre, apellido, email) {
         
@@ -159,7 +218,6 @@ window.addEventListener("load", function(){
                 });
             };
         })(fila));
-        
 
         buttonContainer.appendChild(deleteBtn);
         buttonContainer.appendChild(editBtn);
@@ -174,6 +232,18 @@ window.addEventListener("load", function(){
 
         return fila;
     }
+
+    function populateSelect(selectElement, dataArray) {
+            dataArray.forEach(item => {
+                const option = document.createElement("option");
+                
+                option.value = item.id;
+            
+                option.textContent = item.nombre;
+
+                selectElement.appendChild(option);
+            });
+        }
 
 
     fetch('/API/ApiAlumno.php',{
@@ -197,121 +267,257 @@ window.addEventListener("load", function(){
             }
         }
 
+        btnCarga.addEventListener("click", function(){
+            crearModal();
+            const modalContent = document.getElementById("modalContent");
+            const titulo = document.createElement("h2");
+            titulo.textContent = "Carga Masiva de Alumnos";
+
+            const form = document.createElement("form");
+            form.id = "cargaMasivaForm";    
+
+            const formGrid = document.createElement("div");
+            formGrid.className = "form-gridCarga"; // Contenedor 2x2
+            
+            // 1. Campo de Archivo (Input)
+            const divFile = crearCampo("Add .csv:", "file", "filecsv", true);
+
+            // 2. Select de Familias (envuelto en form-field)
+            const divFamilias = document.createElement("div");
+            divFamilias.className = "form-field";
+            
+            const labelFamilias = document.createElement("label");
+            labelFamilias.textContent = "Familia:";
+            labelFamilias.htmlFor = "selFamilias";
+            
+            const selFamilias = document.createElement("select");
+            selFamilias.id = "selFamilias";
+            selFamilias.className = "form-select";
+
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "-1";
+            defaultOption.textContent = "--- Seleccione Familia ---";
+            defaultOption.selected = true;
+
+            selFamilias.appendChild(defaultOption);
+
+            fetch('/API/ApiFamilia.php', {
+                    method: 'GET'
+                })
+                .then((x)=>x.json())
+                .then((json)=>populateSelect(selFamilias, json));
+            
+            divFamilias.appendChild(labelFamilias);
+            divFamilias.appendChild(selFamilias);
+
+            // 3. Botón de Ejemplo
+            const btnEjemplo = document.createElement("button");
+            btnEjemplo.type = "button";
+            btnEjemplo.textContent = "Ejemplo de entrada";
+            btnEjemplo.id = "btnEjemplo";
+
+            // 4. Select de Ciclos (Inicialmente oculto, envuelto en form-field)
+            const divCiclos = document.createElement("div");
+            divCiclos.className = "form-field";
+            
+            const labelCiclos = document.createElement("label");
+            labelCiclos.textContent = "Ciclo:";
+            labelCiclos.htmlFor = "selCiclos";
+            labelCiclos.style.visibility = 'hidden';
+            
+            const selCiclos = document.createElement("select");
+            selCiclos.id = "selCiclos";
+            selCiclos.className = "form-select";
+            selCiclos.style.visibility = 'hidden'; 
+
+            const defaultOption1 = document.createElement("option");
+            defaultOption1.value = "-1";
+            defaultOption1.textContent = "--- Seleccione Ciclo ---";
+            defaultOption1.selected = true;
+
+            selCiclos.appendChild(defaultOption1);
+            
+
+            selFamilias.addEventListener("change", function(){
+
+                fetch('/API/ApiCiclo.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({"id": this.value})
+                })
+                .then((x)=>x.json())
+                .then((json)=>{
+                    
+                    const primeraOpcion = selCiclos.options[0]; 
+                    
+                    for (let i = selCiclos.options.length - 1; i > 0; i--) {
+                        selCiclos.remove(i); 
+                    }
+
+                    selCiclos.innerHTML = '';
+                    selCiclos.appendChild(primeraOpcion);
+                    
+                    populateSelect(selCiclos, json);
+
+                    labelCiclos.style.visibility = "visible";
+                    selCiclos.style.visibility = "visible";
+                })
+                .catch(error => {
+                    console.error('Error al cargar ciclos:', error);
+                    selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
+                });
+            });
+            
+            divCiclos.appendChild(labelCiclos);
+            divCiclos.appendChild(selCiclos);
+
+            // Añadir al grid en orden de cuadrícula (2x2)
+            formGrid.appendChild(divFile);      // Fila 1, Columna 1
+            formGrid.appendChild(divFamilias);  // Fila 1, Columna 2
+            formGrid.appendChild(btnEjemplo);   // Fila 2, Columna 1
+            formGrid.appendChild(divCiclos);    // Fila 2, Columna 2
+            form.appendChild(formGrid);
+
+            // --- Contenido de Ejemplo CSV ---
+
+            const ejemploCsvContent = document.createElement('div');
+            ejemploCsvContent.id = 'ejemploCsvContent';
+            ejemploCsvContent.className = 'csv-example-container';
+            ejemploCsvContent.style.display = 'none'; 
+
+            const pTitle = document.createElement('p');
+            pTitle.textContent = 'Formato requerido:';
+            pTitle.className = 'csv-example-title';
+            
+            const preContent = document.createElement('pre');
+            preContent.textContent = 
+        `       Juan,Perez,juan.perez@ejemplo.com
+        Maria,Gomez,maria.gomez@ejemplo.com
+        Carlos,Rodriguez,carlos.rodriguez@ejemplo.com
+        Laura,Fernandez,laura.fernandez@ejemplo.com
+        Pedro,Lopez,pedro.lopez@ejemplo.com`;
+            
+            preContent.className = 'csv-example-code';
+
+            ejemploCsvContent.appendChild(pTitle);
+            ejemploCsvContent.appendChild(preContent);
+
+            // --- Tabla Vacía para Previsualización --
+
+            modalContent.appendChild(titulo);
+            modalContent.appendChild(form);
+            modalContent.appendChild(ejemploCsvContent); 
+
+            // --- Event Listeners ---
+
+            const btnFile = document.getElementById("filecsv"); 
+            
+            btnFile.addEventListener("change", function(){
+                console.log("Archivo CSV seleccionado.");
+                const divTablaCarga = crearEmptyTable(["Tick", "Nombre", "Apellido", "Email", "OK"]);
+                modalContent.appendChild(divTablaCarga);
+            });
+
+            btnEjemplo.addEventListener("click", function(){
+                if (ejemploCsvContent.style.display === 'none') {
+                    ejemploCsvContent.style.display = 'block';
+                } else {
+                    ejemploCsvContent.style.display = 'none';
+                }
+            });
+
+            
+        });
+
 
 
         btnAdd.addEventListener("click", function(){
-        crearModal();
-        const modalContent = document.getElementById("modalContent");
-        const titulo = document.createElement("h2");
-        titulo.textContent = "Registro de Usuario";
-        
-        const form = document.createElement("form");
-        form.id = "registroForm";
-        
-        function crearCampo(labelText, inputType, inputId, required = false) {
-            const div = document.createElement("div");
-            div.className = "form-field";
+            crearModal();
+            const modalContent = document.getElementById("modalContent");
+            const titulo = document.createElement("h2");
+            titulo.textContent = "Registro de Usuario";
             
-            const label = document.createElement("label");
-            label.textContent = labelText;
-            label.htmlFor = inputId;
+            const form = document.createElement("form");
+            form.id = "registroForm";    
+
+            const formGrid = document.createElement("div");
+            formGrid.className = "form-grid";
             
-            const input = document.createElement("input");
-            input.type = inputType;
-            input.id = inputId;
-            input.name = inputId;
-            input.required = required;
+            const divNombre = crearCampo("Nombre:", "text", "nombre", true);
+            const divApellido = crearCampo("Apellido:", "text", "apellido", true);
+            const divEmail = crearCampo("Email:", "email", "email", true);
+            const divTelefono = crearCampo("Teléfono:", "tel", "telefono", true);
+            const divProvincia = crearCampo("Provincia:", "text", "provincia");
+            const divLocalidad = crearCampo("Localidad:", "text", "localidad");
+            const divDireccion = crearCampo("Dirección:", "text", "direccion");
             
 
-            const errorDiv = document.createElement("div");
-            errorDiv.className = "error-message";
-            errorDiv.id = `error-${inputId}`;
+            const btnRegistrar = document.createElement("button");
+            btnRegistrar.type = "submit";
+            btnRegistrar.textContent = "Registrar Usuario";
+            btnRegistrar.id = "btnRegistrar";
             
-            div.appendChild(label);
-            div.appendChild(input);
-            div.appendChild(errorDiv);
+
+            formGrid.appendChild(divNombre);
+            formGrid.appendChild(divApellido);
+            formGrid.appendChild(divEmail);
+            formGrid.appendChild(divTelefono);
+            formGrid.appendChild(divProvincia);
+            formGrid.appendChild(divLocalidad);
+            formGrid.appendChild(divDireccion);
             
-            return div;
-        }
-        
 
-        const formGrid = document.createElement("div");
-        formGrid.className = "form-grid";
-        
-        const divNombre = crearCampo("Nombre:", "text", "nombre", true);
-        const divApellido = crearCampo("Apellido:", "text", "apellido", true);
-        const divEmail = crearCampo("Email:", "email", "email", true);
-        const divTelefono = crearCampo("Teléfono:", "tel", "telefono", true);
-        const divProvincia = crearCampo("Provincia:", "text", "provincia");
-        const divLocalidad = crearCampo("Localidad:", "text", "localidad");
-        const divDireccion = crearCampo("Dirección:", "text", "direccion");
-        
+            form.appendChild(formGrid);
+            form.appendChild(btnRegistrar);
+            
 
-        const btnRegistrar = document.createElement("button");
-        btnRegistrar.type = "submit";
-        btnRegistrar.textContent = "Registrar Usuario";
-        btnRegistrar.id = "btnRegistrar";
-        
+            modalContent.appendChild(titulo);
+            modalContent.appendChild(form);
+            
 
-        formGrid.appendChild(divNombre);
-        formGrid.appendChild(divApellido);
-        formGrid.appendChild(divEmail);
-        formGrid.appendChild(divTelefono);
-        formGrid.appendChild(divProvincia);
-        formGrid.appendChild(divLocalidad);
-        formGrid.appendChild(divDireccion);
-        
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
 
-        form.appendChild(formGrid);
-        form.appendChild(btnRegistrar);
-        
+                let nom = document.getElementById("nombre");
+                let ape = document.getElementById("apellido");
+                let username = document.getElementById("email");
+                let tel = document.getElementById("telefono");
+                let prov = document.getElementById("provincia");
+                let loc = document.getElementById("localidad");
+                let direccion = document.getElementById("direccion");
 
-        modalContent.appendChild(titulo);
-        modalContent.appendChild(form);
-        
+                fetch('/API/ApiAlumno.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre: nom.value,
+                                            apellido: ape.value,
+                                            username: username.value,
+                                            telefono: tel.value,
+                                            provincia: prov.value,
+                                            localidad: loc.value,
+                                            direccion: direccion.value
+                                            })
+                    })
+                .then((response)=>response.json())
+                .then((data)=>{
+                    if(data.success){
+                        let nuevoAlumno = data.alumno;
+                        
+                        let nuevaFila = crearFilaTabla(
+                            nuevoAlumno.id, 
+                            nuevoAlumno.nombre, 
+                            nuevoAlumno.apellido, 
+                            nuevoAlumno.email
+                        );
+                        tbody.appendChild(nuevaFila);
 
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            let nom = document.getElementById("nombre");
-            let ape = document.getElementById("apellido");
-            let username = document.getElementById("email");
-            let tel = document.getElementById("telefono");
-            let prov = document.getElementById("provincia");
-            let loc = document.getElementById("localidad");
-            let direccion = document.getElementById("direccion");
-
-            fetch('/API/ApiAlumno.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre: nom.value,
-                                        apellido: ape.value,
-                                        username: username.value,
-                                        telefono: tel.value,
-                                        provincia: prov.value,
-                                        localidad: loc.value,
-                                        direccion: direccion.value
-                                        })
+                        window.cerrarModal();
+                    } else {
+                        alert("Error al registrar el alumno.");
+                    }
                 })
-            .then((response)=>response.json())
-            .then((data)=>{
-                if(data.success){
-                    let nuevoAlumno = data.alumno;
-                    
-                    let nuevaFila = crearFilaTabla(
-                        nuevoAlumno.id, 
-                        nuevoAlumno.nombre, 
-                        nuevoAlumno.apellido, 
-                        nuevoAlumno.email
-                    );
-                    tbody.appendChild(nuevaFila);
-
-                    window.cerrarModal();
-                } else {
-                    alert("Error al registrar el alumno.");
-                }
-            })
-            .catch(error => console.error('Error en POST:', error));
+                .catch(error => console.error('Error en POST:', error));
         });
+
     });
 });

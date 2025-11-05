@@ -1,20 +1,18 @@
 <?php
 
-namespace App\core\model;
+namespace App\core\DTO;
 
-class Familia
+
+class CicloDTO
 {
+
     public $id;
     public $nombre;
 
-    //array 
-
-    private $ciclos = [];
-
-    public function __construct($id, $nombre)
+    public function __construct($id, $nom)
     {
         $this->id = $id;
-        $this->nombre = $nombre;
+        $this->nombre = $nom;
     }
 
     public function __get($propiedad)

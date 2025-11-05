@@ -31,7 +31,7 @@ $this->layout('layout/layout', [
     </div>
 
     <div class="add-button-container">
-        <input type="button" id="add" value="CARGA MASIVA">
+        <input type="button" id="cargaMasiva" value="CARGA MASIVA">
     </div>
 
     <div class="table-container">
