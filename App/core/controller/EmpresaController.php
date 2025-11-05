@@ -56,11 +56,34 @@ class EmpresaController
             exit();
         }
 
-        $empresasDTO = Adapter::AllEmpresasToDTO(EmpresaRepo::findAll());
-        $empresasPendientes = array_filter($empresasDTO, fn($empresa) => !$empresa->validated);
+        $empresasAllDTO = [];
+        $empresasLista = [];
+        $empresasPendientes = [];
+
+        $empresasAll = EmpresaRepo::findAll();
+        $empresasAllDTO = Adapter::AllEmpresasToDTO($empresasAll);
+        $empresasLista = $empresasAllDTO;
+
+        if (!empty($_POST["buscar"])) {
+            $filter = $_POST["buscar"];
+            $empresasFiltered = EmpresaRepo::filteredFindAll($filter);
+
+            if (!empty($empresasFiltered)) {
+                $empresasLista = Adapter::AllEmpresasToDTO($empresasFiltered);
+            } else {
+                $empresasLista = $empresasAllDTO;
+            }
+        }
+
+        // Cálculo de $empresasPendientes sin array_filter
+        foreach ($empresasAllDTO as $empresa) {
+            if (!$empresa->validated) {
+                $empresasPendientes[] = $empresa;
+            }
+        }
 
         echo $engine->render('pages/listadoEmpresa', [
-            'empresastotal' => $empresasDTO,
+            'empresasTotal' => $empresasLista,
             'pendientes' => $empresasPendientes
         ]);
     }

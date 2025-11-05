@@ -122,8 +122,6 @@ class Adapter
         if (!$empresaEdit) {
             return false;
         }
-
-        // Update only the fields that are in the form
         $empresaEdit->nombre = $postData['nombre'];
         $empresaEdit->username = $postData['email'];
         $empresaEdit->telefono = $postData['telefono'];

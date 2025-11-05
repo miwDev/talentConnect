@@ -20,11 +20,13 @@ $this->layout('layout/layout', [
 
 <div class="list-container">
     <div class="header-section">
-        <h1>Listado de Empresas</h1>
-        <div class="search-section">
-            <input type="text" name="buscar" id="buscar" placeholder="Buscar empresa...">
-            <button type="button" id="buscar-btn" class="search-btn">Buscar</button>
-        </div>
+        <form action="" method="post">
+            <h1>Listado de Empresas</h1>
+            <div class="search-section">
+                <input type="text" name="buscar" id="buscar" placeholder="Buscar empresa...">
+                <button type="submit" id="buscar-btn" class="search-btn">Buscar</button>
+            </div>
+        </form>
     </div>
 
     <div class="add-button-container">
@@ -36,15 +38,15 @@ $this->layout('layout/layout', [
         <table>
             <thead>
                 <tr>
-                    <th>ID <span class="static-arrow"></span></th>
-                    <th>Nombre <span class="static-arrow"></span></th>
-                    <th>Email <span class="static-arrow"></span></th>
-                    <th>Telefono <span class="static-arrow"></span></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
                     <th class="actions-column">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($empresastotal as $empresa): ?>
+                <?php foreach ($empresasTotal as $empresa): ?>
                     <tr>
                         <td><?= $empresa->id ?></td>
                         <td><?= $empresa->nombre ?></td>
@@ -72,9 +74,9 @@ $this->layout('layout/layout', [
         <table>
             <thead>
                 <tr>
-                    <th>ID <span class="static-arrow"></span></th>
-                    <th>Nombre <span class="static-arrow"></span></th>
-                    <th>Email <span class="static-arrow"></span></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
                     <th class="actionsPending-column">Acciones</th>
                 </tr>
             </thead>

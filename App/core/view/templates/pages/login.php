@@ -12,6 +12,7 @@ $this->layout('layout/layout', [
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
+<script src="/public/assets/js/authorization.js"></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>
@@ -22,7 +23,7 @@ $this->layout('layout/layout', [
         </div>
         <div class="login-contents">
             <div class="login-form-container">
-                <form action="/login" method="POST">
+                <form action="" method="POST">
                     <div class="form-group">
                         <label for="username">Email</label>
                         <input type="text" id="username" name="username" required>

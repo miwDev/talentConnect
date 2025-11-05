@@ -269,6 +269,7 @@ window.addEventListener("load", function(){
 
         btnCarga.addEventListener("click", function(){
             crearModal();
+
             const modalContent = document.getElementById("modalContent");
             const titulo = document.createElement("h2");
             titulo.textContent = "Carga Masiva de Alumnos";
@@ -280,7 +281,7 @@ window.addEventListener("load", function(){
             formGrid.className = "form-gridCarga"; // Contenedor 2x2
             
             // 1. Campo de Archivo (Input)
-            const divFile = crearCampo("Add .csv:", "file", "filecsv", true);
+            const divFile = crearCampo("Cargar .csv:", "file", "filecsv", true);
 
             // 2. Select de Familias (envuelto en form-field)
             const divFamilias = document.createElement("div");
@@ -410,13 +411,88 @@ window.addEventListener("load", function(){
 
             // --- Event Listeners ---
 
-            const btnFile = document.getElementById("filecsv"); 
+            const fileCSV = document.getElementById("filecsv");
             
-            btnFile.addEventListener("change", function(){
+            fileCSV.addEventListener("change", function(){
                 console.log("Archivo CSV seleccionado.");
+                
+                // Limpiar la tabla de previsualización anterior si existe
+                const existingTableDiv = document.getElementById("divTablaC");
+                if (existingTableDiv) {
+                    existingTableDiv.remove();
+                }
+                
+                // Crear la tabla de previsualización ANTES de llenarla
                 const divTablaCarga = crearEmptyTable(["Tick", "Nombre", "Apellido", "Email", "OK"]);
                 modalContent.appendChild(divTablaCarga);
+                const tbodyC = document.getElementById("cargaTbody"); // Obtener la referencia a tbodyC
+
+                if(this.files.length === 0 || this.files[0].type !== "text/csv"){
+                    alert("Por favor, introduce un fichero CSV válido.");
+                    return;
+                }
+                
+                const lector = new FileReader();
+                lector.onload = function(){
+                    // Obtener los datos y dividir por línea, filtrando líneas vacías
+                    let dataCSV = this.result.split("\n").filter(line => line.trim() !== '');
+                    let csvSize = dataCSV.length;
+                    
+                    for(let i = 0; i < csvSize; i++){
+                        
+                        let fila = document.createElement("tr");
+                        // Dividir la línea actual por coma
+                        let celdaContent = dataCSV[i].split(",");
+
+                        // Normalizar y limpiar espacios
+                        const nombre = celdaContent[0] ? celdaContent[0].trim() : '';
+                        const apellido = celdaContent[1] ? celdaContent[1].trim() : '';
+                        const email = celdaContent[2] ? celdaContent[2].trim() : '';
+
+                        // Crear las 5 celdas (td)
+                        for(let j = 0; j < 5; j++){
+                            let celda = document.createElement("td");
+                            
+                            switch (j) {
+                                case 0: // Tick (Checkbox)
+                                    let check = document.createElement("input");
+                                    check.id = "check" + i;
+                                    check.type = "checkbox";
+
+                                    celda.appendChild(check);
+                                    break;
+                                case 1: // Nombre
+                                    celda.innerHTML = nombre;
+                                    break;
+                                case 2: // Apellido
+                                    celda.innerHTML = apellido;
+                                    break;
+                                case 3: // Email
+                                    celda.innerHTML = email;
+                                    break;
+                                case 4: // OK (Span de estado)
+                                    let span = document.createElement("span");
+                                    span.id = "span" + i;
+                                    span.textContent = "Pendiente";
+                                    celda.appendChild(span);
+                                    break;
+                            }
+                            fila.appendChild(celda); 
+                        }
+
+                        tbodyC.appendChild(fila);
+                    }
+
+                    cargarDatos = document.createElement("button");
+                    cargarDatos.id = "btnCarga";
+                    cargarDatos.textContent = "CARGAR"
+                    modalContent.appendChild(cargarDatos);
+
+                };
+
+                lector.readAsText(this.files[0]);
             });
+
 
             btnEjemplo.addEventListener("click", function(){
                 if (ejemploCsvContent.style.display === 'none') {

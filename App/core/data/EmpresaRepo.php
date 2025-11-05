@@ -102,6 +102,58 @@ class EmpresaRepo implements RepoInterface
         return $empresas;
     }
 
+    public static function filteredFindAll($string)
+    {
+
+        $conn = DBC::getConnection();
+        $empresas = [];
+
+        $searchString = '%' . strtolower($string) . '%';
+
+        $query = $conn->prepare(
+            'SELECT e.id AS empresa_id,
+                    u.user_name AS username,
+                    u.passwrd AS pass,
+                    e.nombre AS nombre,
+                    e.telefono AS telefono,
+                    e.direccion AS direccion,
+                    e.nombre_persona AS nombrePersona,
+                    e.telefono_persona AS telPersona,
+                    e.logo AS logo,
+                    e.validacion AS validacion,
+                    e.provincia AS provincia,
+                    e.localidad AS localidad
+             FROM EMPRESA e
+             JOIN USER u ON e.user_id = u.id
+             WHERE LOWER(e.nombre) LIKE :searchString'
+        );
+
+        $query->bindParam(':searchString', $searchString);
+        $query->execute();
+
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resultados as $res) {
+
+            $empresas[] = new Empresa(
+                $res['empresa_id'],
+                $res['username'],
+                $res['pass'],
+                $res['nombre'],
+                $res['telefono'],
+                $res['direccion'],
+                $res['provincia'],
+                $res['localidad'],
+                $res['nombrePersona'],
+                $res['telPersona'],
+                $res['logo'],
+                $res['validacion']
+            );
+        }
+
+        return $empresas;
+    }
+
     public static function findById(int $id)
     {
         $conn = DBC::getConnection();
