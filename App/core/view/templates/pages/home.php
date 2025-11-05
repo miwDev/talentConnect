@@ -13,7 +13,11 @@ $this->layout('layout/layout', [
 <div class="main-container">
     <section id="section0">
         <div class="banner-container">
-            <img class="banner-image" src="/public/assets/images/banner.png" alt="bannerPicture" height="800">
+            <video class="banner-video" width="100%" height="800" autoplay muted loop playsinline>
+                <source src="/public/assets/images/bannerVideo.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+
             <div class="banner-text">
                 <h1>TALENT CONNECT</h1>
                 <h2>Donde el potencial se encuentra con el éxito</h2>
@@ -42,7 +46,7 @@ $this->layout('layout/layout', [
 
             <div class="feature-card feature-card-reverse">
                 <div class="feature-image-container">
-                    <img src="/public/assets/images/section1img.png" alt="Feature 2: Simplificamos la contratación">
+                    <img src="/public/assets/images/section2img.png" alt="Feature 2: Simplificamos la contratación">
                 </div>
                 <div class="feature-text">
                     <h3>Simplificamos la contratación</h3>

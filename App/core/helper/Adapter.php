@@ -3,6 +3,7 @@
 namespace App\core\helper;
 
 use App\core\data\AlumnoRepo;
+use App\core\data\CicloRepo;
 use App\core\data\EmpresaRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
@@ -63,6 +64,36 @@ class Adapter
 
         return $alumnoDTO;
     }
+
+    static public function groupDTOtoAlumno($alumnosDTO)
+    {
+        $fullAlumnos = [];
+
+        foreach ($alumnosDTO as $aluDTO) {
+            $alumno = new Alumno(
+                null,
+                $aluDTO['email'],
+                "temporalPass",
+                $aluDTO['nombre'],
+                $aluDTO['apellido'],
+                900000000,
+                null, // direccion
+                null, // foto
+                null, // cv
+                null, // provincia
+                null  // localidad
+            );
+
+            $ciclo = CicloRepo::findById($aluDTO["cicloId"]);
+            if ($ciclo) {
+                $alumno->estudios[] = $ciclo;
+            }
+
+            $fullAlumnos[] = $alumno;
+        }
+        return $fullAlumnos;
+    }
+
 
     static public function DTOtoEmpresa()
     {

@@ -42,11 +42,11 @@ main {
      border-radius: 0 0 2em 2em; /* Solo esquinas inferiores */ 
 }
 
-.banner-image {
-    width: 100%; 
+.banner-video {
     display: block;
-    filter: blur(0.8em);
+    object-fit: cover;
 }
+
 
 .banner-text {
     position: absolute; 
@@ -211,7 +211,7 @@ header {
 }
 
 .feature-image-container {
-    flex: 0 0 45%;
+    flex: 0 0 30%;
     background-color: #191919;
     border-radius: 2em;
     padding: 2em;

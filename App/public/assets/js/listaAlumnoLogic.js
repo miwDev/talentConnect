@@ -3,6 +3,7 @@ window.addEventListener("load", function(){
     const tbody = document.querySelector("tbody");
     const btnAdd = document.getElementById("add");
     const btnCarga = document.getElementById("cargaMasiva");
+    const barraBusqueda = document.getElementById("buscar");
 
 
     function crearEmptyTable(cabecera){
@@ -191,7 +192,7 @@ window.addEventListener("load", function(){
                     let ape = document.getElementById("apellido");
                     let email = document.getElementById("email");
 
-                    fetch('/API/ApiAlumno.php', {
+                    fetch('/API/ApiAlumno.php?process=edit', {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: rowToEdit.cells[0].textContent,
@@ -414,84 +415,126 @@ window.addEventListener("load", function(){
             const fileCSV = document.getElementById("filecsv");
             
             fileCSV.addEventListener("change", function(){
-                console.log("Archivo CSV seleccionado.");
-                
-                // Limpiar la tabla de previsualización anterior si existe
-                const existingTableDiv = document.getElementById("divTablaC");
-                if (existingTableDiv) {
-                    existingTableDiv.remove();
-                }
-                
-                // Crear la tabla de previsualización ANTES de llenarla
-                const divTablaCarga = crearEmptyTable(["Tick", "Nombre", "Apellido", "Email", "OK"]);
-                modalContent.appendChild(divTablaCarga);
-                const tbodyC = document.getElementById("cargaTbody"); // Obtener la referencia a tbodyC
+            console.log("Archivo CSV seleccionado.");
+            
+            const existingTableDiv = document.getElementById("divTablaC");
+            if (existingTableDiv) {
+                existingTableDiv.remove();
+            }
+            
+            
+            const divTablaCarga = crearEmptyTable(["Tick", "Nombre", "Apellido", "Email", "OK"]);
+            modalContent.appendChild(divTablaCarga);
+            const tbodyC = document.getElementById("cargaTbody"); // Obtener la referencia a tbodyC
 
-                if(this.files.length === 0 || this.files[0].type !== "text/csv"){
-                    alert("Por favor, introduce un fichero CSV válido.");
-                    return;
-                }
+            if(this.files.length === 0 || this.files[0].type !== "text/csv"){
+                alert("Por favor, introduce un fichero CSV válido.");
+                return;
+            }
+            
+            const lector = new FileReader();
+            lector.onload = function(){
+                let dataCSV = this.result.split("\n").filter(line => line.trim() !== '');
+                let csvSize = dataCSV.length;
                 
-                const lector = new FileReader();
-                lector.onload = function(){
-                    // Obtener los datos y dividir por línea, filtrando líneas vacías
-                    let dataCSV = this.result.split("\n").filter(line => line.trim() !== '');
-                    let csvSize = dataCSV.length;
+                for(let i = 0; i < csvSize; i++){
                     
-                    for(let i = 0; i < csvSize; i++){
+                    let fila = document.createElement("tr");
+                    let celdaContent = dataCSV[i].split(",");
+
+                    const nombre = celdaContent[0] ? celdaContent[0].trim() : '';
+                    const apellido = celdaContent[1] ? celdaContent[1].trim() : '';
+                    const email = celdaContent[2] ? celdaContent[2].trim() : '';
+
+                    for(let j = 0; j < 5; j++){
+                        let celda = document.createElement("td");
                         
-                        let fila = document.createElement("tr");
-                        // Dividir la línea actual por coma
-                        let celdaContent = dataCSV[i].split(",");
+                        switch (j) {
+                            case 0: 
+                                let check = document.createElement("input");
+                                check.id = "check" + i;
+                                check.type = "checkbox";
 
-                        // Normalizar y limpiar espacios
-                        const nombre = celdaContent[0] ? celdaContent[0].trim() : '';
-                        const apellido = celdaContent[1] ? celdaContent[1].trim() : '';
-                        const email = celdaContent[2] ? celdaContent[2].trim() : '';
-
-                        // Crear las 5 celdas (td)
-                        for(let j = 0; j < 5; j++){
-                            let celda = document.createElement("td");
-                            
-                            switch (j) {
-                                case 0: // Tick (Checkbox)
-                                    let check = document.createElement("input");
-                                    check.id = "check" + i;
-                                    check.type = "checkbox";
-
-                                    celda.appendChild(check);
-                                    break;
-                                case 1: // Nombre
-                                    celda.innerHTML = nombre;
-                                    break;
-                                case 2: // Apellido
-                                    celda.innerHTML = apellido;
-                                    break;
-                                case 3: // Email
-                                    celda.innerHTML = email;
-                                    break;
-                                case 4: // OK (Span de estado)
-                                    let span = document.createElement("span");
-                                    span.id = "span" + i;
-                                    span.textContent = "Pendiente";
-                                    celda.appendChild(span);
-                                    break;
-                            }
-                            fila.appendChild(celda); 
+                                celda.appendChild(check);
+                                break;
+                            case 1: // Nombre
+                                celda.innerHTML = nombre;
+                                break;
+                            case 2: // Apellido
+                                celda.innerHTML = apellido;
+                                break;
+                            case 3: // Email
+                                celda.innerHTML = email;
+                                break;
+                            case 4: // OK (Span de estado)
+                                let span = document.createElement("span");
+                                span.id = "span" + i;
+                                span.textContent = "Pendiente";
+                                celda.appendChild(span);
+                                break;
                         }
-
-                        tbodyC.appendChild(fila);
+                        fila.appendChild(celda); 
                     }
 
-                    cargarDatos = document.createElement("button");
-                    cargarDatos.id = "btnCarga";
-                    cargarDatos.textContent = "CARGAR"
-                    modalContent.appendChild(cargarDatos);
+                    tbodyC.appendChild(fila);
+                }
 
-                };
+                cargarDatos = document.createElement("button");
+                cargarDatos.id = "btnCargaDatos";
+                cargarDatos.textContent = "CARGAR";
+                modalContent.appendChild(cargarDatos);
 
-                lector.readAsText(this.files[0]);
-            });
+                btnCargaDatos.addEventListener("click", function(){
+                    const alumnosCargar = [];
+                    const filasCheck = Array.from(tbodyC.rows);
+                    const cicloId = document.getElementById("selCiclos").value;
+
+                    for (let i = 0; i < filasCheck.length; i++) {
+                        if (document.getElementById('check' + i).checked) {
+                            let arrayCeldas = Array.from(filasCheck[i].cells);
+                            let obj = {};
+                            let claves = ["nombre", "apellido", "email", "cicloId"];
+                            let valores = [
+                                arrayCeldas[1].textContent, // nom
+                                arrayCeldas[2].textContent, // ape
+                                arrayCeldas[3].textContent, // email
+                                cicloId                     // cicloId del select
+                            ];
+
+                            for (let j = 0; j < claves.length; j++) {
+                                obj[claves[j]] = valores[j];
+                            }
+                            alumnosCargar.push(obj);
+                        }
+                    }
+                    fetch('/API/ApiAlumno.php?process=saveAll', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(alumnosCargar)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(alumno => {
+                            let fila = crearFilaTabla(
+                                alumno.id,
+                                alumno.nombre,
+                                alumno.apellido,
+                                alumno.email
+                            );
+                            tbody.appendChild(fila);
+                        });
+                        window.cerrarModal();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al cargar los alumnos. Por favor, inténtalo de nuevo.');
+                    });
+                }); 
+            }; 
+
+            lector.readAsText(this.files[0]);
+        }); 
+
 
 
             btnEjemplo.addEventListener("click", function(){

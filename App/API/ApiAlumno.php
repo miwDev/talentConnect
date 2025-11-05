@@ -21,7 +21,12 @@ switch ($method) {
         saveAlumno($body_content);
         break;
     case 'PUT':
-        editAlumno($body_content);
+        $process = $_GET['process'] ?? '';
+        if ($process == "edit") {
+            editAlumno($body_content);
+        } else if ($process == "saveAll") {
+            saveGroupDTO($body_content);
+        }
         break;
     case 'DELETE':
         deleteAlumno($body_content);
@@ -58,6 +63,21 @@ function saveAlumno($body)
         ]);
     } else {
         http_response_code(400);
+        echo json_encode(['success' => false]);
+    }
+}
+
+function saveGroupDTO($body)
+{
+    $data = json_decode($body, true);
+    $alumnos = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
+
+    if (!empty($alumnos)) {
+        http_response_code(200);
+        $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
+        echo json_encode($alumnosDTO);
+    } else {
+        http_response_code(404);
         echo json_encode(['success' => false]);
     }
 }

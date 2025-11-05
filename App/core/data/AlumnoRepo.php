@@ -56,6 +56,59 @@ class AlumnoRepo implements RepoInterface
         return $alumnoId;
     }
 
+
+    public static function saveAll($alumnos)
+    {
+        $conn = DBC::getConnection();
+        $guardados = [];
+
+        try {
+            $conn->beginTransaction();
+
+            foreach ($alumnos as $alumno) {
+                // Insertar en USER
+                $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
+                          VALUES (:username, :pass, :role_id)';
+                $stmtUser = $conn->prepare($queryUser);
+                $stmtUser->bindValue(':username', $alumno->username);
+                $stmtUser->bindValue(':pass', $alumno->password);
+                $stmtUser->bindValue(':role_id', 2);
+                $stmtUser->execute();
+
+                $userId = $conn->lastInsertId();
+
+                // Insertar en ALUMNO
+                $queryAlumno = 'INSERT INTO ALUMNO 
+                        (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
+                        VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad)';
+                $stmtAlumno = $conn->prepare($queryAlumno);
+                $stmtAlumno->bindValue(':nombre', $alumno->nombre);
+                $stmtAlumno->bindValue(':apellido', $alumno->apellido);
+                $stmtAlumno->bindValue(':telefono', $alumno->telefono);
+                $stmtAlumno->bindValue(':direccion', $alumno->direccion);
+                $stmtAlumno->bindValue(':foto', $alumno->foto);
+                $stmtAlumno->bindValue(':cv', $alumno->cv);
+                $stmtAlumno->bindValue(':user_id', $userId);
+                $stmtAlumno->bindValue(':provincia', $alumno->provincia);
+                $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+                $stmtAlumno->execute();
+
+                $alumnoId = $conn->lastInsertId();
+                $alumno->id = $alumnoId;
+
+                $guardados[] = $alumno;
+            }
+
+            $conn->commit();
+        } catch (Exception $e) {
+            $conn->rollBack();
+            error_log("Error en saveAll alumnos: " . $e->getMessage());
+            $guardados = [];
+        }
+
+        return $guardados;
+    }
+
     // READ
     public static function findAll()
     {
