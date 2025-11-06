@@ -279,7 +279,7 @@ window.addEventListener("load", function(){
             form.id = "cargaMasivaForm";    
 
             const formGrid = document.createElement("div");
-            formGrid.className = "form-gridCarga"; // Contenedor 2x2
+            formGrid.className = "form-gridCarga";
             
             // 1. Campo de Archivo (Input)
             const divFile = crearCampo("Cargar .csv:", "file", "filecsv", true);
@@ -303,6 +303,11 @@ window.addEventListener("load", function(){
 
             selFamilias.appendChild(defaultOption);
 
+            // Span de error para Familia
+            const errorFamilia = document.createElement("div");
+            errorFamilia.className = "error-message";
+            errorFamilia.id = "error-familia";
+
             fetch('/API/ApiFamilia.php', {
                     method: 'GET'
                 })
@@ -311,6 +316,7 @@ window.addEventListener("load", function(){
             
             divFamilias.appendChild(labelFamilias);
             divFamilias.appendChild(selFamilias);
+            divFamilias.appendChild(errorFamilia);
 
             // 3. Botón de Ejemplo
             const btnEjemplo = document.createElement("button");
@@ -338,9 +344,17 @@ window.addEventListener("load", function(){
             defaultOption1.selected = true;
 
             selCiclos.appendChild(defaultOption1);
+
+            // Span de error para Ciclo
+            const errorCiclo = document.createElement("div");
+            errorCiclo.className = "error-message";
+            errorCiclo.id = "error-ciclo";
+            errorCiclo.style.visibility = 'hidden';
             
 
             selFamilias.addEventListener("change", function(){
+                // Limpiar error de familia al cambiar
+                errorFamilia.textContent = "";
 
                 fetch('/API/ApiCiclo.php', {
                     method: 'PUT',
@@ -363,22 +377,31 @@ window.addEventListener("load", function(){
 
                     labelCiclos.style.visibility = "visible";
                     selCiclos.style.visibility = "visible";
+                    errorCiclo.style.visibility = "visible";
                 })
                 .catch(error => {
                     console.error('Error al cargar ciclos:', error);
                     selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
+                    errorCiclo.textContent = "Error al cargar los ciclos. Intente nuevamente.";
                 });
             });
             
             divCiclos.appendChild(labelCiclos);
             divCiclos.appendChild(selCiclos);
+            divCiclos.appendChild(errorCiclo);
 
             // Añadir al grid en orden de cuadrícula (2x2)
-            formGrid.appendChild(divFile);      // Fila 1, Columna 1
-            formGrid.appendChild(divFamilias);  // Fila 1, Columna 2
-            formGrid.appendChild(btnEjemplo);   // Fila 2, Columna 1
-            formGrid.appendChild(divCiclos);    // Fila 2, Columna 2
+            formGrid.appendChild(divFile);      
+            formGrid.appendChild(divFamilias);  
+            formGrid.appendChild(btnEjemplo);   
+            formGrid.appendChild(divCiclos);    
             form.appendChild(formGrid);
+
+            // Span de error para validación general (debajo del grid)
+            const errorValidacion = document.createElement("div");
+            errorValidacion.className = "error-message error-validacion";
+            errorValidacion.id = "error-validacion";
+            form.appendChild(errorValidacion);
 
             // --- Contenido de Ejemplo CSV ---
 
@@ -404,17 +427,15 @@ window.addEventListener("load", function(){
             ejemploCsvContent.appendChild(pTitle);
             ejemploCsvContent.appendChild(preContent);
 
-            // --- Tabla Vacía para Previsualización --
-
             modalContent.appendChild(titulo);
             modalContent.appendChild(form);
             modalContent.appendChild(ejemploCsvContent); 
 
-            // --- Event Listeners ---
+    // --- Event Listeners ---
 
-            const fileCSV = document.getElementById("filecsv");
-            
-            fileCSV.addEventListener("change", function(){
+        const fileCSV = document.getElementById("filecsv");
+        
+        fileCSV.addEventListener("change", function(){
             console.log("Archivo CSV seleccionado.");
             
             const existingTableDiv = document.getElementById("divTablaC");
@@ -422,24 +443,29 @@ window.addEventListener("load", function(){
                 existingTableDiv.remove();
             }
             
+            // Limpiar errores previos
+            errorValidacion.textContent = "";
             
             const divTablaCarga = crearEmptyTable(["Tick", "Nombre", "Apellido", "Email", "OK"]);
             modalContent.appendChild(divTablaCarga);
-            const tbodyC = document.getElementById("cargaTbody"); // Obtener la referencia a tbodyC
+            const tbodyC = document.getElementById("cargaTbody");
+            const theadC = document.getElementById("cargaThead");
+            const thElements = theadC.querySelectorAll("th"); 
 
             if(this.files.length === 0 || this.files[0].type !== "text/csv"){
-                alert("Por favor, introduce un fichero CSV válido.");
+                errorValidacion.textContent = "Por favor, introduce un fichero CSV válido.";
                 return;
             }
             
             const lector = new FileReader();
             lector.onload = function(){
-                let dataCSV = this.result.split("\n").filter(line => line.trim() !== '');
-                let csvSize = dataCSV.length;
+            let dataCSV = this.result.split("\n").filter(line => line.trim() !== '');
+            let csvSize = dataCSV.length;
                 
                 for(let i = 0; i < csvSize; i++){
                     
                     let fila = document.createElement("tr");
+                    fila.id = i;
                     let celdaContent = dataCSV[i].split(",");
 
                     const nombre = celdaContent[0] ? celdaContent[0].trim() : '';
@@ -448,35 +474,74 @@ window.addEventListener("load", function(){
 
                     for(let j = 0; j < 5; j++){
                         let celda = document.createElement("td");
+                        celda.id = i;
                         
                         switch (j) {
                             case 0: 
                                 let check = document.createElement("input");
                                 check.id = "check" + i;
                                 check.type = "checkbox";
-
+                                check.className = "check-table"
                                 celda.appendChild(check);
                                 break;
+                                
                             case 1: // Nombre
-                                celda.innerHTML = nombre;
+                                let inputNombre = document.createElement("input");
+                                inputNombre.type = "text";
+                                inputNombre.id = "nombre" + i;
+                                inputNombre.name = "nombre" + i;
+                                inputNombre.value = nombre;
+                                inputNombre.className = "tableInput-style text"
+                                celda.appendChild(inputNombre);
+
+                                inputNombre.addEventListener("blur", function() {
+                                    fila.validateInputRow();
+                                });
+
                                 break;
+                                
                             case 2: // Apellido
-                                celda.innerHTML = apellido;
+                                let inputApellido = document.createElement("input");
+                                inputApellido.type = "text";
+                                inputApellido.id = "apellido" + i;
+                                inputApellido.name = "apellido" + i;
+                                inputApellido.value = apellido;
+                                inputApellido.className = "tableInput-style text"
+                                celda.appendChild(inputApellido);
+
+                                inputApellido.addEventListener("blur", function() {
+                                    fila.validateInputRow();
+                                });
+
                                 break;
+                                
                             case 3: // Email
-                                celda.innerHTML = email;
+                                let inputEmail = document.createElement("input");
+                                inputEmail.type = "email";
+                                inputEmail.id = "email" + i;
+                                inputEmail.name = "email" + i;
+                                inputEmail.value = email;
+                                inputEmail.className = "tableInput-style email"
+                                celda.appendChild(inputEmail);
+
+                                inputEmail.addEventListener("blur", function() {
+                                    fila.validateInputRow();
+                                });
+
                                 break;
+                                
                             case 4: // OK (Span de estado)
                                 let span = document.createElement("span");
                                 span.id = "span" + i;
-                                span.textContent = "Pendiente";
+                                span.className = "icon";
                                 celda.appendChild(span);
                                 break;
                         }
-                        fila.appendChild(celda); 
-                    }
 
+                        fila.appendChild(celda);
+                    }   
                     tbodyC.appendChild(fila);
+                    fila.validateInputRow();
                 }
 
                 cargarDatos = document.createElement("button");
@@ -484,69 +549,128 @@ window.addEventListener("load", function(){
                 cargarDatos.textContent = "CARGAR";
                 modalContent.appendChild(cargarDatos);
 
+                // Span de error para resultados de carga
+                const errorCarga = document.createElement("div");
+                errorCarga.className = "error-message error-carga-resultado";
+                errorCarga.id = "error-carga-resultado";
+                modalContent.appendChild(errorCarga);
+
                 btnCargaDatos.addEventListener("click", function(){
-                    const alumnosCargar = [];
-                    const filasCheck = Array.from(tbodyC.rows);
-                    const cicloId = document.getElementById("selCiclos").value;
+                                const alumnosCargar = [];
+                                const filasCheck = Array.from(tbodyC.rows);
+                                const cicloId = document.getElementById("selCiclos").value;
+                                
+                                // Limpiar errores previos
+                                errorFamilia.textContent = "";
+                                errorCiclo.textContent = "";
+                                errorValidacion.textContent = "";
+                                errorCarga.textContent = "";
+                                
+                                let alumnosMarcados = 0;
+                                for (let i = 0; i < filasCheck.length; i++) {
+                                    if (document.getElementById('check' + i).checked) {
+                                        let obj = {};
+                                        let claves = ["nombre", "apellido", "email", "cicloId"];
+                                        let valores = [
+                                            document.getElementById('nombre' + i).value,
+                                            document.getElementById('apellido' + i).value,
+                                            document.getElementById('email' + i).value,
+                                            cicloId
+                                        ];
 
-                    for (let i = 0; i < filasCheck.length; i++) {
-                        if (document.getElementById('check' + i).checked) {
-                            let arrayCeldas = Array.from(filasCheck[i].cells);
-                            let obj = {};
-                            let claves = ["nombre", "apellido", "email", "cicloId"];
-                            let valores = [
-                                arrayCeldas[1].textContent, // nom
-                                arrayCeldas[2].textContent, // ape
-                                arrayCeldas[3].textContent, // email
-                                cicloId                     // cicloId del select
-                            ];
+                                        alumnosMarcados++;
 
-                            for (let j = 0; j < claves.length; j++) {
-                                obj[claves[j]] = valores[j];
-                            }
-                            alumnosCargar.push(obj);
+                                        for (let j = 0; j < claves.length; j++) {
+                                            obj[claves[j]] = valores[j];
+                                        }
+                                        alumnosCargar.push(obj);
+                                    }
+                                }
+                                
+                                // Validaciones con mensajes en spans
+                                if (!selFamilias.value || selFamilias.value === "-1") {
+                                    errorFamilia.textContent = "Debe seleccionar una familia.";
+                                    return;
+                                }
+                                
+                                if (!selCiclos.value || selCiclos.value === "-1") {
+                                    errorCiclo.textContent = "Debe seleccionar un ciclo.";
+                                    return;
+                                }
+                                
+                                if (alumnosMarcados === 0) {
+                                    errorValidacion.textContent = "Debe seleccionar al menos un alumno para cargar.";
+                                    return;
+                                }
+
+                                fetch('/API/ApiAlumno.php?process=saveAll', {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(alumnosCargar)
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+
+                                    const emailsGuardados = [];
+                                    for (let i = 0; i < data.guardados.length; i++) {
+                                        emailsGuardados.push(data.guardados[i].email);
+                                    }
+                                    const emailsErrores = data.errores;
+
+                                    data.guardados.forEach(alumno => {
+                                        let fila = crearFilaTabla(
+                                            alumno.id,
+                                            alumno.nombre,
+                                            alumno.apellido,
+                                            alumno.email
+                                        );
+                                        tbody.appendChild(fila);
+                                    });
+
+                                    const filasTabla = Array.from(tbodyC.rows);
+
+                                    filasTabla.forEach((fila, index) => {
+                                        const emailInput = fila.querySelector('input[type="email"]');
+                                        const checkbox = fila.querySelector('input[type="checkbox"]');
+                                        
+                                        if (emailInput && checkbox && checkbox.checked) {
+                                            const email = emailInput.value;
+                                            
+                                            if (emailsGuardados.includes(email)) {
+                                                fila.className = "saved"
+                                                checkbox.parentNode.removeChild(checkbox);
+
+                                            } else if (emailsErrores.includes(email)) {
+                                                fila.className = "emailDupe"
+                                                checkbox.disabled = true;
+                                            }
+                                        }
+                                    });
+                                    
+                                    // Mostrar resultados en span
+                                    if (data.errores.length > 0) {
+                                        errorCarga.textContent = `Se guardaron ${data.guardados.length} alumnos. ${data.errores.length} emails ya existían: ${emailsErrores.join(', ')}`;
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    errorCarga.textContent = 'Error al cargar los alumnos. Por favor, inténtalo de nuevo.';
+                                });
+                            });
+                        }; 
+
+                        lector.readAsText(this.files[0]);
+                    }); 
+
+                    btnEjemplo.addEventListener("click", function(){
+                        if (ejemploCsvContent.style.display === 'none') {
+                            ejemploCsvContent.style.display = 'block';
+                        } else {
+                            ejemploCsvContent.style.display = 'none';
                         }
-                    }
-                    fetch('/API/ApiAlumno.php?process=saveAll', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(alumnosCargar)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(alumno => {
-                            let fila = crearFilaTabla(
-                                alumno.id,
-                                alumno.nombre,
-                                alumno.apellido,
-                                alumno.email
-                            );
-                            tbody.appendChild(fila);
-                        });
-                        window.cerrarModal();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error al cargar los alumnos. Por favor, inténtalo de nuevo.');
                     });
-                }); 
-            }; 
+                });
 
-            lector.readAsText(this.files[0]);
-        }); 
-
-
-
-            btnEjemplo.addEventListener("click", function(){
-                if (ejemploCsvContent.style.display === 'none') {
-                    ejemploCsvContent.style.display = 'block';
-                } else {
-                    ejemploCsvContent.style.display = 'none';
-                }
-            });
-
-            
-        });
 
 
 

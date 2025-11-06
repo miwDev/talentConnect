@@ -70,12 +70,20 @@ function saveAlumno($body)
 function saveGroupDTO($body)
 {
     $data = json_decode($body, true);
-    $alumnos = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
+    $resultado = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
 
-    if (!empty($alumnos)) {
+    if (!empty($resultado['guardados']) || !empty($resultado['errores'])) {
         http_response_code(200);
-        $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
-        echo json_encode($alumnosDTO);
+
+        $alumnosDTO = Adapter::AllAlumnoToDTO($resultado['guardados']);
+
+        $response = [
+            'success' => true,
+            'guardados' => $alumnosDTO,
+            'errores' => $resultado['errores'] // Array of indices with errors
+        ];
+
+        echo json_encode($response);
     } else {
         http_response_code(404);
         echo json_encode(['success' => false]);

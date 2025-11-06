@@ -39,6 +39,10 @@ class Adapter
     {
         $alumnosDTO = [];
 
+        if (empty($alumnos)) {
+            return $alumnosDTO;
+        }
+
         foreach ($alumnos as $alumno) {
             $alumnosDTO[] = new AlumnoDTO(
                 $alumno->id,
@@ -91,6 +95,7 @@ class Adapter
 
             $fullAlumnos[] = $alumno;
         }
+
         return $fullAlumnos;
     }
 

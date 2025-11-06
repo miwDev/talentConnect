@@ -61,42 +61,61 @@ class AlumnoRepo implements RepoInterface
     {
         $conn = DBC::getConnection();
         $guardados = [];
+        $errores = [];
 
         try {
             $conn->beginTransaction();
 
-            foreach ($alumnos as $alumno) {
-                // Insertar en USER
-                $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
+            foreach ($alumnos as $index => $alumno) {
+                // Check if email (username) already exists
+                $queryCheckEmail = 'SELECT COUNT(*) FROM USER WHERE user_name = :username';
+                $stmtCheck = $conn->prepare($queryCheckEmail);
+                $stmtCheck->bindValue(':username', $alumno->username);
+                $stmtCheck->execute();
+                $emailExists = $stmtCheck->fetchColumn() > 0;
+
+                if ($emailExists) {
+                    $errores[] = $alumno->username;
+                    continue;
+                }
+
+                try {
+                    // Insertar en USER
+                    $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
                           VALUES (:username, :pass, :role_id)';
-                $stmtUser = $conn->prepare($queryUser);
-                $stmtUser->bindValue(':username', $alumno->username);
-                $stmtUser->bindValue(':pass', $alumno->password);
-                $stmtUser->bindValue(':role_id', 2);
-                $stmtUser->execute();
+                    $stmtUser = $conn->prepare($queryUser);
+                    $stmtUser->bindValue(':username', $alumno->username);
+                    $stmtUser->bindValue(':pass', $alumno->password);
+                    $stmtUser->bindValue(':role_id', 2);
+                    $stmtUser->execute();
 
-                $userId = $conn->lastInsertId();
+                    $userId = $conn->lastInsertId();
 
-                // Insertar en ALUMNO
-                $queryAlumno = 'INSERT INTO ALUMNO 
+                    // Insertar en ALUMNO
+                    $queryAlumno = 'INSERT INTO ALUMNO 
                         (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
                         VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad)';
-                $stmtAlumno = $conn->prepare($queryAlumno);
-                $stmtAlumno->bindValue(':nombre', $alumno->nombre);
-                $stmtAlumno->bindValue(':apellido', $alumno->apellido);
-                $stmtAlumno->bindValue(':telefono', $alumno->telefono);
-                $stmtAlumno->bindValue(':direccion', $alumno->direccion);
-                $stmtAlumno->bindValue(':foto', $alumno->foto);
-                $stmtAlumno->bindValue(':cv', $alumno->cv);
-                $stmtAlumno->bindValue(':user_id', $userId);
-                $stmtAlumno->bindValue(':provincia', $alumno->provincia);
-                $stmtAlumno->bindValue(':localidad', $alumno->localidad);
-                $stmtAlumno->execute();
+                    $stmtAlumno = $conn->prepare($queryAlumno);
+                    $stmtAlumno->bindValue(':nombre', $alumno->nombre);
+                    $stmtAlumno->bindValue(':apellido', $alumno->apellido);
+                    $stmtAlumno->bindValue(':telefono', $alumno->telefono);
+                    $stmtAlumno->bindValue(':direccion', $alumno->direccion);
+                    $stmtAlumno->bindValue(':foto', $alumno->foto);
+                    $stmtAlumno->bindValue(':cv', $alumno->cv);
+                    $stmtAlumno->bindValue(':user_id', $userId);
+                    $stmtAlumno->bindValue(':provincia', $alumno->provincia);
+                    $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+                    $stmtAlumno->execute();
 
-                $alumnoId = $conn->lastInsertId();
-                $alumno->id = $alumnoId;
+                    $alumnoId = $conn->lastInsertId();
+                    $alumno->id = $alumnoId;
 
-                $guardados[] = $alumno;
+                    $guardados[] = $alumno;
+                } catch (Exception $e) {
+                    // If any error during insertion, add email to errors
+                    error_log("Error al guardar alumno en índice $index: " . $e->getMessage());
+                    $errores[] = $alumno->username;
+                }
             }
 
             $conn->commit();
@@ -104,9 +123,13 @@ class AlumnoRepo implements RepoInterface
             $conn->rollBack();
             error_log("Error en saveAll alumnos: " . $e->getMessage());
             $guardados = [];
+            $errores = array_keys($alumnos);
         }
 
-        return $guardados;
+        return [
+            'guardados' => $guardados,
+            'errores' => $errores
+        ];
     }
 
     // READ
