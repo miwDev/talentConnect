@@ -35,6 +35,7 @@ $this->layout('layout/adminLayout', [
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>CIF</th>
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Telefono</th>
@@ -45,6 +46,7 @@ $this->layout('layout/adminLayout', [
                 <?php foreach ($empresasTotal as $empresa): ?>
                     <tr>
                         <td><?= $empresa->id ?></td>
+                        <td><?= $empresa->cif ?></td>
                         <td><?= $empresa->nombre ?></td>
                         <td><?= $empresa->email ?></td>
                         <td><?= $empresa->telefono ?></td>

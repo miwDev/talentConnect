@@ -125,6 +125,7 @@ class Adapter
             null,
             $_POST['email'],
             "temporalPass",
+            $_POST['cif'],
             $_POST['nombre'],
             $_POST['telefono'],
             null, //direccion
@@ -146,6 +147,7 @@ class Adapter
         foreach ($empresas as $empresa) {
             $empresasDTO[] = new EmpresaDTO(
                 $empresa->id,
+                $empresa->cif,
                 $empresa->nombre,
                 $empresa->username,
                 $empresa->telefono,
@@ -161,6 +163,7 @@ class Adapter
 
         $empresaDTO = new EmpresaDTO(
             $empresa->id,
+            $empresa->cif,
             $empresa->nombre,
             $empresa->username,
             $empresa->telefono,
@@ -177,6 +180,7 @@ class Adapter
         if (!$empresaEdit) {
             return false;
         }
+        $empresaEdit->cif = $postData['cif'];
         $empresaEdit->nombre = $postData['nombre'];
         $empresaEdit->username = $postData['email'];
         $empresaEdit->telefono = $postData['telefono'];

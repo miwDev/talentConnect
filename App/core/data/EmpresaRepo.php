@@ -29,9 +29,9 @@ class EmpresaRepo implements RepoInterface
             $userId = $conn->lastInsertId();
 
             $queryEmpresa = 'INSERT INTO EMPRESA 
-                                (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad)
+                                (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad, cif)
                              VALUES 
-                                (:nomb, :telef, :direccion, :nom_pers, :telf_pers, :logo, :user_id, :validacion, :provincia, :localidad)';
+                                (:nomb, :telef, :direccion, :nom_pers, :telf_pers, :logo, :user_id, :validacion, :provincia, :localidad, :cif)';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
             $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
             $stmtEmpresa->bindValue(':telef', $empresa->telefono);
@@ -43,6 +43,7 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
             $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
             $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
+            $stmtEmpresa->bindValue(':cif', $empresa->cif);
             $stmtEmpresa->execute();
 
             $empresaId = $conn->lastInsertId();
@@ -73,7 +74,8 @@ class EmpresaRepo implements RepoInterface
                     e.logo AS logo,
                     e.validacion AS validacion,
                     e.provincia AS provincia,
-                    e.localidad AS localidad
+                    e.localidad AS localidad,
+                    e.cif AS cif
              FROM EMPRESA e
              JOIN USER u ON e.user_id = u.id'
         );
@@ -87,6 +89,7 @@ class EmpresaRepo implements RepoInterface
                 $res['empresa_id'],
                 $res['username'],
                 $res['pass'],
+                $res['cif'],
                 $res['nombre'],
                 $res['telefono'],
                 $res['direccion'],
@@ -122,7 +125,8 @@ class EmpresaRepo implements RepoInterface
                     e.logo AS logo,
                     e.validacion AS validacion,
                     e.provincia AS provincia,
-                    e.localidad AS localidad
+                    e.localidad AS localidad,
+                    e.cif AS cif
              FROM EMPRESA e
              JOIN USER u ON e.user_id = u.id
              WHERE LOWER(e.nombre) LIKE :searchString'
@@ -139,6 +143,7 @@ class EmpresaRepo implements RepoInterface
                 $res['empresa_id'],
                 $res['username'],
                 $res['pass'],
+                $res['cif'],
                 $res['nombre'],
                 $res['telefono'],
                 $res['direccion'],
@@ -169,7 +174,8 @@ class EmpresaRepo implements RepoInterface
                          e.logo AS logo,
                          e.validacion AS validacion,
                          e.provincia AS provincia,
-                         e.localidad AS localidad
+                         e.localidad AS localidad,
+                         e.cif AS cif
                   FROM EMPRESA e
                   JOIN USER u ON e.user_id = u.id
                   WHERE e.id = :id';
@@ -189,6 +195,7 @@ class EmpresaRepo implements RepoInterface
             $resultado['empresa_id'],
             $resultado['username'],
             $resultado['pass'],
+            $resultado['cif'],
             $resultado['nombre'],
             $resultado['telefono'],
             $resultado['direccion'],
@@ -224,7 +231,8 @@ class EmpresaRepo implements RepoInterface
                                  logo = :logo,
                                  validacion = :validacion,
                                  provincia = :provincia,
-                                 localidad = :localidad
+                                 localidad = :localidad,
+                                 cif = :cif
                              WHERE id = :id';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
             $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
@@ -236,6 +244,7 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
             $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
             $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
+            $stmtEmpresa->bindValue(':cif', $empresa->cif);
             $stmtEmpresa->bindValue(':id', $empresa->id);
             $stmtEmpresa->execute();
 

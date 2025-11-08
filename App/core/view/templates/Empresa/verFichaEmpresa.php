@@ -27,6 +27,10 @@ $this->layout('layout/adminLayout', [
                     <img src="/public/assets/images/placeholder.png" alt="logo_image" />
                 </div>
                 <div>
+                    <label for="cif">CIF</label>
+                    <input type="text" name="cif" value="<?= $empresaVer->cif ?>" readonly>
+                </div>
+                <div>
                     <label for="nombre">NOMBRE</label>
                     <input type="text" name="nombre" value="<?= $empresaVer->nombre ?>" readonly>
                 </div>

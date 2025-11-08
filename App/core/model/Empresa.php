@@ -8,6 +8,7 @@ class Empresa
     private $id;
     private $username;
     private $password;
+    private $cif;
     private $nombre;
     private $telefono;
     private $direccion;
@@ -22,11 +23,12 @@ class Empresa
 
     private $ofertas = [];
 
-    public function __construct($id, $username, $pass, $nombre, $telefono, $direccion, $provincia, $localidad, $nombrePersona, $telPersona, $logo, $validacion)
+    public function __construct($id, $username, $pass, $cif, $nombre, $telefono, $direccion, $provincia, $localidad, $nombrePersona, $telPersona, $logo, $validacion)
     {
         $this->id = $id;
         $this->username = $username;
         $this->password = $pass;
+        $this->cif = $cif;
         $this->nombre = $nombre;
         $this->telefono = $telefono;
         $this->direccion = $direccion;

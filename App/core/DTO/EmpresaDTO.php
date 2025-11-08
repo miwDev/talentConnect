@@ -5,14 +5,16 @@ namespace App\core\DTO;
 class EmpresaDTO
 {
     private $id;
+    private $cif;
     private $nombre;
     private $email;
     private $telefono;
     private $validated;
 
-    public function __construct($id, $nom, $email, $tel, $val)
+    public function __construct($id, $cif, $nom, $email, $tel, $val)
     {
         $this->id = $id;
+        $this->cif = $cif;
         $this->nombre = $nom;
         $this->email = $email;
         $this->telefono = $tel;

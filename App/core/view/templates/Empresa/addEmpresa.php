@@ -22,6 +22,10 @@ $this->layout('layout/adminLayout', [
     <form action="" method="post" id="editForm">
         <div class="form-grid">
             <div class="form-field">
+                <label for="cif">CIF</label>
+                <input type="text" name="cif">
+            </div>
+            <div class="form-field">
                 <label for="nombre">NOMBRE</label>
                 <input type="text" name="nombre">
             </div>
@@ -31,7 +35,7 @@ $this->layout('layout/adminLayout', [
             </div>
             <div class="form-field">
                 <label for="telefono">TELÉFONO</label>
-                <input type="text" name="telefono">
+                <input type="tel" name="telefono">
             </div>
             <div class="form-field"></div>
         </div>

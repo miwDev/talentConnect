@@ -106,7 +106,7 @@ function deleteAlumno($body)
 function editAlumno($body)
 {
     $data = json_decode($body, true);
-    if (AlumnoRepo::updateDTO($data)) {
+    if (AlumnoRepo::updateDTO(Adapter::editedDatatoDTO($data))) {
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {
