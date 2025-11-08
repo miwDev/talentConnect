@@ -589,7 +589,7 @@ background: #d7b4f2;
     display: flex;
     align-items: center; 
     gap: 40px; 
-    padding: 20px;
+    padding: 40px;
     border: 2px dashed #EBD3FD; 
     border-radius: 1em;
 }

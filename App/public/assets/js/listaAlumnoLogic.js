@@ -188,25 +188,30 @@ window.addEventListener("load", function(){
 
                 form.addEventListener("submit", function(e) {
                     e.preventDefault();
-                    let nom = document.getElementById("nombre");
-                    let ape = document.getElementById("apellido");
-                    let email = document.getElementById("email");
+                    
+                    const formData = new FormData(this);
+                    formData.append('id', rowToEdit.cells[0].textContent);
+
+                    const data = { // se hace esto porque PUT no recibe formData
+                        id: formData.get('id'),
+                        nombre: formData.get('nombre'),
+                        apellido: formData.get('apellido'),
+                        email: formData.get('email')
+                    };
 
                     fetch('/API/ApiAlumno.php?process=edit', {
                         method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: rowToEdit.cells[0].textContent,
-                                                nombre: nom.value,
-                                                apellido: ape.value,
-                                                email: email.value
-                                                })
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     })
                     .then(response => response.json())
                     .then(data => {
                         if(data.success){
-                            rowToEdit.cells[1].textContent = nom.value;
-                            rowToEdit.cells[2].textContent = ape.value;
-                            rowToEdit.cells[3].textContent = email.value;
+                            rowToEdit.cells[1].textContent = formData.get("nombre");
+                            rowToEdit.cells[2].textContent = formData.get("apellido");
+                            rowToEdit.cells[3].textContent = formData.get("email");
 
                             window.cerrarModal();
                         }else{
@@ -353,38 +358,52 @@ window.addEventListener("load", function(){
             
 
             selFamilias.addEventListener("change", function(){
-                // Limpiar error de familia al cambiar
-                errorFamilia.textContent = "";
+            // Limpiar error de familia al cambiar
+            errorFamilia.textContent = "";
 
-                fetch('/API/ApiCiclo.php', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({"id": this.value})
-                })
-                .then((x)=>x.json())
-                .then((json)=>{
-                    
-                    const primeraOpcion = selCiclos.options[0]; 
-                    
-                    for (let i = selCiclos.options.length - 1; i > 0; i--) {
-                        selCiclos.remove(i); 
-                    }
+            // 1. Ocultar los campos de ciclo si se selecciona la opción por defecto de familia (-1)
+            if (this.value === "-1") {
+                labelCiclos.style.visibility = "hidden";
+                selCiclos.style.visibility = "hidden";
+                errorCiclo.style.visibility = "hidden";
+                
+                // Limpiar ciclos
+                selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
+                return;
+            }
 
-                    selCiclos.innerHTML = '';
-                    selCiclos.appendChild(primeraOpcion);
-                    
-                    populateSelect(selCiclos, json);
 
-                    labelCiclos.style.visibility = "visible";
-                    selCiclos.style.visibility = "visible";
-                    errorCiclo.style.visibility = "visible";
-                })
-                .catch(error => {
-                    console.error('Error al cargar ciclos:', error);
-                    selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
-                    errorCiclo.textContent = "Error al cargar los ciclos. Intente nuevamente.";
-                });
+            // Codificación de URL para robustez (buena práctica)
+            const familyId = this.value;
+
+            fetch('/API/ApiCiclo.php?familia=' + familyId, {
+                method: 'GET'
+            })
+            .then((x)=>x.json())
+            .then((json)=>{
+                
+                // CORRECCIÓN: Limpiar todas las opciones excepto la primera
+                selCiclos.innerHTML = '';
+                const defaultOption = document.createElement("option");
+                defaultOption.value = "-1";
+                defaultOption.textContent = "--- Seleccione Ciclo ---";
+                defaultOption.selected = true;
+                selCiclos.appendChild(defaultOption);
+
+                
+                populateSelect(selCiclos, json);
+
+                // Mostrar los campos
+                labelCiclos.style.visibility = "visible";
+                selCiclos.style.visibility = "visible";
+                errorCiclo.style.visibility = "visible";
+            })
+            .catch(error => {
+                console.error('Error al cargar ciclos:', error);
+                selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
+                errorCiclo.textContent = "Error al cargar los ciclos. Intente nuevamente.";
             });
+        });
             
             divCiclos.appendChild(labelCiclos);
             divCiclos.appendChild(selCiclos);
@@ -721,25 +740,22 @@ window.addEventListener("load", function(){
             form.addEventListener("submit", function(e) {
                 e.preventDefault();
 
-                let nom = document.getElementById("nombre");
-                let ape = document.getElementById("apellido");
-                let username = document.getElementById("email");
-                let tel = document.getElementById("telefono");
-                let prov = document.getElementById("provincia");
-                let loc = document.getElementById("localidad");
-                let direccion = document.getElementById("direccion");
+                const formData = new FormData(this);
+
+                    const data = { // se envian los datos en una variable para no usar $_POST en backend
+                        nombre: formData.get('nombre'),
+                        apellido: formData.get('apellido'),
+                        username: formData.get('email'),
+                        telefono: formData.get('telefono'),
+                        provincia: formData.get('provincia'),
+                        localidad: formData.get('localidad'),
+                        direccion: formData.get('direccion'),
+                    };
 
                 fetch('/API/ApiAlumno.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nombre: nom.value,
-                                            apellido: ape.value,
-                                            username: username.value,
-                                            telefono: tel.value,
-                                            provincia: prov.value,
-                                            localidad: loc.value,
-                                            direccion: direccion.value
-                                            })
+                    body: JSON.stringify(data)
                     })
                 .then((response)=>response.json())
                 .then((data)=>{

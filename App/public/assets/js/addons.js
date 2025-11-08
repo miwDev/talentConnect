@@ -6,7 +6,7 @@
 HTMLTableRowElement.prototype.validateInputRow = function() {
     let inputs = this.querySelectorAll("input");
     let check = document.getElementById('check' + this.id);
-
+ 
     let size = inputs.length;
     let validatedRow = true;
 
@@ -25,6 +25,7 @@ HTMLTableRowElement.prototype.validateInputRow = function() {
         check.disabled = false;
     }else{
         this.className = "error";
+        check.checked = false;
         check.disabled = true;
     }
 };
