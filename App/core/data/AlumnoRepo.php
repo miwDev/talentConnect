@@ -30,8 +30,8 @@ class AlumnoRepo implements RepoInterface
             $userId = $conn->lastInsertId();
 
             $queryAlumno = 'INSERT INTO ALUMNO 
-                        (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
-                        VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad)';
+                        (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad, dni, confirmed)
+                        VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad, :dni, :confirmed)';
             $stmtAlumno = $conn->prepare($queryAlumno);
             $stmtAlumno->bindValue(':nombre', $alumno->nombre);
             $stmtAlumno->bindValue(':apellido', $alumno->apellido);
@@ -42,6 +42,8 @@ class AlumnoRepo implements RepoInterface
             $stmtAlumno->bindValue(':user_id', $userId);
             $stmtAlumno->bindValue(':provincia', $alumno->provincia);
             $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+            $stmtAlumno->bindValue(':dni', $alumno->dni);
+            $stmtAlumno->bindValue(':confirmed', $alumno->confirmed);
             $stmtAlumno->execute();
 
             $alumnoId = $conn->lastInsertId();
@@ -93,8 +95,8 @@ class AlumnoRepo implements RepoInterface
 
                     // Insertar en ALUMNO
                     $queryAlumno = 'INSERT INTO ALUMNO 
-                        (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad)
-                        VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad)';
+                        (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad, dni, confirmed)
+                        VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad, :dni, :confirmed)';
                     $stmtAlumno = $conn->prepare($queryAlumno);
                     $stmtAlumno->bindValue(':nombre', $alumno->nombre);
                     $stmtAlumno->bindValue(':apellido', $alumno->apellido);
@@ -105,6 +107,8 @@ class AlumnoRepo implements RepoInterface
                     $stmtAlumno->bindValue(':user_id', $userId);
                     $stmtAlumno->bindValue(':provincia', $alumno->provincia);
                     $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+                    $stmtAlumno->bindValue(':dni', $alumno->dni);
+                    $stmtAlumno->bindValue(':confirmed', $alumno->confirmed);
                     $stmtAlumno->execute();
 
                     $alumnoId = $conn->lastInsertId();
@@ -149,7 +153,9 @@ class AlumnoRepo implements RepoInterface
                 a.foto AS foto,
                 a.cv AS cv,
                 a.provincia AS provincia,
-                a.localidad AS localidad
+                a.localidad AS localidad,
+                a.dni as dni,
+                a.confirmed as confirmed
          FROM ALUMNO a
          JOIN USER u ON a.user_id = u.id'
         );
@@ -164,12 +170,14 @@ class AlumnoRepo implements RepoInterface
                 $res['pass'],
                 $res['nombre'],
                 $res['ape'],
+                $res['dni'],
                 $res['tel'],
                 $res['direccion'],
                 $res['foto'],
                 $res['cv'],
                 $res['provincia'],
-                $res['localidad']
+                $res['localidad'],
+                $res['confirmed']
             );
         }
 
@@ -190,7 +198,9 @@ class AlumnoRepo implements RepoInterface
                         a.foto as foto,
                         a.cv as cv,
                         a.provincia as provincia,
-                        a.localidad as localidad
+                        a.localidad as localidad,
+                        a.dni as dni,
+                        a.confirmed as confirmed
             FROM ALUMNO a
             JOIN USER u
             on a.user_id = u.id
@@ -211,12 +221,14 @@ class AlumnoRepo implements RepoInterface
                 $resultado['pass'],
                 $resultado['nombre'],
                 $resultado['ape'],
+                $resultado['dni'],
                 $resultado['tel'],
                 $resultado['direccion'],
                 $resultado['foto'],
                 $resultado['cv'],
                 $resultado['provincia'],
-                $resultado['localidad']
+                $resultado['localidad'],
+                $resultado['confirmed']
             );
         }
 
@@ -257,7 +269,9 @@ class AlumnoRepo implements RepoInterface
                             foto = :foto,
                             cv = :cv,
                             provincia = :provincia,
-                            localidad = :localidad
+                            localidad = :localidad,
+                            dni = :dni,
+                            confirmed = :confirmed
                         WHERE id = :id';
 
             $stmtAlumno = $conn->prepare($queryAlumno);
@@ -269,6 +283,8 @@ class AlumnoRepo implements RepoInterface
             $stmtAlumno->bindValue(':cv', $alumno->cv);
             $stmtAlumno->bindValue(':provincia', $alumno->provincia);
             $stmtAlumno->bindValue(':localidad', $alumno->localidad);
+            $stmtAlumno->bindValue(':dni', $alumno->dni);
+            $stmtAlumno->bindValue(':confirmed', $alumno->confirmed);
             $stmtAlumno->bindValue(':id', $alumno->id);
             $stmtAlumno->execute();
 
@@ -300,7 +316,6 @@ class AlumnoRepo implements RepoInterface
     }
 
 
-    // UPDATE - Only DTO fields (for web interface edits)
     public static function updateDTO($alumnoDTO)
     {
         $conn = DBC::getConnection();
@@ -315,14 +330,14 @@ class AlumnoRepo implements RepoInterface
                         WHERE id = :id';
 
             $stmtAlumno = $conn->prepare($queryAlumno);
-            $stmtAlumno->bindValue(':nombre', $alumnoDTO['nombre']);
-            $stmtAlumno->bindValue(':apellido', $alumnoDTO['apellido']);
-            $stmtAlumno->bindValue(':id', $alumnoDTO['id']);
+            $stmtAlumno->bindValue(':nombre', $alumnoDTO->nombre);
+            $stmtAlumno->bindValue(':apellido', $alumnoDTO->apellido);
+            $stmtAlumno->bindValue(':id', $alumnoDTO->id);
             $stmtAlumno->execute();
 
             $queryGetUserId = 'SELECT user_id FROM ALUMNO WHERE id = :alumno_id';
             $stmtGetUserId = $conn->prepare($queryGetUserId);
-            $stmtGetUserId->bindValue(':alumno_id', $alumnoDTO['id']);
+            $stmtGetUserId->bindValue(':alumno_id', $alumnoDTO->id);
             $stmtGetUserId->execute();
             $user_id = $stmtGetUserId->fetchColumn();
 
@@ -333,7 +348,7 @@ class AlumnoRepo implements RepoInterface
                     WHERE id = :user_id';
 
                 $stmtUser = $conn->prepare($queryUser);
-                $stmtUser->bindValue(':username', $alumnoDTO['email']);
+                $stmtUser->bindValue(':username', $alumnoDTO->email);
                 $stmtUser->bindValue(':user_id', $user_id);
                 $stmtUser->execute();
             }

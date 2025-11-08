@@ -10,13 +10,15 @@ class AlumnoDTO
     public $nombre;
     public $apellido;
     public $email;
+    public $confirmed;
 
-    public function __construct($id, $nom, $ape, $email)
+    public function __construct($id, $nom, $ape, $email, $conf)
     {
         $this->id = $id;
         $this->nombre = $nom;
         $this->apellido = $ape;
         $this->email = $email;
+        $this->confirmed = $conf;
     }
 
     public function __get($propiedad)

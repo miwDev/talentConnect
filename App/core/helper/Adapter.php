@@ -19,17 +19,19 @@ class Adapter
     static public function DTOtoAlumno($data)
     {
         $alumno = new Alumno(
-            null,
-            $data['username'],
-            "temporalPass",
-            $data['nombre'],
-            $data['apellido'],
-            $data['telefono'],
-            $data['direccion'],
-            null,
-            null,
-            $data['provincia'],
-            $data['localidad']
+            null, //id
+            $data['username'], //email
+            "temporalPass", //pass
+            $data['nombre'], //nombre
+            $data['apellido'], //apellido
+            null, //dni
+            $data['telefono'], //telefone
+            $data['direccion'], //dir
+            null, //foto
+            null, //cv
+            $data['provincia'], // provincia
+            $data['localidad'], //localidad
+            0 //confirmed = 0/false
         );
 
         return $alumno;
@@ -48,7 +50,8 @@ class Adapter
                 $alumno->id,
                 $alumno->nombre,
                 $alumno->apellido,
-                $alumno->username
+                $alumno->username,
+                $alumno->confirmed
             );
         }
 
@@ -63,7 +66,21 @@ class Adapter
             $alumno->id,
             $alumno->nombre,
             $alumno->apellido,
-            $alumno->username
+            $alumno->username,
+            $alumno->confirmed
+        );
+
+        return $alumnoDTO;
+    }
+
+    static public function editedDatatoDTO($data)
+    {
+        $alumnoDTO = new AlumnoDTO(
+            $data['id'], //id
+            $data['nombre'], // nombre
+            $data['apellido'], // ape
+            $data['email'], // username
+            0 // confirmed
         );
 
         return $alumnoDTO;
@@ -80,12 +97,14 @@ class Adapter
                 "temporalPass",
                 $aluDTO['nombre'],
                 $aluDTO['apellido'],
-                900000000,
+                null, // dni
+                900000000, // tel
                 null, // direccion
                 null, // foto
                 null, // cv
                 null, // provincia
-                null  // localidad
+                null,  // localidad
+                0 //confirmed
             );
 
             $ciclo = CicloRepo::findById($aluDTO["cicloId"]);
