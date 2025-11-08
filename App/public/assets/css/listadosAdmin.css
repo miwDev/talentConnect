@@ -811,7 +811,7 @@ tr.valida .icon {
     background-position: center;
 }
 tr.error .icon {
-    background: url("/public/assets/images/cross.svg") no-repeat;
+    background: url("/public/assets/images/errorEmail.svg") no-repeat;
     display: inline-block;
     width: 24px;
     height: 24px;
@@ -820,7 +820,7 @@ tr.error .icon {
 }
 
 tr.emailDupe .icon {
-    background: url("/public/assets/images/errorEmail.svg") no-repeat;
+    background: url("/public/assets/images/cross.svg") no-repeat;
     display: inline-block;
     width: 24px;
     height: 24px;

@@ -1,5 +1,8 @@
 //defer
 
+
+// table methods
+
 HTMLTableRowElement.prototype.validateInputRow = function() {
     let inputs = this.querySelectorAll("input");
     let check = document.getElementById('check' + this.id);

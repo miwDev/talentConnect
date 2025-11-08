@@ -12,7 +12,7 @@ class EmpresaController
         $selfRoute = "Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-empresas";
 
         if (isset($_POST["btnAdd"])) {
-            echo $engine->render('pages/addEmpresa');
+            echo $engine->render('Empresa/addEmpresa');
         } elseif (isset($_POST["btnAddCompany"])) {
             EmpresaRepo::save(Adapter::DTOtoEmpresa());
             header($selfRoute);
@@ -20,14 +20,14 @@ class EmpresaController
         } elseif (isset($_POST["btnEdit"])) {
             $id = $_POST["btnEdit"];
             $empresaDTO = Adapter::empresaToDTO($id);
-            echo $engine->render('pages/editEmpresa', [
+            echo $engine->render('Empresa/editEmpresa', [
                 'empresaEdit' => $empresaDTO
             ]);
             exit();
         } elseif (isset($_POST["btnVerFicha"])) {
             $id = $_POST["btnVerFicha"];
             $empresa = EmpresaRepo::findById($id);
-            echo $engine->render('pages/verFichaEmpresa', [
+            echo $engine->render('Empresa/verFichaEmpresa', [
                 'empresaVer' => $empresa
             ]);
             exit();
@@ -82,7 +82,7 @@ class EmpresaController
             }
         }
 
-        echo $engine->render('pages/listadoEmpresa', [
+        echo $engine->render('Empresa/listadoEmpresa', [
             'empresasTotal' => $empresasLista,
             'pendientes' => $empresasPendientes
         ]);
