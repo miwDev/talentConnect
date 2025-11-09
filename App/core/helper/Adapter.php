@@ -10,7 +10,6 @@ use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
 use App\core\model\Alumno;
 use App\core\model\Empresa;
-use App\core\model\Ciclo;
 
 
 class Adapter
@@ -21,7 +20,7 @@ class Adapter
         $alumno = new Alumno(
             null, //id
             $data['username'], //email
-            "temporalPass", //pass
+            "tempPass", //pass
             $data['nombre'], //nombre
             $data['apellido'], //apellido
             null, //dni
@@ -94,7 +93,7 @@ class Adapter
             $alumno = new Alumno(
                 null,
                 $aluDTO['email'],
-                "temporalPass",
+                "tempPass",
                 $aluDTO['nombre'],
                 $aluDTO['apellido'],
                 null, // dni
@@ -124,7 +123,7 @@ class Adapter
         $empresa = new Empresa(
             null,
             $_POST['email'],
-            "temporalPass",
+            "tempPass",
             $_POST['cif'],
             $_POST['nombre'],
             $_POST['telefono'],

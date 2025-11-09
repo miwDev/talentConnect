@@ -6,6 +6,8 @@ use League\Plates\Engine;
 use App\core\controller\LandingController;
 use App\core\controller\AuthController;
 use App\core\controller\AlumnoController;
+use App\core\controller\EmpresaController; // Asegúrate de incluir esta clase si la usas más adelante
+use App\core\controller\AdminController;   // Asegúrate de incluir esta clase si la usas más adelante
 
 class Router
 {
@@ -61,6 +63,16 @@ class Router
             case 'admin-dashboard':
                 $adminManage = new AdminController();
                 $adminManage->renderList($this->engine);
+                break;
+
+            case 'alumno-dashboard':
+                $alumnoManage = new AlumnoController();
+                $alumnoManage->renderDashboard($this->engine);
+                break;
+
+            default:
+                $landing = new LandingController();
+                $landing->renderLanding($this->engine);
                 break;
         }
     }

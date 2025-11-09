@@ -16,6 +16,8 @@ class AlumnoRepo implements RepoInterface
         $conn = DBC::getConnection();
         $alumnoId = false;
 
+        $hashedPassword = password_hash($alumno->password, PASSWORD_DEFAULT);
+
         try {
             $conn->beginTransaction();
 
@@ -23,7 +25,7 @@ class AlumnoRepo implements RepoInterface
                       VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $alumno->username);
-            $stmtUser->bindValue(':pass', $alumno->password);
+            $stmtUser->bindValue(':pass', $hashedPassword);
             $stmtUser->bindValue(':role_id', 2);
             $stmtUser->execute();
 
@@ -69,6 +71,8 @@ class AlumnoRepo implements RepoInterface
             $conn->beginTransaction();
 
             foreach ($alumnos as $index => $alumno) {
+
+                $hashedPassword = password_hash($alumno->password, PASSWORD_DEFAULT);
                 // Check if email (username) already exists
                 $queryCheckEmail = 'SELECT COUNT(*) FROM USER WHERE user_name = :username';
                 $stmtCheck = $conn->prepare($queryCheckEmail);
@@ -87,7 +91,7 @@ class AlumnoRepo implements RepoInterface
                           VALUES (:username, :pass, :role_id)';
                     $stmtUser = $conn->prepare($queryUser);
                     $stmtUser->bindValue(':username', $alumno->username);
-                    $stmtUser->bindValue(':pass', $alumno->password);
+                    $stmtUser->bindValue(':pass', $hashedPassword);
                     $stmtUser->bindValue(':role_id', 2);
                     $stmtUser->execute();
 

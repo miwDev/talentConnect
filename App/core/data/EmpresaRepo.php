@@ -15,6 +15,9 @@ class EmpresaRepo implements RepoInterface
         $conn = DBC::getConnection();
         $empresaId = false;
 
+        $hashedPassword = password_hash($empresa->password, PASSWORD_DEFAULT);
+
+
         try {
             $conn->beginTransaction();
 
@@ -22,7 +25,7 @@ class EmpresaRepo implements RepoInterface
                           VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $empresa->username);
-            $stmtUser->bindValue(':pass', $empresa->password);
+            $stmtUser->bindValue(':pass', $hashedPassword);
             $stmtUser->bindValue(':role_id', 3);
             $stmtUser->execute();
 
