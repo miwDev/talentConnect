@@ -10,6 +10,7 @@ class AuthController
 
     public function renderLogin($engine)
     {
+        Session::start();
 
         if (isset($_POST['username']) && isset($_POST['password'])) {
             $user = Authorization::verifyUser($_POST['username'], $_POST['password']);

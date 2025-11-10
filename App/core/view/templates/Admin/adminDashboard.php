@@ -11,7 +11,6 @@ $this->layout('layout/adminLayout', [
 
 <?php $this->start('js') ?>
 <script src="/public/assets/js/elements.js"></script>
-<script src="/public/assets/js/listaEmpresaLogic.js"></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>

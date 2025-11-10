@@ -14,6 +14,7 @@ class Login
 
     public static function logout()
     {
+        Session::start();
         if (self::loggedIn()) {
             Session::sessionEnd();
         }
@@ -21,18 +22,7 @@ class Login
 
     public static function loggedIn()
     {
+        Session::start();
         return isset($_SESSION['user_id']);
-    }
-
-    // get Session Details
-
-    public static function getUserId(): ?int
-    {
-        return $_SESSION['user_id'] ?? null;
-    }
-
-    public static function getUsername(): ?string
-    {
-        return $_SESSION['username'] ?? null;
     }
 }
