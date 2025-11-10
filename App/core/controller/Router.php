@@ -6,11 +6,14 @@ use League\Plates\Engine;
 use App\core\controller\LandingController;
 use App\core\controller\AuthController;
 use App\core\controller\AlumnoController;
-use App\core\controller\EmpresaController; // Asegúrate de incluir esta clase si la usas más adelante
-use App\core\controller\AdminController;   // Asegúrate de incluir esta clase si la usas más adelante
+use App\core\controller\EmpresaController;
+use App\core\controller\AdminController;
+use App\core\helper\Login;
+use App\core\helper\Session;
 
 class Router
 {
+
     private $templatesPath;
     private $engine;
 
@@ -20,8 +23,12 @@ class Router
         $this->engine = new Engine($this->templatesPath);
     }
 
+
+
     public function router()
     {
+        Session::start();
+
         if (isset($_GET['menu'])) {
             $menu = $_GET['menu'];
         } else {

@@ -50,6 +50,11 @@ class AlumnoRepo implements RepoInterface
 
             $alumnoId = $conn->lastInsertId();
 
+            $queryToken = 'INSERT INTO USER_TOKEN (user_id, token) VALUES (:user_id, NULL)';
+            $stmtToken = $conn->prepare($queryToken);
+            $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
+            $stmtToken->execute();
+
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollBack();
@@ -73,7 +78,7 @@ class AlumnoRepo implements RepoInterface
             foreach ($alumnos as $index => $alumno) {
 
                 $hashedPassword = password_hash($alumno->password, PASSWORD_DEFAULT);
-                // Check if email (username) already exists
+
                 $queryCheckEmail = 'SELECT COUNT(*) FROM USER WHERE user_name = :username';
                 $stmtCheck = $conn->prepare($queryCheckEmail);
                 $stmtCheck->bindValue(':username', $alumno->username);
@@ -86,7 +91,6 @@ class AlumnoRepo implements RepoInterface
                 }
 
                 try {
-                    // Insertar en USER
                     $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
                           VALUES (:username, :pass, :role_id)';
                     $stmtUser = $conn->prepare($queryUser);
@@ -97,7 +101,6 @@ class AlumnoRepo implements RepoInterface
 
                     $userId = $conn->lastInsertId();
 
-                    // Insertar en ALUMNO
                     $queryAlumno = 'INSERT INTO ALUMNO 
                         (nombre, apellido, telefono, direccion, foto, cv, user_id, provincia, localidad, dni, confirmed)
                         VALUES (:nombre, :apellido, :telefono, :direccion, :foto, :cv, :user_id, :provincia, :localidad, :dni, :confirmed)';
@@ -118,9 +121,14 @@ class AlumnoRepo implements RepoInterface
                     $alumnoId = $conn->lastInsertId();
                     $alumno->id = $alumnoId;
 
+                    $queryToken = 'INSERT INTO USER_TOKEN (user_id, token) VALUES (:user_id, NULL)';
+                    $stmtToken = $conn->prepare($queryToken);
+                    $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
+                    $stmtToken->execute();
+
+
                     $guardados[] = $alumno;
                 } catch (Exception $e) {
-                    // If any error during insertion, add email to errors
                     error_log("Error al guardar alumno en índice $index: " . $e->getMessage());
                     $errores[] = $alumno->username;
                 }
@@ -212,6 +220,57 @@ class AlumnoRepo implements RepoInterface
 
         $stmt = $conn->prepare($query);
         $stmt->bindValue(':value', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$resultado) {
+            $alumno = null;
+        } else {
+            $alumno = new Alumno(
+                $resultado['alumno_id'],
+                $resultado['username'],
+                $resultado['pass'],
+                $resultado['nombre'],
+                $resultado['ape'],
+                $resultado['dni'],
+                $resultado['tel'],
+                $resultado['direccion'],
+                $resultado['foto'],
+                $resultado['cv'],
+                $resultado['provincia'],
+                $resultado['localidad'],
+                $resultado['confirmed']
+            );
+        }
+
+        return $alumno;
+    }
+
+    public static function findByUserId(int $userId)
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT a.id as alumno_id,
+                        u.user_name as username,
+                        u.passwrd as pass,
+                        a.nombre as nombre,
+                        a.apellido as ape,
+                        a.telefono as tel,
+                        a.direccion as direccion,
+                        a.foto as foto,
+                        a.cv as cv,
+                        a.provincia as provincia,
+                        a.localidad as localidad,
+                        a.dni as dni,
+                        a.confirmed as confirmed
+            FROM ALUMNO a
+            JOIN USER u
+            on a.user_id = u.id
+            WHERE a.user_id = :userIdValue';
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':userIdValue', $userId, PDO::PARAM_INT);
         $stmt->execute();
 
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -383,6 +442,10 @@ class AlumnoRepo implements RepoInterface
             $user_id = $stmt->fetchColumn();
 
             if ($user_id) {
+                $stmtToken = $conn->prepare('DELETE FROM USER_TOKEN WHERE user_id = :user_id');
+                $stmtToken->bindValue(':user_id', $user_id);
+                $stmtToken->execute();
+
                 $stmtUser = $conn->prepare('DELETE FROM USER WHERE id = :user_id');
                 $stmtUser->bindValue(':user_id', $user_id);
                 $stmtUser->execute();

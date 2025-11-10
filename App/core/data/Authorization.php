@@ -3,6 +3,7 @@
 namespace App\core\data;
 
 use App\core\data\DBC;
+use App\core\helper\Security;
 use PDO;
 use PDOException;
 use Exception;
@@ -14,7 +15,7 @@ class Authorization
     public static function verifyUser($username, $password)
     {
         $conn = DBC::getConnection();
-        $verification = "COMETE UN MOJON";
+        $verified = false;
 
         $query = 'SELECT id, user_name, passwrd, role_id
               FROM USER
@@ -26,20 +27,50 @@ class Authorization
 
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado && password_verify($password, $resultado['passwrd'])) { //compares the plain text pass with the hashed one in the bd
-            $verification = "VERIFICACION CORRECTA";
+        if ($resultado && password_verify($password, $resultado['passwrd'])) {
+            $userId = $resultado['id'];
+            $roleId = $resultado['role_id'];
+
+            $token = self::updateToken($userId);
+
+            if ($roleId === 2) {
+
+                $userObject = AlumnoRepo::findByUserId($userId);
+            } elseif ($roleId === 3) {
+
+                $userObject = EmpresaRepo::findByUserId($userId);
+            } else {
+                $adminObject = new \stdClass();
+                $adminObject->id = $resultado['id'];
+                $adminObject->username = $resultado['user_name'];
+
+                $userObject = $adminObject;
+            }
+            if ($userObject) {
+                $verified = [
+                    "user" => $userObject,
+                    "token" => $token
+                ];
+            }
         }
 
-        return $verification;
+        return $verified;
     }
 
-    public static function verifyToken($id, $token)
+    public static function updateToken($user_id)
     {
-        return true;
-    }
+        $conn = DBC::getConnection();
+        $token = Security::generateToken();
 
-    public static function updateToken($id, $token)
-    {
-        return true;
+        $query = 'UPDATE USER_TOKEN 
+                      SET token = :token 
+                      WHERE user_id = :userId';
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':token', $token);
+        $stmt->bindValue(':userId', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $token;
     }
 }

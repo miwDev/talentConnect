@@ -1,4 +1,7 @@
 <?php
+
+use App\core\data\Authorization;
+
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Iniciar Sesión',
     'navItems' => [
@@ -20,8 +23,6 @@ $this->layout('layout/layout', [
     <div class="login-container">
         <div>
             <h2 class="h2-title">Iniciar <span class="h2-title-alter">Sesión</span></h2>
-
-            <?= var_dump($_POST) ?>
         </div>
         <div class="login-contents">
             <div class="login-form-container">

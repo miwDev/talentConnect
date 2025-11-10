@@ -31,6 +31,7 @@ class EmpresaRepo implements RepoInterface
 
             $userId = $conn->lastInsertId();
 
+            // 2. Insertar en EMPRESA
             $queryEmpresa = 'INSERT INTO EMPRESA 
                                 (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad, cif)
                              VALUES 
@@ -50,9 +51,16 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->execute();
 
             $empresaId = $conn->lastInsertId();
+
+            $queryToken = 'INSERT INTO USER_TOKEN (user_id, token) VALUES (:user_id, NULL)';
+            $stmtToken = $conn->prepare($queryToken);
+            $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
+            $stmtToken->execute();
+
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollBack();
+            error_log("Error al guardar empresa: " . $e->getMessage());
             $empresaId = false;
         }
 
@@ -193,7 +201,6 @@ class EmpresaRepo implements RepoInterface
             return null;
         }
 
-        // Constructor order: id, username, pass, nombre, telefono, direccion, provincia, localidad, nombrePersona, telPersona, logo, validacion
         return new Empresa(
             $resultado['empresa_id'],
             $resultado['username'],
@@ -214,6 +221,56 @@ class EmpresaRepo implements RepoInterface
     public static function findBySizePage($size, $page)
     {
         return true;
+    }
+
+    public static function findByUserId(int $userId)
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT e.id AS empresa_id,
+                         u.user_name AS username,
+                         u.passwrd AS pass,
+                         e.nombre AS nombre,
+                         e.telefono AS telefono,
+                         e.direccion AS direccion,
+                         e.nombre_persona AS nombrePersona,
+                         e.telefono_persona AS telPersona,
+                         e.logo AS logo,
+                         e.validacion AS validacion,
+                         e.provincia AS provincia,
+                         e.localidad AS localidad,
+                         e.cif AS cif
+                  FROM EMPRESA e
+                  JOIN USER u ON e.user_id = u.id
+                  WHERE e.user_id = :userIdValue';
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':userIdValue', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$resultado) {
+            $empresa = null;
+        } else {
+            $empresa = new Empresa(
+                $resultado['empresa_id'],
+                $resultado['username'],
+                $resultado['pass'],
+                $resultado['cif'],
+                $resultado['nombre'],
+                $resultado['telefono'],
+                $resultado['direccion'],
+                $resultado['provincia'],
+                $resultado['localidad'],
+                $resultado['nombrePersona'],
+                $resultado['telPersona'],
+                $resultado['logo'],
+                $resultado['validacion']
+            );
+        }
+
+        return $empresa;
     }
 
     // UPDATE
