@@ -592,9 +592,11 @@ background: #d7b4f2;
 
 .img-responsive {
   width: 100%;
-  height: 100%;
-  object-fit: cover; 
+  max-height: 350px;
+  height: auto;
+  object-fit: contain;
   display: none; 
+  background-color: #e0e0e0;
 }
 
 
@@ -632,54 +634,37 @@ background: #d7b4f2;
 #btnCancel:hover { background: #e0e0e0; }
 
 /* ================================================= */
-/* 12. ESTILOS DEL MODAL DE CÁMARA */
+/* 12. ESTILOS DEL MODAL DE CÁMARA (MODIFICADO) */
 /* ================================================= */
 
-/* Contenedor de la cuadrícula 2x2 */
-#divGridCamara {
-    display: grid;
-    /* Dos columnas de igual tamaño */
-    grid-template-columns: 1fr 1fr;
-    /* Dos filas de igual tamaño */
-    grid-template-rows: 1fr 1fr;
-    
-    gap: 1.5em; /* Espacio entre celdas */
-    
-    /* (Clave) Hace que la cuadrícula ocupe el espacio sobrante */
-    flex-grow: 1; 
-    min-height: 0; /* Corrección para flexbox */
-}
-
-/* Estilo base para las 4 celdas de la cuadrícula */
-.camara-celda {
-    display: flex;
+.camara-step {
+    display: flex; 
     flex-direction: column;
-    gap: 1em;
-    background: #f9f9f9;
-    border: 3px solid #ddd;
-    border-radius: 1em;
-    padding: 1em;
-    box-sizing: border-box;
-    position: relative; /* <-- AÑADIR ESTO */
+    gap: 1.5em; 
+    flex-grow: 1; 
+    min-height: 0; 
+    display: none;
+    position: relative;
 }
 
-/* Estilo para los elementos <video> y <canvas> dentro de las celdas */
 .camara-video,
 .camara-canvas {
     width: 100%;
-    /* (Clave) Hace que el video/canvas crezca para llenar la celda */
-    flex-grow: 1;
-    min-height: 0; /* Corrección para flexbox */
-    
-    background: #e0e0e0; /* Color de fondo mientras no hay contenido */
+    max-width: 500px; /* Límite de ancho */
+    aspect-ratio: 1 / 1; /* Forzar cuadrado */
+    height: auto;
+    background: #e0e0e0; 
     border-radius: 0.5em;
-    object-fit: cover; /* Para el video */
+    object-fit: cover; /* Llenar el cuadrado */
+    margin: 0 auto; /* Centrar */
 }
+
+/* Ya no se necesita la regla .camara-video separada */
 
 #recorte {
     position: absolute;
-    top: 1em;
-    left: 1em;
+    top: 1em;  
+    left: 1em; 
     width: 100px;
     height: 100px;
     border: 4px dashed tomato;
@@ -687,7 +672,6 @@ background: #d7b4f2;
     display: none;
 }
 
-/* Estilo para los botones NUEVOS (Capture, Cut) */
 #btnCapture,
 #btnCut {
     padding: 12px 24px;
@@ -700,6 +684,11 @@ background: #d7b4f2;
     background: #EBD3FD;
     color: #191919;
     
+    /* Centrar los botones debajo del visor cuadrado */
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box; /* Para que el padding no afecte el ancho */
 }
 
 #btnCapture:hover,
@@ -707,11 +696,34 @@ background: #d7b4f2;
     background: #d7b4f2;
 }
 
-#divGridCamara #divBotones {
+#divBotones {
+    display: flex;
+    flex-direction: row;
     justify-content: flex-end; 
-    flex-direction: row; 
+    gap: 1em;
+    margin-top: 0; 
+    flex-shrink: 0;
+    
+    /* Centrar los botones debajo del visor cuadrado */
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#btnVolver {
+    padding: 12px 24px;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
     
     background: transparent;
-    border: none;
-    padding: 0;
+    color: #191919;
+    
+    margin-right: auto; 
+}
+#btnVolver:hover { 
+    background: #e0e0e0; 
 }

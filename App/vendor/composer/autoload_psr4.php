@@ -12,5 +12,4 @@ return array(
     'League\\Plates\\' => array($vendorDir . '/league/plates/src'),
     'FontLib\\' => array($vendorDir . '/dompdf/php-font-lib/src/FontLib'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
-    'App\\' => array($baseDir . '/'),
 );

@@ -12,8 +12,10 @@ $this->layout('layout/layout', [
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
-<script src="/public/assets/js/authorization.js" defer></script>
+<script src="/public/assets/js/addons.js" defer></script>
+<script src="/public/assets/js/FormHandler.js" defer></script>
 <script src="/public/assets/js/elements.js" defer></script>
+<script src="/public/assets/js/authorization.js" defer></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>
@@ -25,7 +27,7 @@ $this->layout('layout/layout', [
         <div class="login-contents register-contents">
 
             <div class="login-form-container register-form-container">
-                <form action="/register-alumno" method="POST" enctype="multipart/form-data">
+                <form action="?menu=alumno-dashboard" method="POST" id="formulario" enctype="multipart/form-data">
 
                     <div class="form-row">
                         <div class="form-group half-width">
@@ -41,7 +43,7 @@ $this->layout('layout/layout', [
                         <div class="form-group half-width">
                             <label for="nombre">DNI</label>
                             <input type="text" id="dni" name="dni" required>
-                            <span id="error-nombre" class="input-error-message"></span>
+                            <span id="error-dni" class="input-error-message"></span>
                         </div>
                     </div>
 
@@ -54,7 +56,7 @@ $this->layout('layout/layout', [
                         <div class="form-group half-width">
                             <label for="password">Contraseña</label>
                             <div class="input-wrapper">
-                                <input type="password" id="password" name="password" required>
+                                <input type="password" id="password" name="password" required placeholder="Mínimo 8 caracteres">
                                 <span id="toggle-password">
                                 </span>
                             </div>
@@ -99,7 +101,7 @@ $this->layout('layout/layout', [
 
                     <div class="form-actions">
                         <div id="login-error-display" class="error-message"></div>
-                        <button type="submit" class="login-btn">Finalizar Registro</button>
+                        <button type="submit" id="envioRegistro" class="login-btn">Finalizar Registro</button>
                     </div>
                 </form>
             </div>

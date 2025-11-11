@@ -6,6 +6,10 @@ window.addEventListener("load", function(){
     const btnCamara = this.document.getElementById("cameraModal");
     const btnFoto = this.document.getElementById("uploadPicture");
     const subirCV = this.document.getElementById("uploadCV");
+    const btnRegister = this.document.getElementById("envioRegistro");
+
+    // Inicializa FormularioManager solo una vez al cargar
+    new FormularioManager("formulario");
 
 
     //metodos
@@ -52,11 +56,12 @@ window.addEventListener("load", function(){
 
     const labelCiclos = document.createElement("label");
     labelCiclos.textContent = "Ciclo:";
-    labelCiclos.htmlFor = "selCiclos";
+    labelCiclos.htmlFor = "ciclo";
     labelCiclos.style.visibility = 'hidden';
     
     const selCiclos = document.createElement("select");
-    selCiclos.id = "selCiclos";
+    selCiclos.id = "ciclo";
+    selCiclos.name = "ciclo";
     selCiclos.className = "form-select";
     selCiclos.style.visibility = 'hidden'; 
 
@@ -71,6 +76,13 @@ window.addEventListener("load", function(){
     errorCiclo.className = "input-error-message";
     errorCiclo.id = "error-ciclo";
     errorCiclo.style.visibility = 'hidden';
+
+    selCiclos.addEventListener("change", function(){
+        const errorCiclo = document.getElementById("error-ciclo");
+        // Limpia el mensaje de error cuando el usuario selecciona una opción
+        errorCiclo.textContent = ""; 
+    });
+
 
     selFamilias.addEventListener("change", function(){
         const errorFamilia = document.getElementById("error-familia");
@@ -130,52 +142,76 @@ window.addEventListener("load", function(){
         const modalContent = document.getElementById("modalContent");
 
         let h2 = document.createElement("h2");
-        h2.textContent = "Camara";
+        h2.textContent = "Paso 1: Capturar Foto";
 
-        const divGrid = document.createElement("div");
-        divGrid.id = "divGridCamara";
+        let videoStream = null; 
+
+        // ===================================
+        // PASO 1: VISTA DE LA CÁMARA (divVideo)
+        // ===================================
 
         const divVideo = document.createElement("div");
-        divVideo.className = "camara-celda";
+        divVideo.className = "camara-step"; 
+        divVideo.id = "step-video";
         
         const video = document.createElement("video");
         video.playsinline = true;
         video.autoplay = true;
         video.muted = true;
-        video.className = "camara-video";
+        video.className = "camara-video"; 
 
         const btnCapture = document.createElement("input");
         btnCapture.type = "button";
         btnCapture.id = "btnCapture";
-        btnCapture.value = "CAPTURAR";
+        btnCapture.value = "CAPTURAR FOTO";
 
         divVideo.appendChild(video);
         divVideo.appendChild(btnCapture);
 
+        // ===================================
+        // PASO 2: RECORTE (divCanvas)
+        // ===================================
         const divCanvas = document.createElement("div");
-        divCanvas.className = "camara-celda";
+        divCanvas.className = "camara-step"; 
+        divCanvas.id = "step-canvas";
 
         const canvas = document.createElement("canvas");
         canvas.className = "camara-canvas"; 
         const recorte = document.createElement("div");
-        recorte.id = "recorte";
+        recorte.id = "recorte"; 
 
         canvas.width = 640;
-        canvas.height = 480;
+        canvas.height = 640;
 
         const btnCut = document.createElement("input");
         btnCut.type = "button";
         btnCut.id = "btnCut";
-        btnCut.value = "RECORTAR";
+        btnCut.value = "RECORTAR IMAGEN";
 
         divCanvas.appendChild(canvas);
         divCanvas.appendChild(recorte);
         divCanvas.appendChild(btnCut);
 
+        // ===================================
+        // PASO 3: RESULTADO (divResult)
+        // ===================================
+        const divResult = document.createElement("div");
+        divResult.className = "camara-step"; 
+        divResult.id = "step-result";
+        
+        const canvasRes = document.createElement("canvas");
+        canvasRes.className = "camara-canvas"; 
+        canvasRes.width = 640;
+        canvasRes.height = 480;
+
         const divBotones = document.createElement("div");
         divBotones.id = "divBotones"; 
-        divBotones.className = "camara-celda"; 
         
+        const btnVolver = document.createElement("input");
+        btnVolver.type = "button";
+        btnVolver.id = "btnVolver"; 
+        btnVolver.value = "VOLVER A CAPTURAR";
+
         const btnAccept = document.createElement("input");
         btnAccept.type = "button";
         btnAccept.id = "btnAdd";
@@ -186,93 +222,68 @@ window.addEventListener("load", function(){
         btnCancel.id = "btnCancel";
         btnCancel.value = "CANCELAR";
         
+        divBotones.appendChild(btnVolver);
         divBotones.appendChild(btnAccept);
         divBotones.appendChild(btnCancel);
 
-
-        const divResult = document.createElement("div");
-        divResult.className = "camara-celda";
-        
-        const canvasRes = document.createElement("canvas");
-        canvasRes.className = "camara-canvas";
-        canvasRes.width = 640;
-        canvasRes.height = 480;
-
         divResult.appendChild(canvasRes);
+        divResult.appendChild(divBotones);
 
-
+        // ===================================
+        // AÑADIR PASOS AL MODAL
+        // ===================================
         modalContent.appendChild(h2);
-        
-        divGrid.appendChild(divVideo);      // Celda Sup-Izq
-        divGrid.appendChild(divCanvas);     // Celda Sup-Der
-        divGrid.appendChild(divResult);     // Celda Inf-Izq (Tu código original tenía esto)
-        divGrid.appendChild(divBotones);    // Celda Inf-Der (Tu código original tenía esto)
-        
-        modalContent.appendChild(divGrid);
-
+        modalContent.appendChild(divVideo);   
+        modalContent.appendChild(divCanvas);  
+        modalContent.appendChild(divResult);  
 
         // ===================================
-        //  FUNCIONALIDAD DE CAMARA Y RECORTE 
+        //  LÓGICA DE RECORTE
         // ===================================
-
-        // --- RECORTE ---
-
-        // 1. Redimensionar (Wheel) con Límites
         recorte.addEventListener('wheel',function(e){
             e.preventDefault();
 
-            // Límites del canvas
             const c_left = canvas.offsetLeft;
             const c_top = canvas.offsetTop;
             const c_w = canvas.offsetWidth;
             const c_h = canvas.offsetHeight;
             
             const minSize = 20;
-            // Tamaño máximo (desde la pos. actual hasta el borde del canvas)
+
             const maxW = (c_left + c_w) - this.offsetLeft;
             const maxH = (c_top + c_h) - this.offsetTop;
-
-            const deltaW = this.offsetWidth * 0.05 * Math.sign(e.wheelDelta || -e.deltaY);
-            const deltaH = this.offsetHeight * 0.05 * Math.sign(e.wheelDelta || -e.deltaY);
-
-            let newW = this.offsetWidth + deltaW;
-            let newH = this.offsetHeight + deltaH;
-
-            // Aplicar límites
-            newW = Math.max(minSize, Math.min(newW, maxW));
-            newH = Math.max(minSize, Math.min(newH, maxH));
             
-            this.style.width = newW + "px";
-            this.style.height = newH + "px";
+            // --- INICIO CAMBIO: Forzar redimensionado cuadrado ---
+            const delta = this.offsetWidth * 0.05 * Math.sign(e.wheelDelta || -e.deltaY);
+            let newSize = this.offsetWidth + delta;
+
+            const maxSafeSize = Math.min(maxW, maxH);
+
+            newSize = Math.max(minSize, Math.min(newSize, maxSafeSize));
+            
+            this.style.width = newSize + "px";
+            this.style.height = newSize + "px";
+            // --- FIN CAMBIO ---
         });
 
-        // 2. Mover (Drag) con Límites (Patrón 'mousedown' mejorado)
-        // Este patrón evita que el 'drag' se rompa si mueves el ratón rápido
         recorte.addEventListener("mousedown", function(e_down) {
             e_down.preventDefault();
-
             function onMouseMove(e_move) {
-
                 const minX = canvas.offsetLeft;
                 const minY = canvas.offsetTop;
                 const maxX = canvas.offsetLeft + canvas.offsetWidth - recorte.offsetWidth;
                 const maxY = canvas.offsetTop + canvas.offsetHeight - recorte.offsetHeight;
-
                 let newX = recorte.offsetLeft + e_move.movementX;
                 let newY = recorte.offsetTop + e_move.movementY;
-
                 newX = Math.max(minX, Math.min(newX, maxX));
                 newY = Math.max(minY, Math.min(newY, maxY));
-                
                 recorte.style.left = newX + "px";
                 recorte.style.top = newY + "px";
             }
-
             function onMouseUp() {
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
             }
-
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
         });
@@ -281,72 +292,109 @@ window.addEventListener("load", function(){
             recorte.style.cursor = "all-scroll"; 
         });
 
-        btnCut.addEventListener("click", async function(e){
-            
-            const scaleX = canvas.width / canvas.offsetWidth;
-            const scaleY = canvas.height / canvas.offsetHeight;
+        // ===================================
+        //  LÓGICA DE CÁMARA Y NAVEGACIÓN
+        // ===================================
 
-            const x_recorte_css = recorte.offsetLeft;
-            const y_recorte_css = recorte.offsetTop;
-            const w_recorte_css = recorte.offsetWidth;
-            const h_recorte_css = recorte.offsetHeight;
+        function stopStream() {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+        }
 
-            const x_canvas_css = canvas.offsetLeft;
-            const y_canvas_css = canvas.offsetTop;
-
-            const sX_css = x_recorte_css - x_canvas_css;
-            const sY_css = y_recorte_css - y_canvas_css;
-
-            const sX_res = sX_css * scaleX;
-            const sY_res = sY_css * scaleY;
-            const sW_res = w_recorte_css * scaleX;
-            const sH_res = h_recorte_css * scaleY;
-
-            canvasRes.width = sW_res;
-            canvasRes.height = sH_res;
-            
-            let contextRes = canvasRes.getContext('2d');
-            
-            contextRes.drawImage(
-                canvas,      // Canvas Fuente
-                sX_res, sY_res, // Coords. Fuente (en píxeles de resolución)
-                sW_res, sH_res, // Tamaño Fuente (en píxeles de resolución)
-                0, 0,           // Coords. Destino (0,0 del canvasRes)
-                sW_res, sH_res  // Tamaño Destino
-            );
-        });
-
-        // --- VIDEO ---
         const constraints = {
             audio: false,
-            video: {
-                width: 800, height: 600
-            }
+            video: { width: 800, height: 600 }
         };
 
         async function init() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                video.srcObject = stream;
+                videoStream = stream; 
+                video.srcObject = videoStream;
+                
+                divVideo.style.display = "flex"; 
+                divCanvas.style.display = "none";
+                divResult.style.display = "none";
+                recorte.style.display = "none"; 
+                h2.textContent = "Paso 1: Capturar Foto";
+
             } catch (e) {
                 console.error(`navigator.getUserMedia error:${e.toString()}`);
             }
         }
 
         let context = canvas.getContext('2d');
+        
         btnCapture.addEventListener('click', async function() {
-            context.drawImage(video, 0, 0, 640, 480);
-            recorte.style.display = "block"; // Esto estaba bien
+            // --- INICIO CAMBIO: Dibujar 4:3 en 1:1 (cover) ---
+            const sHeight = video.videoHeight;
+            const sWidth = sHeight * (canvas.width / canvas.height); // 600 * (640/640) = 600
+            const sX = (video.videoWidth - sWidth) / 2; // (800 - 600) / 2 = 100
+            const sY = 0;
+            
+            context.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+            // --- FIN CAMBIO ---
+            
+            recorte.style.display = "block"; 
+
+            divVideo.style.display = "none";
+            divCanvas.style.display = "flex"; 
+            divResult.style.display = "none";
+            h2.textContent = "Paso 2: Recortar Imagen";
+            
+            stopStream();
+        });
+        
+        btnCut.addEventListener("click", async function(e){
+            const scaleX = canvas.width / canvas.offsetWidth;
+            const scaleY = canvas.height / canvas.offsetHeight;
+            const x_recorte_css = recorte.offsetLeft;
+            const y_recorte_css = recorte.offsetTop;
+            const w_recorte_css = recorte.offsetWidth;
+            const h_recorte_css = recorte.offsetHeight;
+            const x_canvas_css = canvas.offsetLeft;
+            const y_canvas_css = canvas.offsetTop;
+            const sX_css = x_recorte_css - x_canvas_css;
+            const sY_css = y_recorte_css - y_canvas_css;
+            const sX_res = sX_css * scaleX;
+            const sY_res = sY_css * scaleY;
+            const sW_res = w_recorte_css * scaleX;
+            const sH_res = h_recorte_css * scaleY;
+            
+            // El recorte será cuadrado, por lo que sW_res y sH_res serán iguales
+            canvasRes.width = sW_res;
+            canvasRes.height = sH_res;
+            
+            let contextRes = canvasRes.getContext('2d');
+            contextRes.drawImage(
+                canvas, sX_res, sY_res, sW_res, sH_res, 
+                0, 0, sW_res, sH_res
+            );
+
+            divVideo.style.display = "none";
+            divCanvas.style.display = "none";
+            divResult.style.display = "flex"; 
+            h2.textContent = "Paso 3: Confirmar Resultado";
         });
 
-        init();
+        // ===================================
+        //  FUNCIONALIDAD BOTONES FINALES
+        // ===================================
 
+        btnVolver.addEventListener("click", function() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            let contextRes = canvasRes.getContext('2d');
+            contextRes.clearRect(0, 0, canvasRes.width, canvasRes.height);
+            
+            init(); 
+        });
 
-        // ===============================================
-        //  FUNCIONALIDAD BOTONES
-        // ===============================================
-
-        btnCancel.onclick=()=>{window.cerrarModal()};
+        btnCancel.onclick=()=>{
+            stopStream(); 
+            window.cerrarModal();
+        };
 
         btnAccept.onclick=()=>{
             const imgDestino = document.getElementById('avatarId');
@@ -354,12 +402,13 @@ window.addEventListener("load", function(){
 
             const dataURL = canvasRes.toDataURL();
             imgDestino.src = dataURL;
-
             hiddeninput.value = dataURL;
-            console.log(dataURL);
-
+            
+            stopStream(); 
             window.cerrarModal();
         };
+
+        init();
     });
 
     btnFoto.addEventListener("click", function() {
@@ -452,4 +501,11 @@ window.addEventListener("load", function(){
         modalContent.appendChild(divContent);
         modalContent.appendChild(divBotones);
     });
+
+
+    subirCV.onclick=()=>{
+        input = this.document.createElement("input");
+        input.type = "file";
+        I
+    };
 })

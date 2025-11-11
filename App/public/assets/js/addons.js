@@ -33,6 +33,8 @@ HTMLTableRowElement.prototype.validateInputRow = function() {
 
 
 
+
+
 // Validacion de cadenas
 
 const nombreRegexp = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+([ '\-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)*$/;
@@ -47,4 +49,26 @@ String.prototype.esEmailValido = function() {
     return emailRegexp.test(this);
 };
 
+const passwordRegexp = /^.{8,}$/;
 
+String.prototype.esContrasenaValida = function() {
+    return passwordRegexp.test(this);
+};
+
+const telefonoRegexp = /^(\+34|0034)?[ -]?[679]([ -]?\d){8}$/;
+
+String.prototype.esTelefonoValido = function() {
+    return telefonoRegexp.test(this);
+};
+
+const dniRegexp = /^(\d{8}|[XYZxyz]\d{7})[A-Za-z]$/;
+
+String.prototype.esDniValido = function() {
+    return dniRegexp.test(this);
+};
+
+const direccionRegexp = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9\s,.\-ºª/]+$/;
+
+String.prototype.esDireccionValida = function() {
+    return direccionRegexp.test(this);
+};
