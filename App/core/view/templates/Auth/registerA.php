@@ -12,6 +12,8 @@ $this->layout('layout/layout', [
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
+<script src="/public/assets/js/authorization.js" defer></script>
+<script src="/public/assets/js/elements.js" defer></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>
@@ -36,6 +38,11 @@ $this->layout('layout/layout', [
                             <input type="text" id="apellido" name="apellido" required>
                             <span id="error-apellido" class="input-error-message"></span>
                         </div>
+                        <div class="form-group half-width">
+                            <label for="nombre">DNI</label>
+                            <input type="text" id="dni" name="dni" required>
+                            <span id="error-nombre" class="input-error-message"></span>
+                        </div>
                     </div>
 
                     <div class="form-row">
@@ -46,7 +53,11 @@ $this->layout('layout/layout', [
                         </div>
                         <div class="form-group half-width">
                             <label for="password">Contraseña</label>
-                            <input type="password" id="password" name="password" required>
+                            <div class="input-wrapper">
+                                <input type="password" id="password" name="password" required>
+                                <span id="toggle-password">
+                                </span>
+                            </div>
                             <span id="error-password" class="input-error-message"></span>
                         </div>
                     </div>
@@ -77,25 +88,12 @@ $this->layout('layout/layout', [
                         </div>
                     </div>
 
-                    <div class="form-row education-row">
+                    <div class="form-row education-colum" id="divEducacion">
                         <div class="form-group half-width">
                             <label for="familia">Familia Profesional</label>
                             <select id="familia" name="familia" class="form-select">
-                                <option value="">Selecciona una familia</option>
-                                <option value="inf">Informática y Comunicaciones (Mock)</option>
-                                <option value="adm">Administración y Gestión (Mock)</option>
                             </select>
                             <span id="error-familia" class="input-error-message"></span>
-                        </div>
-
-                        <div class="form-group half-width" id="ciclo-group" style="display: none;">
-                            <label for="ciclo">Ciclo Formativo</label>
-                            <select id="ciclo" name="ciclo" class="form-select">
-                                <option value="">Selecciona un ciclo</option>
-                                <option value="dam">Desarrollo de Aplicaciones Multiplataforma (Mock)</option>
-                                <option value="daw">Desarrollo de Aplicaciones Web (Mock)</option>
-                            </select>
-                            <span id="error-ciclo" class="input-error-message"></span>
                         </div>
                     </div>
 
@@ -113,22 +111,23 @@ $this->layout('layout/layout', [
                 </p>
 
                 <div class="avatar-upload-area">
-                    <img src="/public/assets/images/genericAvatar.svg" alt="Avatar genérico" class="generic-avatar">
+                    <img src="/public/assets/images/genericAvatar.svg" alt="Avatar genérico" class="generic-avatar" id="avatarId">
                 </div>
 
                 <div class="avatar-buttons">
-                    <button type="button" class="login-btn avatar-btn upload-btn">Subir Foto</button>
-                    <button type="button" class="login-btn avatar-btn camera-btn">Acceder a Cámara</button>
+                    <button type="button" class="login-btn avatar-btn upload-btn" id="uploadPicture">Subir Foto</button>
+                    <button type="button" class="login-btn avatar-btn camera-btn" id="cameraModal">Acceder a Cámara</button>
                 </div>
 
                 <div class="avatar-buttons cv-upload">
-                    <button type="button" class="login-btn avatar-btn cv-btn">Subir CV (PDF/DOC)</button>
+                    <button type="button" class="login-btn avatar-btn cv-btn" id="uploadCV">Subir CV (PDF)</button>
                 </div>
-
 
                 <p class="back-to-login">
                     ¿Ya tienes cuenta? <a href="?menu=login" class="forgot-password-link">Iniciar Sesión</a>
                 </p>
+
+                <input type="hidden" id="datosCanvas" name="imagenBase64">
             </div>
 
         </div>

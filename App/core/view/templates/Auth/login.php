@@ -15,7 +15,7 @@ $this->layout('layout/layout', [
 <?php $this->stop() ?>
 
 <?php $this->start('js') ?>
-<script src="/public/assets/js/authorization.js"></script>
+<script src="/public/assets/js/login.js"></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>
@@ -34,7 +34,12 @@ $this->layout('layout/layout', [
 
                     <div class="form-group">
                         <label for="password">Contraseña</label>
-                        <input type="password" id="password" name="password" required>
+                        <div class="input-wrapper">
+                            <input type="password" id="password" name="password" required>
+                            <span id="toggle-password">
+                            </span>
+                        </div>
+                        <span id="error-password" class="input-error-message"></span>
                     </div>
 
                     <div id="login-error-display" class="error-message">

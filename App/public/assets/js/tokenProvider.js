@@ -7,6 +7,8 @@ window.addEventListener("load", function(){
     .then(data => {
         if(data.success){
             sessionStorage.setItem("token", data.token);
+        }else{
+            
         }
     })
 

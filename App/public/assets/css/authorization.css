@@ -356,7 +356,6 @@ body{
     width: 100%;
     max-width: 200px;
     height: auto;
-    border-radius: 50%;
     border: 5px solid #EBD3FD;
     margin-bottom: 20px;
 }
@@ -411,6 +410,34 @@ body{
     color: #EBD3FD; /* Cambiar el color del enlace en la tarjeta oscura */
 }
 
+
+.input-wrapper {
+  position: relative;
+}
+
+#toggle-password {
+  /* Tu código existente */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer; 
+  background: url("/public/assets/images/unveil.svg");
+
+  width: 24px;  
+  height: 24px; 
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 3. (Opcional) Añade espacio al input para que el texto no se escriba debajo del icono */
+.input-wrapper input {
+  /* Añade padding a la derecha del input */
+  padding-right: 40px; 
+}
+
 /* ================================================= */
 /* 10. ESTILOS DE MENSAJES DE ERROR POR CAMPO */
 /* ================================================= */
@@ -433,4 +460,258 @@ body{
 /* Regla para hacer el mensaje visible solo cuando tiene contenido */
 .input-error-message:not(:empty) {
     visibility: visible;
+}
+
+
+/* ================================================= */
+/* 11. ESTILOS DE MODALES */
+/* ================================================= */
+
+
+.velo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1005;
+}
+
+
+/* MODAL MÁS GRANDE Y ESPACIOS ADAPTADOS */
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80em;              /* Ampliar el ancho máximo (antes 50em) */
+    max-height: 90vh;         /* Ampliar más el alto máximo */
+    min-width: 600px;         /* Forzar un mínimo ancho útil */
+    min-height: 500px;        /* Forzar un mínimo alto útil */
+    height: auto;
+    overflow-y: auto;
+    background: #FFFFE9;
+    border: 3px solid #191919;
+    z-index: 1006;
+    box-shadow: 0 4px 28px rgba(0,0,0,0.32);
+    padding: 48px;            /* Un poco más de espacio interno */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2em;
+}
+
+#modalContent h2 {
+/* Título del modal: Poppins, oscuro, negrita */
+color: #191919;
+font-family: 'Poppins', sans-serif;
+font-size: 1.8em;
+margin: 0 0 30px 0;
+font-weight: 800;
+text-align: center;
+}
+
+#cerrarModal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    width: 38px;
+    height: 38px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.2em;
+    z-index: 1010;
+}
+
+
+
+#cerrarModal:hover {
+background: #d7b4f2;
+}
+
+
+#modalContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    box-sizing: border-box;
+}
+
+/* 2. Este es el contenedor principal del contenido */
+#divContent {
+   
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; 
+    overflow: hidden;
+}
+
+/* 3. La barra superior (Modificada como "dropzone") */
+#divSubida {
+    flex-shrink: 0; 
+    padding: 2em 1em; /* Más espacio vertical para el texto */
+    margin-bottom: 1em; /* Separación con el canvas */
+    
+    /* CAMBIO: Borde de línea discontinua */
+    border: 3px dashed #aaa; 
+    border-radius: 0.8em;
+    background: #f9f9f9; /* Fondo más claro */
+    
+    /* CAMBIO: Estilos para el texto "Subir archivos" */
+    text-align: center;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer; 
+}
+
+#divSubida:hover {
+    background: #f0f0f0;
+    border-color: #888;
+}
+
+
+/* 4. El contenedor del canvas (Modificado) */
+#divCanva { 
+    flex-grow: 1;     
+    position: relative;
+    min-height: 200px; 
+}
+
+.img-responsive {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  display: none; 
+}
+
+
+/* 5. Un contenedor para los botones (Sin cambios) */
+#divBotones {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1em;
+    margin-top: 24px;
+    flex-shrink: 0;
+}
+
+/* 6. Estilos para los botones (Sin cambios) */
+#divBotones input[type="button"] {
+    padding: 12px 24px;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+#btnAdd {
+    background: #EBD3FD;
+    color: #191919;
+}
+#btnAdd:hover { background: #d7b4f2; }
+
+#btnCancel {
+    background: transparent;
+    color: #191919;
+}
+#btnCancel:hover { background: #e0e0e0; }
+
+/* ================================================= */
+/* 12. ESTILOS DEL MODAL DE CÁMARA */
+/* ================================================= */
+
+/* Contenedor de la cuadrícula 2x2 */
+#divGridCamara {
+    display: grid;
+    /* Dos columnas de igual tamaño */
+    grid-template-columns: 1fr 1fr;
+    /* Dos filas de igual tamaño */
+    grid-template-rows: 1fr 1fr;
+    
+    gap: 1.5em; /* Espacio entre celdas */
+    
+    /* (Clave) Hace que la cuadrícula ocupe el espacio sobrante */
+    flex-grow: 1; 
+    min-height: 0; /* Corrección para flexbox */
+}
+
+/* Estilo base para las 4 celdas de la cuadrícula */
+.camara-celda {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background: #f9f9f9;
+    border: 3px solid #ddd;
+    border-radius: 1em;
+    padding: 1em;
+    box-sizing: border-box;
+    position: relative; /* <-- AÑADIR ESTO */
+}
+
+/* Estilo para los elementos <video> y <canvas> dentro de las celdas */
+.camara-video,
+.camara-canvas {
+    width: 100%;
+    /* (Clave) Hace que el video/canvas crezca para llenar la celda */
+    flex-grow: 1;
+    min-height: 0; /* Corrección para flexbox */
+    
+    background: #e0e0e0; /* Color de fondo mientras no hay contenido */
+    border-radius: 0.5em;
+    object-fit: cover; /* Para el video */
+}
+
+#recorte {
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    width: 100px;
+    height: 100px;
+    border: 4px dashed tomato;
+    cursor: move;
+    display: none;
+}
+
+/* Estilo para los botones NUEVOS (Capture, Cut) */
+#btnCapture,
+#btnCut {
+    padding: 12px 24px;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9em;
+    background: #EBD3FD;
+    color: #191919;
+    
+}
+
+#btnCapture:hover,
+#btnCut:hover {
+    background: #d7b4f2;
+}
+
+#divGridCamara #divBotones {
+    justify-content: flex-end; 
+    flex-direction: row; 
+    
+    background: transparent;
+    border: none;
+    padding: 0;
 }
