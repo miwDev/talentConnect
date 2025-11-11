@@ -18,7 +18,12 @@ switch ($method) {
         }
         break;
     case 'POST':
-        saveAlumno($body_content);
+        $process = $_GET['process'] ?? '';
+        if ($process == '') {
+            saveAlumno($body_content);
+        } else if ($process == "newStudent") {
+            saveFullAlumno();
+        }
         break;
     case 'PUT':
         $process = $_GET['process'] ?? '';
@@ -64,6 +69,26 @@ function saveAlumno($body)
     } else {
         http_response_code(400);
         echo json_encode(['success' => false]);
+    }
+}
+
+function saveFullAlumno(){
+    header('Content-Type: application/json');
+    
+    try {
+        $alumno = Adapter::formDataToAlumno();
+        $dbResponse = AlumnoRepo::save($alumno);
+
+        if($dbResponse !== false){
+            http_response_code(201);
+            echo json_encode(['success' => true, 'alumno_id' => $dbResponse]);
+        }else{
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Error al guardar en BD']);
+        }
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
     }
 }
 

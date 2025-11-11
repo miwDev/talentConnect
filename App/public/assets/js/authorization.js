@@ -8,7 +8,6 @@ window.addEventListener("load", function(){
     const subirCV = this.document.getElementById("uploadCV");
     const btnRegister = this.document.getElementById("envioRegistro");
 
-    // Inicializa FormularioManager solo una vez al cargar
     new FormularioManager("formulario");
 
 
@@ -79,7 +78,6 @@ window.addEventListener("load", function(){
 
     selCiclos.addEventListener("change", function(){
         const errorCiclo = document.getElementById("error-ciclo");
-        // Limpia el mensaje de error cuando el usuario selecciona una opción
         errorCiclo.textContent = ""; 
     });
 
@@ -93,7 +91,6 @@ window.addEventListener("load", function(){
             selCiclos.style.visibility = "hidden";
             errorCiclo.style.visibility = "hidden";
             
-            // Limpiar ciclos
             selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
             return;
         }
@@ -116,7 +113,6 @@ window.addEventListener("load", function(){
             
             populateSelect(selCiclos, json);
 
-            // Mostrar los campos
             labelCiclos.style.visibility = "visible";
             selCiclos.style.visibility = "visible";
             errorCiclo.style.visibility = "visible";
@@ -146,10 +142,6 @@ window.addEventListener("load", function(){
 
         let videoStream = null; 
 
-        // ===================================
-        // PASO 1: VISTA DE LA CÁMARA (divVideo)
-        // ===================================
-
         const divVideo = document.createElement("div");
         divVideo.className = "camara-step"; 
         divVideo.id = "step-video";
@@ -168,9 +160,6 @@ window.addEventListener("load", function(){
         divVideo.appendChild(video);
         divVideo.appendChild(btnCapture);
 
-        // ===================================
-        // PASO 2: RECORTE (divCanvas)
-        // ===================================
         const divCanvas = document.createElement("div");
         divCanvas.className = "camara-step"; 
         divCanvas.id = "step-canvas";
@@ -192,9 +181,6 @@ window.addEventListener("load", function(){
         divCanvas.appendChild(recorte);
         divCanvas.appendChild(btnCut);
 
-        // ===================================
-        // PASO 3: RESULTADO (divResult)
-        // ===================================
         const divResult = document.createElement("div");
         divResult.className = "camara-step"; 
         divResult.id = "step-result";
@@ -229,17 +215,11 @@ window.addEventListener("load", function(){
         divResult.appendChild(canvasRes);
         divResult.appendChild(divBotones);
 
-        // ===================================
-        // AÑADIR PASOS AL MODAL
-        // ===================================
         modalContent.appendChild(h2);
         modalContent.appendChild(divVideo);   
         modalContent.appendChild(divCanvas);  
         modalContent.appendChild(divResult);  
 
-        // ===================================
-        //  LÓGICA DE RECORTE
-        // ===================================
         recorte.addEventListener('wheel',function(e){
             e.preventDefault();
 
@@ -253,7 +233,6 @@ window.addEventListener("load", function(){
             const maxW = (c_left + c_w) - this.offsetLeft;
             const maxH = (c_top + c_h) - this.offsetTop;
             
-            // --- INICIO CAMBIO: Forzar redimensionado cuadrado ---
             const delta = this.offsetWidth * 0.05 * Math.sign(e.wheelDelta || -e.deltaY);
             let newSize = this.offsetWidth + delta;
 
@@ -263,7 +242,6 @@ window.addEventListener("load", function(){
             
             this.style.width = newSize + "px";
             this.style.height = newSize + "px";
-            // --- FIN CAMBIO ---
         });
 
         recorte.addEventListener("mousedown", function(e_down) {
@@ -291,10 +269,6 @@ window.addEventListener("load", function(){
         recorte.addEventListener("mouseover", function() {
             recorte.style.cursor = "all-scroll"; 
         });
-
-        // ===================================
-        //  LÓGICA DE CÁMARA Y NAVEGACIÓN
-        // ===================================
 
         function stopStream() {
             if (videoStream) {
@@ -328,14 +302,12 @@ window.addEventListener("load", function(){
         let context = canvas.getContext('2d');
         
         btnCapture.addEventListener('click', async function() {
-            // --- INICIO CAMBIO: Dibujar 4:3 en 1:1 (cover) ---
             const sHeight = video.videoHeight;
-            const sWidth = sHeight * (canvas.width / canvas.height); // 600 * (640/640) = 600
-            const sX = (video.videoWidth - sWidth) / 2; // (800 - 600) / 2 = 100
+            const sWidth = sHeight * (canvas.width / canvas.height); 
+            const sX = (video.videoWidth - sWidth) / 2; 
             const sY = 0;
             
             context.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-            // --- FIN CAMBIO ---
             
             recorte.style.display = "block"; 
 
@@ -363,7 +335,6 @@ window.addEventListener("load", function(){
             const sW_res = w_recorte_css * scaleX;
             const sH_res = h_recorte_css * scaleY;
             
-            // El recorte será cuadrado, por lo que sW_res y sH_res serán iguales
             canvasRes.width = sW_res;
             canvasRes.height = sH_res;
             
@@ -378,10 +349,6 @@ window.addEventListener("load", function(){
             divResult.style.display = "flex"; 
             h2.textContent = "Paso 3: Confirmar Resultado";
         });
-
-        // ===================================
-        //  FUNCIONALIDAD BOTONES FINALES
-        // ===================================
 
         btnVolver.addEventListener("click", function() {
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -398,7 +365,7 @@ window.addEventListener("load", function(){
 
         btnAccept.onclick=()=>{
             const imgDestino = document.getElementById('avatarId');
-            const hiddeninput = document.getElementById("datosCanvas");
+            const hiddeninput = document.getElementById("hiddenFotoPerfil");
 
             const dataURL = canvasRes.toDataURL();
             imgDestino.src = dataURL;
@@ -434,6 +401,10 @@ window.addEventListener("load", function(){
         divSubida.id = "divSubida";
         divSubida.textContent = "Subir archivos"; 
 
+        const imgElemento = document.createElement("img");
+        imgElemento.className = "img-responsive"; 
+        imgElemento.style.display = 'none';
+
         divSubida.addEventListener("click", () => {
             inputArchivo.click();
         });
@@ -458,9 +429,6 @@ window.addEventListener("load", function(){
         const divCanva = document.createElement("div");
         divCanva.id = "divCanva";
         
-        const imgElemento = document.createElement("img");
-        imgElemento.className = "img-responsive"; 
-        
         divCanva.appendChild(imgElemento);
         divContent.appendChild(divSubida);
         divContent.appendChild(divCanva); 
@@ -478,20 +446,38 @@ window.addEventListener("load", function(){
         btnCancel.id = "btnCancel";
         btnCancel.value = "CANCELAR";
 
-        btnCancel.onclick=()=>{window.cerrarModal()};
+        btnCancel.onclick=()=>{
+            if (previewURLTemporal) {
+                URL.revokeObjectURL(previewURLTemporal);
+            }
+            window.cerrarModal()
+        };
 
         btnAccept.addEventListener("click", () => {
             
-            if (previewURLTemporal) {
+            if (archivoParaSubir) {
                 const imgDestino = document.getElementById('avatarId'); 
+                const hiddenInput = document.getElementById('hiddenFotoPerfil');
                 
-                if (imgDestino) {
-                    imgDestino.src = previewURLTemporal;
-                } else {
-                    console.error("No se encontró el <img> de destino en el formulario.");
-                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const dataURL = e.target.result; 
+                    
+                    imgDestino.src = dataURL;
+                    
+                    hiddenInput.value = dataURL;
+                    
+                    window.cerrarModal();
+                };
+                reader.readAsDataURL(archivoParaSubir);
+            
+            } else {
+                window.cerrarModal();
             }
-            window.cerrarModal()
+
+            if (previewURLTemporal) {
+                URL.revokeObjectURL(previewURLTemporal);
+            }
         });
 
         divBotones.appendChild(btnAccept);
@@ -503,9 +489,31 @@ window.addEventListener("load", function(){
     });
 
 
-    subirCV.onclick=()=>{
-        input = this.document.createElement("input");
-        input.type = "file";
-        I
+    subirCV.onclick = function() {
+        const form = document.getElementById('formulario');
+
+        let input = form.querySelector('input[name="cv"]');
+
+        if (!input) {
+            input = document.createElement("input");
+            input.type = "file";
+            input.name = "cv";
+            input.style.display = "none";
+            input.accept = ".pdf,application/pdf";
+            input.required = true;
+            
+            form.appendChild(input);
+        }
+
+        input.onchange = () => {
+            if (input.files.length > 0) {
+                const fileName = input.files[0].name;
+                this.textContent = fileName;
+            } else {
+                this.textContent = "Subir CV (PDF)";
+            }
+        };
+
+        input.click();
     };
 })
