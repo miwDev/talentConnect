@@ -15,6 +15,9 @@ class EmpresaRepo implements RepoInterface
         $conn = DBC::getConnection();
         $empresaId = false;
 
+        $hashedPassword = password_hash($empresa->password, PASSWORD_DEFAULT);
+
+
         try {
             $conn->beginTransaction();
 
@@ -22,16 +25,17 @@ class EmpresaRepo implements RepoInterface
                           VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $empresa->username);
-            $stmtUser->bindValue(':pass', $empresa->password);
+            $stmtUser->bindValue(':pass', $hashedPassword);
             $stmtUser->bindValue(':role_id', 3);
             $stmtUser->execute();
 
             $userId = $conn->lastInsertId();
 
+            // 2. Insertar en EMPRESA
             $queryEmpresa = 'INSERT INTO EMPRESA 
-                                (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad)
+                                (nombre, telefono, direccion, nombre_persona, telefono_persona, logo, user_id, validacion, provincia, localidad, cif)
                              VALUES 
-                                (:nomb, :telef, :direccion, :nom_pers, :telf_pers, :logo, :user_id, :validacion, :provincia, :localidad)';
+                                (:nomb, :telef, :direccion, :nom_pers, :telf_pers, :logo, :user_id, :validacion, :provincia, :localidad, :cif)';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
             $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
             $stmtEmpresa->bindValue(':telef', $empresa->telefono);
@@ -43,12 +47,20 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
             $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
             $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
+            $stmtEmpresa->bindValue(':cif', $empresa->cif);
             $stmtEmpresa->execute();
 
             $empresaId = $conn->lastInsertId();
+
+            $queryToken = 'INSERT INTO USER_TOKEN (user_id, token) VALUES (:user_id, NULL)';
+            $stmtToken = $conn->prepare($queryToken);
+            $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
+            $stmtToken->execute();
+
             $conn->commit();
         } catch (Exception $e) {
             $conn->rollBack();
+            error_log("Error al guardar empresa: " . $e->getMessage());
             $empresaId = false;
         }
 
@@ -73,7 +85,8 @@ class EmpresaRepo implements RepoInterface
                     e.logo AS logo,
                     e.validacion AS validacion,
                     e.provincia AS provincia,
-                    e.localidad AS localidad
+                    e.localidad AS localidad,
+                    e.cif AS cif
              FROM EMPRESA e
              JOIN USER u ON e.user_id = u.id'
         );
@@ -82,19 +95,75 @@ class EmpresaRepo implements RepoInterface
         $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($resultados as $res) {
+            // Constructor order: id, username, pass, nombre, telefono, direccion, provincia, localidad, nombrePersona, telPersona, logo, validacion
             $empresas[] = new Empresa(
                 $res['empresa_id'],
                 $res['username'],
                 $res['pass'],
+                $res['cif'],
                 $res['nombre'],
                 $res['telefono'],
                 $res['direccion'],
+                $res['provincia'],
+                $res['localidad'],
                 $res['nombrePersona'],
                 $res['telPersona'],
                 $res['logo'],
-                $res['validacion'],
+                $res['validacion']
+            );
+        }
+
+        return $empresas;
+    }
+
+    public static function filteredFindAll($string)
+    {
+
+        $conn = DBC::getConnection();
+        $empresas = [];
+
+        $searchString = '%' . strtolower($string) . '%';
+
+        $query = $conn->prepare(
+            'SELECT e.id AS empresa_id,
+                    u.user_name AS username,
+                    u.passwrd AS pass,
+                    e.nombre AS nombre,
+                    e.telefono AS telefono,
+                    e.direccion AS direccion,
+                    e.nombre_persona AS nombrePersona,
+                    e.telefono_persona AS telPersona,
+                    e.logo AS logo,
+                    e.validacion AS validacion,
+                    e.provincia AS provincia,
+                    e.localidad AS localidad,
+                    e.cif AS cif
+             FROM EMPRESA e
+             JOIN USER u ON e.user_id = u.id
+             WHERE LOWER(e.nombre) LIKE :searchString'
+        );
+
+        $query->bindParam(':searchString', $searchString);
+        $query->execute();
+
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resultados as $res) {
+
+            $empresas[] = new Empresa(
+                $res['empresa_id'],
+                $res['username'],
+                $res['pass'],
+                $res['cif'],
+                $res['nombre'],
+                $res['telefono'],
+                $res['direccion'],
                 $res['provincia'],
-                $res['localidad']
+                $res['localidad'],
+                $res['nombrePersona'],
+                $res['telPersona'],
+                $res['logo'],
+                $res['validacion']
             );
         }
 
@@ -107,7 +176,7 @@ class EmpresaRepo implements RepoInterface
 
         $query = 'SELECT e.id AS empresa_id,
                          u.user_name AS username,
-                         u.password AS pass,
+                         u.passwrd AS pass,
                          e.nombre AS nombre,
                          e.telefono AS telefono,
                          e.direccion AS direccion,
@@ -116,7 +185,8 @@ class EmpresaRepo implements RepoInterface
                          e.logo AS logo,
                          e.validacion AS validacion,
                          e.provincia AS provincia,
-                         e.localidad AS localidad
+                         e.localidad AS localidad,
+                         e.cif AS cif
                   FROM EMPRESA e
                   JOIN USER u ON e.user_id = u.id
                   WHERE e.id = :id';
@@ -135,20 +205,76 @@ class EmpresaRepo implements RepoInterface
             $resultado['empresa_id'],
             $resultado['username'],
             $resultado['pass'],
+            $resultado['cif'],
             $resultado['nombre'],
             $resultado['telefono'],
             $resultado['direccion'],
+            $resultado['provincia'],
+            $resultado['localidad'],
             $resultado['nombrePersona'],
             $resultado['telPersona'],
             $resultado['logo'],
-            $resultado['validacion'],
-            $resultado['provincia'],
-            $resultado['localidad']
+            $resultado['validacion']
         );
     }
 
+    public static function findBySizePage($size, $page)
+    {
+        return true;
+    }
+
+    public static function findByUserId(int $userId)
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT e.id AS empresa_id,
+                         u.user_name AS username,
+                         u.passwrd AS pass,
+                         e.nombre AS nombre,
+                         e.telefono AS telefono,
+                         e.direccion AS direccion,
+                         e.nombre_persona AS nombrePersona,
+                         e.telefono_persona AS telPersona,
+                         e.logo AS logo,
+                         e.validacion AS validacion,
+                         e.provincia AS provincia,
+                         e.localidad AS localidad,
+                         e.cif AS cif
+                  FROM EMPRESA e
+                  JOIN USER u ON e.user_id = u.id
+                  WHERE e.user_id = :userIdValue';
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':userIdValue', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$resultado) {
+            $empresa = null;
+        } else {
+            $empresa = new Empresa(
+                $resultado['empresa_id'],
+                $resultado['username'],
+                $resultado['pass'],
+                $resultado['cif'],
+                $resultado['nombre'],
+                $resultado['telefono'],
+                $resultado['direccion'],
+                $resultado['provincia'],
+                $resultado['localidad'],
+                $resultado['nombrePersona'],
+                $resultado['telPersona'],
+                $resultado['logo'],
+                $resultado['validacion']
+            );
+        }
+
+        return $empresa;
+    }
+
     // UPDATE
-    public static function updateById($empresa)
+    public static function update($empresa)
     {
         $conn = DBC::getConnection();
         $salida = false;
@@ -165,7 +291,8 @@ class EmpresaRepo implements RepoInterface
                                  logo = :logo,
                                  validacion = :validacion,
                                  provincia = :provincia,
-                                 localidad = :localidad
+                                 localidad = :localidad,
+                                 cif = :cif
                              WHERE id = :id';
             $stmtEmpresa = $conn->prepare($queryEmpresa);
             $stmtEmpresa->bindValue(':nomb', $empresa->nombre);
@@ -177,8 +304,19 @@ class EmpresaRepo implements RepoInterface
             $stmtEmpresa->bindValue(':validacion', $empresa->validacion);
             $stmtEmpresa->bindValue(':provincia', $empresa->provincia);
             $stmtEmpresa->bindValue(':localidad', $empresa->localidad);
+            $stmtEmpresa->bindValue(':cif', $empresa->cif);
             $stmtEmpresa->bindValue(':id', $empresa->id);
             $stmtEmpresa->execute();
+
+            $queryGetUserId = 'SELECT user_id FROM EMPRESA WHERE id = :empresa_id';
+            $stmtGetUserId = $conn->prepare($queryGetUserId);
+            $stmtGetUserId->bindValue(':empresa_id', $empresa->id);
+            $stmtGetUserId->execute();
+            $user_id = $stmtGetUserId->fetchColumn();
+
+            if (!$user_id) {
+                throw new \PDOException("No se pudo recuperar el user_id.");
+            }
 
             $queryUser = 'UPDATE USER
                           SET user_name = :username,
@@ -187,12 +325,12 @@ class EmpresaRepo implements RepoInterface
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $empresa->username);
             $stmtUser->bindValue(':pass', $empresa->password);
-            $stmtUser->bindValue(':user_id', $empresa->user_id);
+            $stmtUser->bindValue(':user_id', $user_id);
             $stmtUser->execute();
 
             $conn->commit();
             $salida = true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $conn->rollBack();
             $salida = false;
         }

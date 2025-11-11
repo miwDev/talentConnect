@@ -8,10 +8,13 @@
     6. REGISTER CONTENT
     7. REGISTER EMPRESA CONTENT
     8. ERROR STYLES
+    9. ADMIN STYLES (AÑADIDO AL FINAL)
 
 */
 
 /* 1. GLOBAL STYLES */
+/* BLOQUE 1: ESTILOS BASE Y DISEÑO GENERAL */
+/* Define la base tipográfica (Libre Baskerville) y el color de fondo principal. */
 body {
     background-color: #FFFFE9;
     margin: 0;
@@ -23,10 +26,12 @@ body {
     font-family: 'Libre Baskerville', serif;
 }
 
+/* Permite que el contenido principal ocupe el espacio restante (necesario para el sticky footer). */
 main {
     flex: 1;
 }
 
+/* Estilos del contenedor general de contenido. */
 .container{
     background-color: #FFFFE9;
     border-radius: 0.6875em;
@@ -35,6 +40,9 @@ main {
 }
 
 /* 2. HEADER CONTENT */
+/* BLOQUE 2: CABECERA Y NAVEGACIÓN */
+
+/* Estilos para el banner superior */
 .banner-container { 
     position: relative; 
     width: 100%;
@@ -42,12 +50,15 @@ main {
      border-radius: 0 0 2em 2em; /* Solo esquinas inferiores */ 
 }
 
-.banner-image {
-    width: 100%; 
+/* Asegura que el video de fondo cubra el área */
+.banner-video {
     display: block;
-    filter: blur(0.8em);
+    object-fit: cover;
+    filter: blur(30px);
 }
 
+
+/* Posicionamiento y centrado del texto sobre el banner */
 .banner-text {
     position: absolute; 
     top: 50%;
@@ -57,6 +68,7 @@ main {
     color: #191919; 
 }
 
+/* Título principal del banner (Poppins) */
 .banner-text h1 {
     font-size: 6.5em;
     margin-bottom: 0.1em;
@@ -64,6 +76,7 @@ main {
     font-family: 'Poppins', sans-serif;
 }
 
+/* Subtítulo del banner (Poppins) */
 .banner-text h2 {
     font-size: 1.9em;
     font-weight: 300;
@@ -72,12 +85,14 @@ main {
     font-family: 'Poppins', sans-serif;
 }
 
+/* Hace que la cabecera se mantenga pegada en la parte superior */
 header {
     position: sticky;
     top: 0em;
     z-index: 1000;
 }
 
+/* Contenedor de la barra de navegación (uso de Flexbox) */
 .header-banner{
     background-color: #FFFFE9;
     display: flex;
@@ -89,6 +104,7 @@ header {
     border-bottom: 3px #505050;
 }
 
+/* Estilos para el logo y el texto de la marca */
 #logo{
     display: flex;
     flex-direction: row;
@@ -116,6 +132,7 @@ header {
     color: inherit;
 }
 
+/* Contenedor para navegación y avatar */
 #nav-and-user {
     display: flex;
     align-items: center;
@@ -126,6 +143,7 @@ header {
     margin-right: 1em;
 }
 
+/* Estilo para destacar el botón de registro */
 #nav li {
     margin-right: 3em;
     border: 3px solid black;
@@ -137,6 +155,7 @@ header {
     background-color: #EBD3FD;
 }
 
+/* Lista de navegación con Flexbox */
 .menu-lista {
     list-style: none;
     display: flex;
@@ -151,6 +170,7 @@ header {
     font-weight: bold;
 }
 
+/* Tipografía de los enlaces de navegación (Poppins) */
 #navParent a {
     color: #191919;
     line-height: 1.2;
@@ -160,6 +180,7 @@ header {
     font-weight: 400;
 }
 
+/* Efecto hover de los enlaces de navegación */
 #navParent a:hover {
     color: #505050;
     line-height: 1.2;
@@ -169,6 +190,7 @@ header {
     font-weight: 400;
 }
 
+/* Avatar de usuario y efecto hover */
 .avatar {
     content: url('/public/assets/images/genericAvatar.svg');
     padding: 0;
@@ -182,8 +204,11 @@ header {
 }
 
 /* 3. MAIN CONTENT - INDEX */
+/* BLOQUE 3: CONTENIDO PRINCIPAL DE LA PÁGINA DE INICIO (INDEX) */
 
 /* SECTION 1 - Rediseño */
+
+/* Título de la sección 1 (Poppins) */
 .section1-title {
     text-align: center;
     /* TÍTULO SECCIÓN: Poppins */
@@ -194,10 +219,12 @@ header {
     padding: 0 2em;
 }
 
+/* Resalte de color para palabras clave en el título */
 .section1-title .highlight {
     color: #EBD3FD; /* Tu color de acento */
 }
 
+/* Contenedor de tarjetas de características (uso de Flexbox) */
 .feature-card {
     display: flex;
     align-items: center;
@@ -206,12 +233,14 @@ header {
     padding: 0 2em;
 }
 
+/* Inversión del orden de texto e imagen */
 .feature-card-reverse {
     flex-direction: row-reverse;
 }
 
+/* Contenedor de imagen con fondo oscuro y borde redondeado */
 .feature-image-container {
-    flex: 0 0 45%;
+    flex: 0 0 30%;
     background-color: #191919;
     border-radius: 2em;
     padding: 2em;
@@ -226,11 +255,13 @@ header {
     border-radius: 1em;
 }
 
+/* Estilos del texto de la característica */
 .feature-text {
     flex: 1;
     padding: 0 2em;
 }
 
+/* Título de la tarjeta (Poppins) */
 .feature-text h3 {
     /* TÍTULO CARDS: Poppins */
     font-family: 'Poppins', sans-serif;
@@ -240,6 +271,7 @@ header {
     font-weight: 700;
 }
 
+/* Párrafo de la tarjeta (Libre Baskerville) */
 .feature-text p {
     font-family: 'Libre Baskerville', serif;
     font-size: 1.3em;
@@ -248,7 +280,7 @@ header {
     margin: 0;
 }
 
-/* SECTION 2 */
+/* SECTION 2 - Placeholder con fondo oscuro */
 
 #section2{
     background-color: #191919;
@@ -257,6 +289,7 @@ header {
     z-index: 2; /* Por encima del section3 */
 }
 
+/* Título principal H2 de la sección (Poppins) */
 h2{
     text-align: center;
     /* TÍTULO H2: Poppins */
@@ -271,22 +304,23 @@ h2{
     padding: 3em
 }
 
-/* SECTION 3 */
+/* SECTION 3 - Call to Action (CTA) */
 
 
 #section3{
     background-color: #16443D;
-    padding: 8em 0; /* Aumentado de 4em a 8em para más espacio */
+    padding: 8em 0; /* Aumentado para más espacio */
     position: relative;
     z-index: 1;
-    margin-top: -4em;
+    margin-top: -4em; /* Superposición con sección anterior */
     margin-bottom: -4em;
 }
 
+/* Contenedor central de la CTA con fondo claro */
 .s3-container{
     background-color: #FFFFE9;
     border: 1.5px solid #191919;
-    margin: 0 30em; /* Quita el margin top/bottom, deja solo lateral */
+    margin: 0 30em; /* Centrado con márgenes laterales */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -299,6 +333,7 @@ h2{
     margin-top: 2.5em;
 }
 
+/* Título H3 de la CTA (Poppins) */
 h3{
     text-align: center;
     /* TÍTULO H3: Poppins */
@@ -307,6 +342,7 @@ h3{
     color: #191919;
 }
 
+/* Subtítulo principal de la CTA (Libre Baskerville) */
 .s3-subtitle{
     text-align: center;
     /* SUBTÍTULO S3: Libre Baskerville */
@@ -330,6 +366,7 @@ h3{
     padding: 3.5em;
 }
 
+/* Estilo del botón principal (Poppins) */
 .a-section3 {
     background-color: #EBD3FD; 
     color: #191919;
@@ -352,6 +389,7 @@ h3{
     color: #191919; 
 }
 
+/* Enlace secundario (Libre Baskerville) */
 .s3-register-link{
     /* ENLACE SECUNDARIO S3: Libre Baskerville */
     font-family: 'Libre Baskerville', serif;
@@ -374,21 +412,39 @@ h3{
 }
 
 /* 4. FOOTER CONTENT */
+/* BLOQUE 4: PIE DE PÁGINA Y COMPONENTES DEL ADMIN */
 
+/* Estilos base del pie de página con fondo oscuro y esquinas superiores redondeadas */
 footer {
     background-color: #191919;
     color: #FFFFE9;
     padding: 0.1em 0;
-    /* FOOTER TEXTO: Libre Baskerville */
     font-family: 'Libre Baskerville', serif;
     font-size: 1.4em;
     width: 100%;
     margin: 0;
     box-sizing: border-box;
-    border-radius: 1em 1em 0 0;
-    position: relative; /* Necesario para que z-index funcione */
-    z-index: 2; /* Por encima del section3 */
+    border-radius: 1em 1em 0 0; /* superior-izq, superior-der, inferior-der, inferior-izq */
+    position: relative;
+    z-index: 2;
 }
+
+/* Estilo alternativo para el pie de página en la vista de administración */
+footer.admin-page {
+    background-color: #191919;
+    color: #FFFFE9;
+    padding: 0.1em 0;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.4em;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 0 1em 0 0; /* SIN radio en superior-izq, CON radio en superior-der */
+    position: relative;
+    z-index: 2;
+}
+
+
 
 .footer-container {
     display: flex;
@@ -403,6 +459,7 @@ footer {
     margin-top: 2em;
 }
 
+/* Distribución de las columnas del footer */
 .footer-items {
     display: flex;
     gap: 10em; 
@@ -423,6 +480,7 @@ footer {
     margin: 0;
 }
 
+/* Estilos y hover de los enlaces del footer */
 .social-link,
 .about-link {
     color: #FFFFE99d;
@@ -435,8 +493,117 @@ footer {
     color: #EBD3FD;
 }
 
+/* Estilos para el texto de copyright */
 footer > div:last-child {
     text-align: center;
     font-size: 0.7em;
     color: #FFFFE976;
+}
+
+
+/* 9. ADMIN STYLES (o donde decidas añadirlo) */
+/* Estilos para el aside/sidebar de la vista de administración */
+
+/* Contenedor principal del layout admin (Flexbox) */
+#admin-layout-container {
+    display: flex;
+    flex: 1; 
+    min-height: calc(100vh - 120px - 200px); /* Ejemplo: 100vh - header - footer */
+}
+
+/* Barra lateral de administración (Sidebar) */
+#admin-sidebar {
+    width: 280px; /* Ancho fijo para el aside */
+    background-color: #191919; /* Fondo oscuro */
+    color: #FFFFE9; /* Color de texto claro */
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra sutil */
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Área de contenido principal (ocupa el espacio restante) */
+#admin-content-area {
+    flex-grow: 1; 
+    padding: 2em;
+}
+
+/* Estilos de la cabecera del Aside */
+.sidebar-header {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #505050;
+}
+
+.sidebar-header h3 {
+    color: #FFFFE9;
+    font-size: 1.5em;
+    margin: 10px 0 0 0;
+    font-weight: 600;
+}
+
+.sidebar-icon {
+    font-size: 2em;
+    display: block;
+}
+
+/* Estilos de navegación del Aside */
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav .nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 30px;
+    color: #FFFFE9;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+/* Estilos hover y activo (resaltado con barra de color de acento) */
+.sidebar-nav .nav-item a:hover,
+.sidebar-nav .nav-item.active a {
+    background-color: #333333; /* Color de fondo al pasar el ratón/activo */
+    color: #EBD3FD; /* Color de acento para el texto activo */
+    border-left: 5px solid #EBD3FD; /* Barra de color de acento */
+    padding-left: 25px; /* Ajuste para compensar el borde */
+}
+
+.nav-icon {
+    font-size: 1.2em;
+}
+
+/* Estilos del pie de página del Aside (Logout) */
+.sidebar-footer {
+    margin-top: auto; /* Empuja el footer hacia abajo */
+    padding: 20px 0;
+    border-top: 1px solid #505050;
+    text-align: center;
+}
+
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #FFFFE99d; /* Color tenue */
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.sidebar-footer a:hover {
+    color: #EBD3FD;
 }

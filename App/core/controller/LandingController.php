@@ -7,6 +7,6 @@ class LandingController
 
     public function renderLanding($engine)
     {
-        echo $engine->render('pages/home');
+        echo $engine->render('landing/home');
     }
 }

@@ -4,8 +4,8 @@ namespace App\core\model;
 
 class Familia
 {
-    private $id;
-    private $nombre;
+    public $id;
+    public $nombre;
 
     //array 
 

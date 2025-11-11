@@ -1,0 +1,859 @@
+/* 6. ESTILO ESPECÍFICO DE LA FICHA DE VISUALIZACIÓN */
+
+/*
+
+* ESTILOS REESTILIZADOS PARA LA PANTALLA DE LISTADO DE ALUMNOS
+* BASADO EN LA ESTÉTICA DE LA PANTALLA DE LOGIN/REGISTRO
+*
+* Colores:
+* Fondo Principal: #16443D
+* Contenedor/Fondo Claro: #FFFFE9
+* Bordes/Oscuro: #191919
+* Acento/Botón Principal: #EBD3FD
+* Acento Hover: #d7b4f2
+*/
+
+
+/* ================================================= */
+/* 1. ESTILOS BASE Y CONTENEDOR PRINCIPAL */
+/* ================================================= */
+
+
+body {
+/* Fondo principal de la aplicación (16443D) */
+background-color: #16443D;
+}
+
+
+.list-container {
+/* Estilos de la caja principal: Fondo claro, borde oscuro, border-radius grande */
+background-color: #FFFFE9;
+border: 3px solid #191919;
+border-radius: 2em; /* 2em = 32px */
+padding: 30px;
+margin: 40px auto;
+max-width: 1200px;
+box-shadow: 0 5px 15px rgba(25, 25, 25, 0.2);
+font-family: 'Poppins', sans-serif;
+}
+
+
+/* ================================================= */
+/* 2. TIPOGRAFÍA Y SECCIÓN DE BÚSQUEDA */
+/* ================================================= */
+
+
+.header-section {
+margin-bottom: 25px;
+}
+
+
+h1 {
+/* Estilo h2-title adaptado: Poppins, font-weight 800, color oscuro */
+font-family: 'Poppins', sans-serif;
+font-size: 2.5em;
+color: #191919;
+margin: 0 0 20px 0;
+font-weight: 800;
+text-align: left;
+}
+
+
+.search-section {
+display: flex;
+align-items: center;
+gap: 10px;
+max-width: 400px;
+}
+
+
+.search-section input[type="text"] {
+/* Estilo de .form-group input: Borde 3px oscuro, padding, border-radius */
+padding: 0.6em;
+border: 3px solid #191919;
+font-family: 'Poppins', sans-serif;
+flex: 1;
+font-size: 1em;
+border-radius: 0.6875em; /* 11px */
+}
+
+
+.search-section input[type="text"]:focus {
+/* Estilo al enfocar: Borde de acento */
+outline: none;
+border: 3px solid #EBD3FD;
+box-shadow: none;
+}
+
+
+/* ================================================= */
+/* 3. BOTONES DE ACCIÓN PRINCIPALES (Buscar, Añadir) */
+/* ================================================= */
+
+
+.search-btn {
+/* Estilo de .login-btn: Fondo de acento, texto oscuro, borde oscuro */
+background-color: #EBD3FD;
+color: #191919;
+border: 3px solid #191919;
+padding: 0.6em 1.5em;
+cursor: pointer;
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 1.1em;
+white-space: nowrap;
+border-radius: 0.6875em;
+}
+
+
+.search-btn:hover {
+/* Efecto hover de acento */
+background-color: #d7b4f2;
+}
+
+
+.add-button-container {
+display: flex;
+justify-content: flex-end;
+margin-bottom: 20px;
+}
+
+
+#add,
+#cargaMasiva {
+/* Mismo estilo que .search-btn y .login-btn (Acento) */
+background: #EBD3FD;
+color: #191919;
+border: 3px solid #191919;
+padding: 0.6em 1.5em;
+cursor: pointer;
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 1.1em;
+border-radius: 0.6875em;
+transition: all 0.3s ease;
+}
+
+
+#add:hover,
+#cargaMasiva:hover {
+/* Efecto hover de acento */
+background: #d7b4f2;
+}
+
+
+/* ================================================= */
+/* 4. TABLA Y ACCIONES */
+/* ================================================= */
+
+
+.table-container {
+background: #FFFFE9;
+overflow: hidden;
+box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+border-radius: 0.6875em; /* Bordes redondeados pequeños para la tabla interna */
+}
+
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-family: 'Libre Baskerville', serif; /* Usamos Libre Baskerville para el cuerpo */
+}
+
+
+thead {
+/* Fondo Oscuro, como la tarjeta lateral (191919) */
+background: #16443D;
+}
+
+
+thead th {
+/* Texto Claro, como la tarjeta lateral (FFFFE9) */
+color: #FFFFE9;
+padding: 18px 20px;
+text-align: left;
+font-weight: 600;
+font-size: 0.95em;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+cursor: pointer;
+user-select: none;
+}
+
+
+/* Efecto hover en el header (ligeramente más claro que el fondo oscuro) */
+thead th:hover {
+background: #333333;
+}
+
+
+/* Celdas del cuerpo */
+tbody tr {
+border-bottom: 1px solid #E5E7EB;
+/* Nuevo: Fila impar (Odd) usa blanco puro */
+background: #FFFFFF;
+}
+
+
+tbody tr:hover {
+/* Nuevo: Color de hover general (sutil toque de acento) */
+background: #E0E0F0;
+}
+
+
+tbody td {
+padding: 16px 20px;
+color: #191919;
+font-size: 0.95em;
+vertical-align: middle;
+}
+
+
+tbody tr:nth-child(even) {
+/* Nuevo: Fila par (Even) usa un gris muy claro con un toque de acento (no es el color del fondo) */
+background: #EDEDF8;
+}
+
+
+tbody tr:nth-child(even):hover {
+/* Nuevo: Mismo color de hover para pares */
+background: #E0E0F0;
+}
+
+
+/* Botones de acción (Editar/Eliminar) */
+
+
+.action-buttons {
+display: flex;
+gap: 8px;
+}
+
+
+.action-btn {
+/* Estilo base de los botones pequeños: borde 3px oscuro, font Poppins, radius pequeño */
+padding: 8px 16px;
+border: 3px solid #191919;
+cursor: pointer;
+font-family: 'Poppins', sans-serif;
+font-size: 0.85em;
+font-weight: 500;
+border-radius: 0.6875em;
+flex: 1;
+}
+
+
+.edit-btn {
+/* Editar usa el color de acento */
+background: #EBD3FD;
+color: #191919;
+}
+
+
+.edit-btn:hover {
+background: #d7b4f2;
+}
+
+
+.delete-btn {
+/* Eliminar usa el color de peligro (d32f2f de tu error-message) */
+background: #d32f2f;
+color: #FFFFE9; /* Texto claro */
+}
+
+
+.delete-btn:hover {
+background: #a82424;
+}
+
+
+/* Flechas de ordenación (no se modifican los URLs) */
+
+.static-arrow, .arrow-up, .arrow-down {
+
+display: inline-block;
+
+width: 30px;
+
+height: 30px;
+
+margin-left: 8px;
+
+background-size: contain;
+
+background-repeat: no-repeat;
+
+background-position: center;
+
+vertical-align: middle;
+
+}
+
+
+.static-arrow {
+
+background-image: url('/public/assets/images/StaticArrow.svg');
+
+}
+
+
+.arrow-up {
+
+background-image: url('/public/assets/images/ArrowUp.svg');
+
+}
+
+
+.arrow-down {
+
+background-image: url('/public/assets/images/ArrowDown.svg');
+
+}
+
+
+/* ================================================= */
+/* 5. ESTILO MODAL (Registro/Edición) */
+/* ================================================= */
+
+
+.velo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1005;
+}
+
+
+/* MODAL MÁS GRANDE Y ESPACIOS ADAPTADOS */
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80em;              /* Ampliar el ancho máximo (antes 50em) */
+    max-height: 90vh;         /* Ampliar más el alto máximo */
+    min-width: 600px;         /* Forzar un mínimo ancho útil */
+    min-height: 500px;        /* Forzar un mínimo alto útil */
+    height: auto;
+    overflow-y: auto;
+    background: #FFFFE9;
+    border: 3px solid #191919;
+    z-index: 1006;
+    box-shadow: 0 4px 28px rgba(0,0,0,0.32);
+    padding: 48px;            /* Un poco más de espacio interno */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2em;
+}
+
+.divTablaC {
+    max-height: 60vh;    /* Puede subirse el scroll según el tamaño del modal */
+    overflow-y: auto;
+    padding: 12px;
+}
+
+/* Contenido Modal - Título, Campos e Inputs */
+
+
+#modalContent h2 {
+/* Título del modal: Poppins, oscuro, negrita */
+color: #191919;
+font-family: 'Poppins', sans-serif;
+font-size: 1.8em;
+margin: 0 0 30px 0;
+font-weight: 800;
+text-align: center;
+}
+
+
+.form-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+margin-bottom: 20px;
+}
+
+
+/*Grid especifico para carga masiva*/
+.form-gridCarga {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+margin-bottom: 20px;
+}
+
+
+#registroForm .form-field, #editForm .form-field {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+
+#cargaMasivaForm .form-field {
+display: flex;
+flex-direction: column;
+}
+
+
+#registroForm label, #editForm label, #cargaMasivaForm label {
+/* Estilo Label de autenticación: Poppins, 1.3em, oscuro */
+font-family: 'Poppins', sans-serif;
+font-size: 1.1em; /* Ligeramente más pequeño para formularios internos */
+color: #191919;
+font-weight: 500;
+margin-bottom: 2px;
+}
+
+
+#registroForm input, #editForm input {
+/* Estilo Input de autenticación */
+padding: 0.6em;
+border: 3px solid #191919;
+font-family: 'Libre Baskerville', serif;
+font-size: 1em;
+border-radius: 0.6875em;
+}
+
+
+#cargaMasivaForm input[type="file"] {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1em;
+    padding: 0.6em;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    align-self: left;
+}
+
+
+#registroForm input:focus, #editForm input:focus {
+/* Foco de acento */
+outline: none;
+border: 3px solid #EBD3FD;
+box-shadow: none;
+}
+
+
+/* Espacio reservado para errores */
+.error-message {
+min-height: 20px;
+font-size: 0.85em;
+color: #d32f2f;
+font-family: 'Poppins', sans-serif;
+margin-top: 4px;
+}
+
+
+/* Botones dentro de los modales */
+
+
+#btnRegistrar, #btnEjemplo , #btnCargaDatos{
+/* Botón Registrar: Acento */
+background: #EBD3FD;
+color: #191919;
+border: 3px solid #191919;
+padding: 4px 14px;
+cursor: pointer;
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 1.1em;
+margin-top: auto;
+border-radius: 0.6875em;
+}
+
+#btnCargaDatos{
+    margin: 1.5em 27em auto;
+}
+
+
+/* ESTILO AÑADIDO PARA LA CUADRÍCULA 2X2 */
+#btnEjemplo {
+width: 100%;
+height: auto; /* Permite que el padding y contenido definan la altura */
+align-self: start; /* Alinea el botón con la parte superior de su celda (por defecto) */
+margin-top: 0; /* Anula el margin-top: auto; del estilo genérico */
+padding: 0.6em 1.5em; /* Padding para que coincida con otros botones grandes */
+box-sizing: border-box; /* Asegura que el padding no exceda el 100% de width */
+}
+/* FIN ESTILO AÑADIDO */
+
+
+#btnRegistrar:hover {
+background: #d7b4f2;
+}
+
+
+/* Botones de Confirmar/Cancelar Edición */
+
+
+.button-container {
+display: flex;
+gap: 12px;
+margin-top: auto;
+}
+
+
+.button-container button {
+/* Base de los botones de acción */
+flex: 1;
+padding: 14px 24px;
+border: 3px solid #191919;
+cursor: pointer;
+font-family: 'Poppins', sans-serif;
+font-weight: 500;
+font-size: 1.1em;
+border-radius: 0.6875em;
+}
+
+
+#btnConfirmar {
+/* Confirmar: Fondo de acento */
+background: #EBD3FD;
+color: #191919;
+}
+
+
+#btnConfirmar:hover {
+background: #d7b4f2;
+}
+
+
+#btnCancelar {
+/* Cancelar: Fondo Oscuro para distinguirlo, con texto claro */
+background: #191919;
+color: #FFFFE9;
+}
+
+
+#btnCancelar:hover {
+background: #333333;
+}
+
+
+#cerrarModal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    width: 38px;
+    height: 38px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.2em;
+    z-index: 1010;
+}
+
+
+
+#cerrarModal:hover {
+background: #d7b4f2;
+}
+
+
+/* ================================================= */
+/* 6. ESTILO ESPECÍFICO DE LA FICHA DE VISUALIZACIÓN */
+/* ================================================= */
+
+
+#verForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Cuadrícula de Campos (Form-Grid) --- */
+#verForm .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px; 
+    margin-bottom: 40px;
+}
+
+/* --- Sección Superior (Logo, Nombre, Email/Apellido) --- */
+/* Esta sección ocupa las 2 columnas */
+#verForm .form-grid > .form-field:first-child { 
+    grid-column: 1 / -1; 
+    display: flex;
+    align-items: center; 
+    gap: 40px; 
+    padding: 40px;
+    border: 2px dashed #EBD3FD; 
+    border-radius: 1em;
+}
+
+#verForm .form-grid > .form-field:first-child > div:first-child {
+    min-width: 150px;
+    height: 150px;
+    border: 3px solid #191919;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EDEDF8;
+}
+
+#verForm .form-grid > .form-field:first-child img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+#verForm .form-grid > .form-field:first-child > div:nth-child(2),
+#verForm .form-grid > .form-field:first-child > div:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 250px;
+}
+
+
+/* --- Estilos de Inputs para Visualización (Solo Lectura) --- */
+/* Se aplica estilo general a label */
+#verForm label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    color: #191919;
+    font-weight: 600; 
+    margin-bottom: 2px;
+}
+
+/* Se aplica el estilo base del input para la ficha */
+#verForm input[type="text"] {
+    padding: 0.8em; 
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
+    color: #191919;
+    /* Estilos de solo lectura para diferenciarlo del resto de formularios */
+    background-color: #EDEDF8; /* Fondo gris suave */
+    border: 3px solid #E5E7EB; /* Borde gris muy claro */
+    box-shadow: none;
+    cursor: default;
+}
+
+/* Reglas de solo lectura más específicas para anular cualquier hover/focus general */
+#verForm input[type="text"]:focus {
+    outline: none;
+    border: 3px solid #E5E7EB; /* Mantiene el borde pasivo al enfocar */
+}
+
+/* --- Botón Volver --- */
+/* Usamos el input[type="submit"] con el id de la página para que no choque con el resto */
+#verForm input[type="submit"]#btnVolver {
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 14px 24px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.1em;
+    border-radius: 0.6875em;
+    width: 200px; 
+    transition: background 0.2s ease;
+}
+
+#verForm input[type="submit"]#btnVolver:hover {
+    background: #d7b4f2;
+}
+
+/* --- Responsividad Básica --- */
+@media (max-width: 900px) {
+    #verForm .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    #verForm .form-grid > .form-field:first-child {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    #verForm .form-grid > .form-field:first-child > div:first-child {
+        margin: 0 auto;
+    }
+}
+
+
+/* ================================================= */
+/* 7. ESTILOS EJEMPLO CSV DE CARGA MASIVA */
+/* ================================================= */
+
+
+.csv-example-container {
+/* Mismos bordes y márgenes que antes */
+margin-top: 20px;
+margin-bottom: 20px;
+padding: 7px;
+border: 3px solid #191919; /* Usando tu borde oscuro estándar */
+background-color: #FFFFE9; /* Fondo claro de tus modales */
+border-radius: 0.6875em;
+}
+
+
+.csv-example-title {
+/* Estilo para el título "Formato requerido:" */
+font-family: 'Poppins', sans-serif;
+font-weight: 600;
+color: #191919;
+margin-bottom: 10px;
+}
+
+
+.csv-example-code {
+/* Estilo para el bloque de código CSV (<pre>) */
+font-family: monospace;
+font-size: 0.9em;
+line-height: 1.5;
+color: #191919; /* Usando tu color de fondo principal para el texto */
+background-color: #EDEDF8; /* Un gris muy claro para diferenciar el código */
+padding: 10px;
+border-radius: 5px;
+}
+
+
+.csv-example-note {
+display: block;
+text-align: right;
+color: #505050;
+font-family: 'Libre Baskerville', serif;
+font-size: 0.9em;
+margin-top: 8px;
+}
+
+
+/* Estilos de los select */
+
+
+.form-select {
+width: 100%;
+padding: 0.6em;
+box-sizing: border-box;
+border: 3px solid #191919;
+border-radius: 0.6875em;
+font-size: 1em;
+background-color: #FFFFE9;
+font-family: 'Libre Baskerville', serif;
+}
+
+.tableInput-style{
+    padding: 0.6em;
+    border: 3px solid #191919;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1em;
+    border-radius: 0.6875em;
+}
+
+.check-table {
+    /* Ocultar el checkbox nativo */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Dimensiones y estructura */
+    width: 20px;
+    height: 20px;
+    border: 3px solid #191919;
+    border-radius: 0.375em; /* Bordes redondeados suaves */
+    background-color: #FFFFE9;
+    
+    /* Cursor y posición */
+    cursor: pointer;
+    position: relative;
+}
+
+/* Estado checked */
+.check-table:checked {
+    background-color: #EBD3FD;
+    border-color: #191919;
+}
+
+.check-table:disabled {
+    background-color: #cecbd0;
+    border-color: #3e3d3d;
+}
+
+/* Marca de verificación cuando está checked */
+.check-table:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #191919;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+}
+
+tr.valida .icon {
+    background: url("/public/assets/images/tick.svg") no-repeat;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+}
+tr.error .icon {
+    background: url("/public/assets/images/errorEmail.svg") no-repeat;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+}
+
+tr.emailDupe .icon {
+    background: url("/public/assets/images/cross.svg") no-repeat;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+}
+
+tr.saved .icon {
+    background: url("/public/assets/images/saved.svg") no-repeat;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+}
+
+
+/* ================================================= */
+/* 7. MENSAJES DE ERROR */
+/* ================================================= */
+
+.error-message {
+    min-height: 20px;
+    font-size: 0.95em;
+    color: #d32f2f;
+    font-family: 'Libre Baskerville', serif;
+    margin-top: 4px;
+}
+
+.error-validacion {
+    text-align: center;
+}
+
+.error-carga-resultado {
+    text-align: center;
+}

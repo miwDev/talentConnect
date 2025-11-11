@@ -14,14 +14,19 @@ switch ($method) {
         if ($body_content == "" || empty($body_content)) {
             getFullList();
         } else {
-            getSizedList();
+            getSizedList(); // listados paginados
         }
         break;
     case 'POST':
         saveAlumno($body_content);
         break;
     case 'PUT':
-        editAlumno($body_content);
+        $process = $_GET['process'] ?? '';
+        if ($process == "edit") {
+            editAlumno($body_content);
+        } else if ($process == "saveAll") {
+            saveGroupDTO($body_content);
+        }
         break;
     case 'DELETE':
         deleteAlumno($body_content);
@@ -36,8 +41,9 @@ function getFullList()
 {
     header('Content-Type: application/json');
     http_response_code(200);
-    $alumnos = AlumnoRepo::findAllDTO();
-    echo json_encode($alumnos);
+    $alumnos = AlumnoRepo::findAll();
+    $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
+    echo json_encode($alumnosDTO);
 }
 
 function getSizedList() {}
@@ -61,6 +67,29 @@ function saveAlumno($body)
     }
 }
 
+function saveGroupDTO($body)
+{
+    $data = json_decode($body, true);
+    $resultado = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
+
+    if (!empty($resultado['guardados']) || !empty($resultado['errores'])) {
+        http_response_code(200);
+
+        $alumnosDTO = Adapter::AllAlumnoToDTO($resultado['guardados']);
+
+        $response = [
+            'success' => true,
+            'guardados' => $alumnosDTO,
+            'errores' => $resultado['errores'] // Array of indices with errors
+        ];
+
+        echo json_encode($response);
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false]);
+    }
+}
+
 function deleteAlumno($body)
 {
     $data = json_decode($body, true);
@@ -77,7 +106,7 @@ function deleteAlumno($body)
 function editAlumno($body)
 {
     $data = json_decode($body, true);
-    if (AlumnoRepo::updateDTO($data)) {
+    if (AlumnoRepo::updateDTO(Adapter::editedDatatoDTO($data))) {
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {

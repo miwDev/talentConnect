@@ -6,9 +6,14 @@ use League\Plates\Engine;
 use App\core\controller\LandingController;
 use App\core\controller\AuthController;
 use App\core\controller\AlumnoController;
+use App\core\controller\EmpresaController;
+use App\core\controller\AdminController;
+use App\core\helper\Login;
+use App\core\helper\Session;
 
 class Router
 {
+
     private $templatesPath;
     private $engine;
 
@@ -18,8 +23,12 @@ class Router
         $this->engine = new Engine($this->templatesPath);
     }
 
+
+
     public function router()
     {
+        Session::start();
+
         if (isset($_GET['menu'])) {
             $menu = $_GET['menu'];
         } else {
@@ -48,10 +57,29 @@ class Router
                 $Auth = new AuthController();
                 $Auth->renderRegAlumno($this->engine);
                 break;
-
-            case 'listado':
+            case 'admin-alumnos':
                 $alumnoManage = new AlumnoController();
                 $alumnoManage->renderList($this->engine);
+                break;
+
+            case 'admin-empresas':
+                $empresaManage = new EmpresaController();
+                $empresaManage->renderList($this->engine);
+                break;
+
+            case 'admin-dashboard':
+                $adminManage = new AdminController();
+                $adminManage->renderList($this->engine);
+                break;
+
+            case 'alumno-dashboard':
+                $alumnoManage = new AlumnoController();
+                $alumnoManage->renderDashboard($this->engine);
+                break;
+
+            default:
+                $landing = new LandingController();
+                $landing->renderLanding($this->engine);
                 break;
         }
     }
