@@ -196,7 +196,7 @@ class AlumnoRepo implements RepoInterface
         return $alumnos;
     }
 
-    public static function findById(int $id)
+    public static function findById($id)
     {
         $conn = DBC::getConnection();
 
@@ -247,7 +247,7 @@ class AlumnoRepo implements RepoInterface
         return $alumno;
     }
 
-    public static function findByUserId(int $userId)
+    public static function findByUserId($userId)
     {
         $conn = DBC::getConnection();
 
@@ -297,6 +297,61 @@ class AlumnoRepo implements RepoInterface
 
         return $alumno;
     }
+    
+    public static function findByToken($token)
+    {
+        $conn = DBC::getConnection();
+        $alumno = null;
+
+        $query = 'SELECT a.id AS alumno_id,
+                        u.user_name AS username,
+                        u.passwrd AS pass,
+                        a.nombre AS nombre,
+                        a.apellido AS ape,
+                        a.telefono AS tel,
+                        a.direccion AS direccion,
+                        a.foto AS foto,
+                        a.cv AS cv,
+                        a.provincia AS provincia,
+                        a.localidad AS localidad,
+                        a.dni AS dni,
+                        a.confirmed AS confirmed
+                FROM ALUMNO a
+                JOIN USER u ON a.user_id = u.id
+                JOIN USER_TOKEN ut ON u.id = ut.user_id
+                WHERE ut.token = :token';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) {
+                $alumno = new Alumno(
+                    $resultado['alumno_id'],
+                    $resultado['username'],
+                    $resultado['pass'],
+                    $resultado['nombre'],
+                    $resultado['ape'],
+                    $resultado['dni'],
+                    $resultado['tel'],
+                    $resultado['direccion'],
+                    $resultado['foto'],
+                    $resultado['cv'],
+                    $resultado['provincia'],
+                    $resultado['localidad'],
+                    $resultado['confirmed']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar Alumno por token: " . $e->getMessage());
+        }
+
+        return $alumno;
+    }
+
 
     public static function findDTOBySizePage($size, $page)
     {

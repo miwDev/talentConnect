@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
-    <script src="/public/assets/js/tokenProvider.js"></script>
+    <script src="/public/assets/js/auth.js"></script>
 
     <?= $this->section('css') ?>
     <?= $this->section('js') ?>
@@ -21,24 +21,39 @@
     <header>
         <div class="header-banner" id="hBanner">
             <div id="logo">
-                <a href="?menu=home">
                     <img id="logo" src="/public/assets/images/logoDark.svg" alt="logo_placeholder" width="120" height="120">
                     <p>TALENT </br> CONNECT</p>
                 </a>
             </div>
+            
             <div id="nav-and-user">
-                <div id="nav">
-                    <nav class="menu-principal">
-                        <ul id="navParent" class="menu-lista">
-                            <?php foreach ($navItems as $item): ?>
-                                <li class="menu-item">
-                                    <?php echo $item; ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </nav>
-                </div>
+                <?php
+                $role = $this->data['role'] ?? 'ROLE_GUEST';
+                $username = $this->data['username'] ?? '';
+                $pfpPath = $this->data['pfpPath'] ?? '/public/assets/images/genericAvatar.svg'; 
+
+                switch ($role) {
+                    case 'ROLE_ADMIN':
+                        $this->insert('partials/header-admin', [
+                        ]);
+                        break;
+                    case 'ROLE_EMPRESA':
+                        $this->insert('partials/header-empresa', [
+                            'username' => $username,
+                            'pfpPath' => $pfpPath
+                        ]);
+                        break;
+                    case 'ROLE_ALUMNO':
+                        $this->insert('partials/header-alumno');
+                        break;
+                    case 'ROLE_GUEST':
+                    default:
+                        $this->insert('partials/header-guest');
+                        break;
+                }
+                ?>
             </div>
+            
         </div>
     </header>
 

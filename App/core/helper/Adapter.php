@@ -15,7 +15,11 @@ use App\core\model\Empresa;
 class Adapter
 {
 
-    static public function DTOtoAlumno($data)
+    //////////////////////////////////////
+    /// Alumno.                      /////
+    /////////////////////////////////////
+
+    public static function DTOtoAlumno($data)
     {
         $alumno = new Alumno(
             null, //id
@@ -36,7 +40,83 @@ class Adapter
         return $alumno;
     }
 
-    static public function AllAlumnoToDTO($alumnos)
+    public static function formDataToAlumno(){
+
+        // Lógica de guardado de la foto de perfil
+        $fotoData = $_POST['fotoPerfil'] ?? null;
+        $ruta_base = __DIR__ . '/../../public'; // Corregido: desde App/core/helper a App/public
+        $carpeta_destino = $ruta_base . '/assets/images/userPfp/';
+        $ruta_para_base_de_datos = '/assets/images/genericAvatar.svg'; // Default
+
+        if($fotoData && $fotoData !== 'default'){
+            if (preg_match('/^data:image\/(\w+);base64,(.+)$/', $fotoData, $matches)) {
+                $extension = $matches[1];
+                $datos_base64 = $matches[2];
+
+                $datos_binarios = base64_decode($datos_base64);
+                $nombre_archivo = 'foto_' . uniqid() . '.' . $extension;
+                $ruta_fisica_archivo = $carpeta_destino . $nombre_archivo;
+
+                // Crear directorio si no existe
+                if (!is_dir($carpeta_destino)) {
+                    mkdir($carpeta_destino, 0755, true);
+                }
+
+                if (file_put_contents($ruta_fisica_archivo, $datos_binarios)) {
+                    $ruta_para_base_de_datos = '/assets/images/userPfp/' . $nombre_archivo; 
+                } else {
+                    error_log("No se pudo guardar la imagen: " . $ruta_fisica_archivo);
+                }
+            }
+        }
+
+        // Lógica de guardado del CV
+        $carpeta_destino_cv = $ruta_base . '/assets/uploads/cvs/';
+        $ruta_cv_db = null;
+
+        if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+            $archivo_temporal = $_FILES['cv']['tmp_name'];
+            $nombre_original = $_FILES['cv']['name'];
+            $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
+            
+            $dni_alumno = $_POST['dni'] ?? 'sin_dni'; 
+            $nombre_seguro = preg_replace('/[^a-zA-Z0-9]/', '_', $dni_alumno) . '.' . $extension;
+            
+            // Crear directorio si no existe
+            if (!is_dir($carpeta_destino_cv)) {
+                mkdir($carpeta_destino_cv, 0755, true);
+            }
+            
+            $ruta_destino_final = $carpeta_destino_cv . $nombre_seguro;
+            
+            if (move_uploaded_file($archivo_temporal, $ruta_destino_final)) {
+                $ruta_cv_db = '/assets/uploads/cvs/' . $nombre_seguro;
+            } else {
+                error_log("Error al mover el archivo CV a: " . $ruta_destino_final);
+            }
+        } else {
+            error_log("No se recibió el archivo CV o hubo un error de subida: " . ($_FILES['cv']['error'] ?? 'No set'));
+        }
+        $alumnoFull = new Alumno(
+            null,                           // id
+            $_POST['email'] ?? '',          // username
+            $_POST['password'] ?? '',       // password
+            $_POST['nombre'] ?? '',         // nombre
+            $_POST['apellido'] ?? '',       // apellido
+            $_POST['dni'] ?? '',            // dni
+            $_POST['telefono'] ?? '',       // telefono
+            $_POST['direccion'] ?? '',      // direccion
+            $ruta_para_base_de_datos,       // foto
+            $ruta_cv_db,                    // cv
+            $_POST['provincia'] ?? '',      // provincia
+            $_POST['localidad'] ?? '',      // localidad
+            1                               // confirmed
+        );
+
+        return $alumnoFull;
+    }
+
+    public static function AllAlumnoToDTO($alumnos)
     {
         $alumnosDTO = [];
 
@@ -50,6 +130,7 @@ class Adapter
                 $alumno->nombre,
                 $alumno->apellido,
                 $alumno->username,
+                $alumno->foto,
                 $alumno->confirmed
             );
         }
@@ -57,7 +138,7 @@ class Adapter
         return $alumnosDTO;
     }
 
-    static public function alumnoToDTO($id)
+    public static function alumnoToDTO($id)
     {
         $alumno = AlumnoRepo::findById($id);
 
@@ -66,26 +147,28 @@ class Adapter
             $alumno->nombre,
             $alumno->apellido,
             $alumno->username,
+            $alumno->foto,
             $alumno->confirmed
         );
 
         return $alumnoDTO;
     }
 
-    static public function editedDatatoDTO($data)
+    public static function editedDatatoDTO($data)
     {
         $alumnoDTO = new AlumnoDTO(
             $data['id'], //id
             $data['nombre'], // nombre
             $data['apellido'], // ape
             $data['email'], // username
+            null,   //foto
             0 // confirmed
         );
 
         return $alumnoDTO;
     }
 
-    static public function groupDTOtoAlumno($alumnosDTO)
+    public static function groupDTOtoAlumno($alumnosDTO)
     {
         $fullAlumnos = [];
 
@@ -117,8 +200,52 @@ class Adapter
         return $fullAlumnos;
     }
 
+    public static function getDTObyToken($authHeaderValue){
 
-    static public function DTOtoEmpresa()
+        $token = self::tokenRetrieve($authHeaderValue); 
+
+        if (is_null($token)) {
+            $alumnoDTO = false;
+        }
+
+        $alumno = AlumnoRepo::findByToken($token);
+
+        if($alumno){
+            
+            $alumnoDTO = new AlumnoDTO(
+                $alumno->id,
+                $alumno->nombre,
+                $alumno->apellido,
+                $alumno->username,
+                $alumno->foto,
+                $alumno->confirmed
+            );
+        }else{
+            $alumnoDTO = false;
+        }
+        return $alumnoDTO;
+    }
+
+    public static function tokenRetrieve($authHeaderValue){ 
+        
+        
+
+        if (empty($authHeaderValue)) {
+            $token = null;
+        }
+
+        $token = trim(preg_replace('/^Bearer:?\s*/i', '', $authHeaderValue));
+
+        return $token;
+    }
+
+
+    //////////////////////////////////////
+    /// EMPRESA                     /////
+    /////////////////////////////////////
+
+
+    public static function DTOtoEmpresa()
     {
         $empresa = new Empresa(
             null,
@@ -139,7 +266,7 @@ class Adapter
         return $empresa;
     }
 
-    static public function AllEmpresasToDTO($empresas)
+    public static function AllEmpresasToDTO($empresas)
     {
         $empresasDTO = [];
 
@@ -156,7 +283,7 @@ class Adapter
         return $empresasDTO;
     }
 
-    static public function empresaToDTO($id)
+    public static function empresaToDTO($id)
     {
         $empresa = EmpresaRepo::findById($id);
 
@@ -172,7 +299,7 @@ class Adapter
         return $empresaDTO;
     }
 
-    static public function empresaEditDTO($id, $postData)
+    public static function empresaEditDTO($id, $postData)
     {
         $empresaEdit = EmpresaRepo::findById($id);
 
@@ -187,7 +314,7 @@ class Adapter
         return EmpresaRepo::update($empresaEdit);
     }
 
-    static public function ciclosToDTO($ciclos)
+    public static function ciclosToDTO($ciclos)
     {
         $ciclosDTO = [];
         foreach ($ciclos as $ciclo) {

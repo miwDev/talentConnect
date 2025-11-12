@@ -10,14 +10,16 @@ class AlumnoDTO
     public $nombre;
     public $apellido;
     public $email;
+    public $foto;
     public $confirmed;
 
-    public function __construct($id, $nom, $ape, $email, $conf)
+    public function __construct($id, $nom, $ape, $email, $foto, $conf)
     {
         $this->id = $id;
         $this->nombre = $nom;
         $this->apellido = $ape;
         $this->email = $email;
+        $this->foto = $foto;
         $this->confirmed = $conf;
     }
 

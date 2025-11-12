@@ -1,9 +1,7 @@
 <?php
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Registro Alumno',
-    'navItems' => [
-        '<a href="?menu=home" class="menu-enlace">HOME</a>'
-    ]
+    'role' => $this->data['role'] ?? 'ROLE_GUEST'
 ]);
 ?>
 
@@ -103,6 +101,10 @@ $this->layout('layout/layout', [
                         <div id="login-error-display" class="error-message"></div>
                         <button type="submit" id="envioRegistro" class="login-btn">Finalizar Registro</button>
                     </div>
+
+                    <input type="hidden" id="hiddenFotoPerfil" name="fotoPerfil">
+
+
                 </form>
             </div>
 
@@ -128,8 +130,6 @@ $this->layout('layout/layout', [
                 <p class="back-to-login">
                     ¿Ya tienes cuenta? <a href="?menu=login" class="forgot-password-link">Iniciar Sesión</a>
                 </p>
-
-                <input type="hidden" id="datosCanvas" name="imagenBase64">
             </div>
 
         </div>

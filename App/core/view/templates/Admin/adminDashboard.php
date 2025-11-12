@@ -1,7 +1,6 @@
 <?php
 $this->layout('layout/adminLayout', [
     'title' => 'Talent Connect - Gestión de Empresas',
-    'navItems' => []
 ]);
 ?>
 

@@ -1,11 +1,8 @@
 <?php
-// Esto asume que tienes un layout.php que maneja el esqueleto de la página.
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Inicio',
-    'navItems' => [
-        '<a id="login" href="?menu=login" class="menu-enlace">Iniciar sesión</a>',
-        '<a id="registro" href="?menu=regRedirect" class="menu-enlace">Inscribirse</a>'
-    ]
+    'role' => $this->data['role'] ?? 'ROLE_GUEST', // Propaga el rol para el header
+    'username' => $this->data['username'] ?? '' // Propaga el username
 ]);
 ?>
 

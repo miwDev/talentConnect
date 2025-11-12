@@ -1,9 +1,7 @@
 <?php
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Registro',
-    'navItems' => [
-        '<a href="?menu=home" class="menu-enlace">HOME</a>'
-    ]
+    'role' => $this->data['role'] ?? 'ROLE_GUEST'
 ]);
 ?>
 

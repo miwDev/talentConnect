@@ -45,6 +45,8 @@ class FormularioManager {
     const familia = this.form.elements['familia'];
     const ciclo = this.form.elements['ciclo'];
 
+    const cvInput = this.form.elements['cv'];
+
     this.clearErrors(); 
 
     if(!nombre.value.esNombreValido()){
@@ -103,17 +105,55 @@ class FormularioManager {
         esValido = false;
     }
     
+    if (!cvInput || cvInput.files.length === 0) {
+        console.error("No se ha subido un CV");
+        alert("Por favor, sube tu CV en formato PDF.");
+        esValido = false;
+    }
+    
     return esValido;
   }
 
   enviarDatosAPI() {
-    console.log('Validación exitosa. Enviando formulario...');
-    console.log("hola mundo"); 
-  }
+    const formData = new FormData(this.form);
+    
+    fetch("/API/ApiAlumno.php?process=newStudent", {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        return response.text();
+    })
+    .then(text => {
+        console.log("Respuesta cruda:", text);
+        try {
+            const data = JSON.parse(text);
+            if(data.success){
+              alert("¡Registro exitoso! Bienvenido.");
+              window.location.href = data.redirect;
+          }else{
+                console.error("Error:", data);
+            }
+        } catch(e) {
+            console.error("Error parseando JSON:", e);
+            console.error("Respuesta recibida:", text);
+        }
+    })
+    .catch(error => console.error("Error de red:", error));
+}
 
 
   onSubmit(event){
     event.preventDefault(); 
+
+    const imgAvatar = document.getElementById('avatarId');
+    const hiddenFotoInput = document.getElementById('hiddenFotoPerfil');
+    
+    if (!hiddenFotoInput.value) {
+        if (!imgAvatar.src.startsWith('data:image')) {
+            hiddenFotoInput.value = 'default';
+        }
+    }
 
     if (this.validar()) {
       this.enviarDatosAPI(); 
