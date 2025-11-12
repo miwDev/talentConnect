@@ -20,33 +20,33 @@ class AuthController
                 switch (Session::readRole()) {
                     case "ROLE_ADMIN":
                         header("Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-dashboard");
-                        break;
+                        exit;
                     case "ROLE_ALUMNO":
                         header("Location: " . $_SERVER['PHP_SELF'] . "?menu=alumno-dashboard");
-                        break;
+                        exit;
                     case "ROLE_EMPRESA":
-                        header("Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-dashboard");
-                        break;
+                        header("Location: " . $_SERVER['PHP_SELF'] . "?menu=empresa-dashboard");
+                        exit;
                 }
             } else {
                 //errores
             }
         }
-        echo $engine->render('Auth/login');
+        echo $engine->render('Auth/login' , ['role' => 'ROLE_GUEST']);
     }
 
     public function renderRegRedirect($engine)
     {
-        echo $engine->render('Auth/regRedirect');
+        echo $engine->render('Auth/regRedirect' , ['role' => 'ROLE_GUEST']);
     }
 
     public function renderRegAlumno($engine)
     {
-        echo $engine->render('Auth/registerA');
+        echo $engine->render('Auth/registerA' , ['role' => 'ROLE_GUEST']);
     }
 
     public function renderRegEmpresa($engine)
     {
-        echo $engine->render('Auth/registerE');
+        echo $engine->render('Auth/registerE' , ['role' => 'ROLE_GUEST']);
     }
 }

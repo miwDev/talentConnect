@@ -1,7 +1,6 @@
 <?php
 $this->layout('layout/adminLayout', [
-    'title' => 'Talent Connect - Gestión de Alumnos',
-    'navItems' => [] // El adminLayout ya no necesita navItems en el header, tiene el aside
+    'title' => 'Talent Connect - Gestión de Alumnos'
 ]);
 ?>
 
@@ -42,8 +41,7 @@ $this->layout('layout/adminLayout', [
                 </tr>
             </thead>
             <tbody>
-                <!-- Las filas se generarán dinámicamente con JavaScript -->
-            </tbody>
+                </tbody>
         </table>
     </div>
 </div>

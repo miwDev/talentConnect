@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
-    <script src="/public/assets/js/tokenProvider.js"></script>
+    <script src="/public/assets/js/auth.js"></script>
 
     <?= $this->section('css') ?>
     <?= $this->section('js') ?>
@@ -26,25 +26,34 @@
                     <p>TALENT </br> CONNECT</p>
                 </a>
             </div>
+            
             <div id="nav-and-user">
                 <div id="nav">
                     <nav class="menu-principal">
                         <ul id="navParent" class="menu-lista">
-                            <?php
-                            $navItems = $navItems ?? [];
-                            foreach ($navItems as $item):
-                            ?>
-                                <li class="menu-item">
-                                    <?php echo $item; ?>
-                                </li>
-                            <?php endforeach; ?>
                             <li class="menu-item">
                                 <a href="?menu=home" class="menu-enlace">Home</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="?menu=admin-dashboard" class="menu-enlace" id="dashboardAdmin">Dashboard</a>
                             </li>
                         </ul>
                     </nav>
                 </div>
+                <div id="user-area-admin" class="user-area user-menu-dropdown">
+                    <div class="pfp-username">
+                        <span class="username-display" id="user-area-username">ADMIN</span>
+                        <span id="menuToggle" class="pfp-container">
+                            <img src="/public/assets/images/adminPfp.svg" alt="Admin PFP" class="profile-photo" id="adminPfp">
+                        </span>
+                    </div>
+
+                    <div class="dropdown-content"> 
+                        <a id="cerrarSesion" href="#">Cerrar Sesión</a> 
+                    </div>
+                </div>
             </div>
+            
         </div>
     </header>
 

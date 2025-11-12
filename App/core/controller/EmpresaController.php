@@ -9,60 +9,11 @@ class EmpresaController
 {
     public function renderList($engine)
     {
-        $selfRoute = "Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-empresas";
-
-        if (isset($_POST["btnAdd"])) {
-            echo $engine->render('Empresa/addEmpresa');
-        } elseif (isset($_POST["btnAddCompany"])) {
-            EmpresaRepo::save(Adapter::DTOtoEmpresa());
-            header($selfRoute);
-            exit();
-        } elseif (isset($_POST["btnEdit"])) {
-            $id = $_POST["btnEdit"];
-            $empresaDTO = Adapter::empresaToDTO($id);
-            echo $engine->render('Empresa/editEmpresa', [
-                'empresaEdit' => $empresaDTO
-            ]);
-            exit();
-        } elseif (isset($_POST["btnVerFicha"])) {
-            $id = $_POST["btnVerFicha"];
-            $empresa = EmpresaRepo::findById($id);
-            echo $engine->render('Empresa/verFichaEmpresa', [
-                'empresaVer' => $empresa
-            ]);
-            exit();
-        } elseif (isset($_POST["btnAccept"])) {
-            $id = $_POST["id"];
-            Adapter::empresaEditDTO($id, $_POST);
-            header($selfRoute);
-            exit();
-        } elseif (isset($_POST["btnCancel"])) {
-            header($selfRoute);
-            exit();
-        } elseif (isset($_POST["btnBorrar"])) {
-
-            $this->deleteCompany($_POST["btnBorrar"]);
-            header($selfRoute);
-            exit();
-        } elseif (isset($_POST["btnRechazar"])) {
-
-            $this->deleteCompany($_POST["btnRechazar"]);
-            header($selfRoute);
-            exit();
-        } elseif (isset($_POST["btnConfirmar"])) {
-
-            $this->validateCompany($_POST["btnConfirmar"]);
-            header($selfRoute);
-            exit();
-        }
-
-        $empresasAllDTO = [];
-        $empresasLista = [];
-        $empresasPendientes = [];
-
+        $this->handlePostActions($engine);
+        
         $empresasAll = EmpresaRepo::findAll();
         $empresasAllDTO = Adapter::AllEmpresasToDTO($empresasAll);
-        $empresasLista = $empresasAllDTO;
+        $empresasLista = $empresasAllDTO; 
 
         if (!empty($_POST["buscar"])) {
             $filter = $_POST["buscar"];
@@ -70,12 +21,10 @@ class EmpresaController
 
             if (!empty($empresasFiltered)) {
                 $empresasLista = Adapter::AllEmpresasToDTO($empresasFiltered);
-            } else {
-                $empresasLista = $empresasAllDTO;
-            }
+            } 
         }
 
-        // Cálculo de $empresasPendientes sin array_filter
+        $empresasPendientes = [];
         foreach ($empresasAllDTO as $empresa) {
             if (!$empresa->validated) {
                 $empresasPendientes[] = $empresa;
@@ -86,6 +35,69 @@ class EmpresaController
             'empresasTotal' => $empresasLista,
             'pendientes' => $empresasPendientes
         ]);
+    }
+
+    private function handlePostActions($engine)
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+        $selfRoute = "Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-empresas";
+
+        if (isset($_POST["btnAdd"])) {
+            echo $engine->render('Empresa/addEmpresa');
+            exit(); 
+        }
+        
+        if (isset($_POST["btnAddCompany"])) {
+            EmpresaRepo::save(Adapter::DTOtoEmpresa());
+            header($selfRoute);
+            exit();
+        }
+
+        if (isset($_POST["btnEdit"])) {
+            $id = $_POST["btnEdit"];
+            $empresaDTO = Adapter::empresaToDTO($id);
+            echo $engine->render('Empresa/editEmpresa', [
+                'empresaEdit' => $empresaDTO
+            ]);
+            exit();
+        }
+        
+        if (isset($_POST["btnAccept"])) {
+            $id = $_POST["id"];
+            Adapter::empresaEditDTO($id, $_POST);
+            header($selfRoute);
+            exit();
+        }
+
+        if (isset($_POST["btnVerFicha"])) {
+            $id = $_POST["btnVerFicha"];
+            $empresa = EmpresaRepo::findById($id);
+            echo $engine->render('Empresa/verFichaEmpresa', [
+                'empresaVer' => $empresa
+            ]);
+            exit();
+        }
+
+        if (isset($_POST["btnCancel"])) {
+            header($selfRoute);
+            exit();
+        }
+        
+        if (isset($_POST["btnBorrar"]) || isset($_POST["btnRechazar"])) {
+            $id = $_POST["btnBorrar"] ?? $_POST["btnRechazar"];
+            $this->deleteCompany($id);
+            header($selfRoute);
+            exit();
+        }
+        
+        if (isset($_POST["btnConfirmar"])) {
+            $this->validateCompany($_POST["btnConfirmar"]);
+            header($selfRoute);
+            exit();
+        }
     }
 
     public function validateCompany($id)

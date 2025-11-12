@@ -23,6 +23,12 @@ class Login
     public static function loggedIn()
     {
         Session::start();
-        return isset($_SESSION['user_id']);
+
+        $loggedIn = false;
+
+        if(isset($_SESSION['user_id'])){
+            $loggedIn = true;
+        }
+        return $loggedIn;
     }
 }

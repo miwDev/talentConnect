@@ -57,6 +57,55 @@ class Authorization
         return $verified;
     }
 
+
+    public static function registeredUser($alumnoId)
+    {
+        $conn = DBC::getConnection();
+        $verified = false;
+
+        // Obtener user_id y role_id desde el alumno_id
+        $query = 'SELECT u.id, u.user_name, u.role_id
+                FROM USER u
+                JOIN ALUMNO a ON u.id = a.user_id
+                WHERE a.id = :alumno_id';
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($resultado) {
+            $userId = $resultado['id'];
+            $roleId = $resultado['role_id'];
+            
+            // Generar y actualizar token
+            $token = self::updateToken($userId);
+            
+            // Obtener el objeto completo del usuario según su rol
+            if ($roleId === 2) {
+                $userObject = AlumnoRepo::findByUserId($userId);
+            } elseif ($roleId === 3) {
+                $userObject = EmpresaRepo::findByUserId($userId);
+            } else {
+                // Admin u otro rol
+                $adminObject = new \stdClass();
+                $adminObject->id = $resultado['id'];
+                $adminObject->username = $resultado['user_name'];
+                $userObject = $adminObject;
+            }
+            
+            if ($userObject) {
+                $verified = [
+                    "user" => $userObject,
+                    "token" => $token
+                ];
+            }
+        }
+        
+        return $verified;
+    }
+
     public static function updateToken($user_id)
     {
         $conn = DBC::getConnection();
@@ -72,5 +121,28 @@ class Authorization
         $stmt->execute();
 
         return $token;
+    }
+
+    public static function deleteToken($token)
+    {
+        $conn = DBC::getConnection();
+        $success = false;
+        
+        $query = 'UPDATE USER_TOKEN 
+                  SET token = NULL 
+                  WHERE token = :token';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':token', $token);
+            $stmt->execute();
+
+            
+            $success = $stmt->rowCount() > 0; 
+        } catch (PDOException $e) {
+            error.log("error de borrado");
+        }
+
+        return $success;
     }
 }

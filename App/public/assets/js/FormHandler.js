@@ -129,8 +129,9 @@ class FormularioManager {
         try {
             const data = JSON.parse(text);
             if(data.success){
-                console.log("Éxito:", data);
-            }else{
+              alert("¡Registro exitoso! Bienvenido.");
+              window.location.href = data.redirect;
+          }else{
                 console.error("Error:", data);
             }
         } catch(e) {

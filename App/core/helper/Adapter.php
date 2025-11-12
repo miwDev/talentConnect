@@ -15,6 +15,10 @@ use App\core\model\Empresa;
 class Adapter
 {
 
+    //////////////////////////////////////
+    /// Alumno.                      /////
+    /////////////////////////////////////
+
     public static function DTOtoAlumno($data)
     {
         $alumno = new Alumno(
@@ -93,9 +97,6 @@ class Adapter
         } else {
             error_log("No se recibió el archivo CV o hubo un error de subida: " . ($_FILES['cv']['error'] ?? 'No set'));
         }
-
-        // Crear objeto Alumno con el orden correcto de parámetros
-        // Constructor: ($id, $username, $pass, $nom, $ape, $dni, $tel, $direccion, $foto, $cv, $prov, $loc, $conf)
         $alumnoFull = new Alumno(
             null,                           // id
             $_POST['email'] ?? '',          // username
@@ -129,6 +130,7 @@ class Adapter
                 $alumno->nombre,
                 $alumno->apellido,
                 $alumno->username,
+                $alumno->foto,
                 $alumno->confirmed
             );
         }
@@ -136,7 +138,7 @@ class Adapter
         return $alumnosDTO;
     }
 
-    static public function alumnoToDTO($id)
+    public static function alumnoToDTO($id)
     {
         $alumno = AlumnoRepo::findById($id);
 
@@ -145,26 +147,28 @@ class Adapter
             $alumno->nombre,
             $alumno->apellido,
             $alumno->username,
+            $alumno->foto,
             $alumno->confirmed
         );
 
         return $alumnoDTO;
     }
 
-    static public function editedDatatoDTO($data)
+    public static function editedDatatoDTO($data)
     {
         $alumnoDTO = new AlumnoDTO(
             $data['id'], //id
             $data['nombre'], // nombre
             $data['apellido'], // ape
             $data['email'], // username
+            null,   //foto
             0 // confirmed
         );
 
         return $alumnoDTO;
     }
 
-    static public function groupDTOtoAlumno($alumnosDTO)
+    public static function groupDTOtoAlumno($alumnosDTO)
     {
         $fullAlumnos = [];
 
@@ -196,8 +200,52 @@ class Adapter
         return $fullAlumnos;
     }
 
+    public static function getDTObyToken($authHeaderValue){
 
-    static public function DTOtoEmpresa()
+        $token = self::tokenRetrieve($authHeaderValue); 
+
+        if (is_null($token)) {
+            $alumnoDTO = false;
+        }
+
+        $alumno = AlumnoRepo::findByToken($token);
+
+        if($alumno){
+            
+            $alumnoDTO = new AlumnoDTO(
+                $alumno->id,
+                $alumno->nombre,
+                $alumno->apellido,
+                $alumno->username,
+                $alumno->foto,
+                $alumno->confirmed
+            );
+        }else{
+            $alumnoDTO = false;
+        }
+        return $alumnoDTO;
+    }
+
+    public static function tokenRetrieve($authHeaderValue){ 
+        
+        
+
+        if (empty($authHeaderValue)) {
+            $token = null;
+        }
+
+        $token = trim(preg_replace('/^Bearer:?\s*/i', '', $authHeaderValue));
+
+        return $token;
+    }
+
+
+    //////////////////////////////////////
+    /// EMPRESA                     /////
+    /////////////////////////////////////
+
+
+    public static function DTOtoEmpresa()
     {
         $empresa = new Empresa(
             null,
@@ -218,7 +266,7 @@ class Adapter
         return $empresa;
     }
 
-    static public function AllEmpresasToDTO($empresas)
+    public static function AllEmpresasToDTO($empresas)
     {
         $empresasDTO = [];
 
@@ -235,7 +283,7 @@ class Adapter
         return $empresasDTO;
     }
 
-    static public function empresaToDTO($id)
+    public static function empresaToDTO($id)
     {
         $empresa = EmpresaRepo::findById($id);
 
@@ -251,7 +299,7 @@ class Adapter
         return $empresaDTO;
     }
 
-    static public function empresaEditDTO($id, $postData)
+    public static function empresaEditDTO($id, $postData)
     {
         $empresaEdit = EmpresaRepo::findById($id);
 
@@ -266,7 +314,7 @@ class Adapter
         return EmpresaRepo::update($empresaEdit);
     }
 
-    static public function ciclosToDTO($ciclos)
+    public static function ciclosToDTO($ciclos)
     {
         $ciclosDTO = [];
         foreach ($ciclos as $ciclo) {

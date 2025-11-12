@@ -1,12 +1,9 @@
 <?php
-
 use App\core\data\Authorization;
 
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Iniciar Sesión',
-    'navItems' => [
-        '<a href="?menu=home" class="menu-enlace">HOME</a>'
-    ]
+    'role' => $this->data['role'] ?? 'ROLE_GUEST'
 ]);
 ?>
 

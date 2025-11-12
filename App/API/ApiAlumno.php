@@ -4,17 +4,42 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../core/helper/Autoloader.php';
 
 use App\core\data\AlumnoRepo;
+use App\core\data\Authorization;
 use App\core\helper\Adapter;
+use App\core\helper\Session;
+use Exception;
+
+// Función para obtener headers de forma robusta (compatible con getallheaders() y $_SERVER)
+function getAuthorizationHeader() {
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        return $headers['Authorization'] ?? null;
+    }
+    
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        return $_SERVER['HTTP_AUTHORIZATION'];
+    }
+
+    if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        return $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    }
+
+    return null;
+}
 
 $method = strtoupper($_SERVER["REQUEST_METHOD"] ?? 'GET');
 $body_content = file_get_contents('php://input');
 
+$authHeaderValue = getAuthorizationHeader(); 
+
+
 switch ($method) {
     case 'GET':
-        if ($body_content == "" || empty($body_content)) {
+        $process = $_GET['process'] ?? '';
+        if (($body_content == "" || empty($body_content)) && $process === '' ) {
             getFullList();
-        } else {
-            getSizedList(); // listados paginados
+        } else if($process === 'pfp'){
+            getProfilePic($authHeaderValue); 
         }
         break;
     case 'POST':
@@ -38,7 +63,7 @@ switch ($method) {
         break;
     default:
         http_response_code(405);
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => 'Method Not Allowed']);
         break;
 }
 
@@ -51,7 +76,23 @@ function getFullList()
     echo json_encode($alumnosDTO);
 }
 
-function getSizedList() {}
+function getProfilePic($authHeaderValue){
+    $alumnoDTO = Adapter::getDTOByToken($authHeaderValue);
+
+    if($alumnoDTO){
+        header('Content-Type: application/json');
+        http_response_code(200);
+        echo json_encode([
+                        'success' => true,
+                        'pictureRoute' => "/public" . $alumnoDTO->foto,
+                        'username' => $alumnoDTO->email
+                        ]);
+    }else{
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
+    }
+}
 
 function saveAlumno($body)
 {
@@ -60,6 +101,7 @@ function saveAlumno($body)
     $dbResponse = AlumnoRepo::save($alumno);
 
     if ($dbResponse !== false) {
+        header('Content-Type: application/json');
         http_response_code(200);
         $alumnoDTO = Adapter::alumnoToDTO($dbResponse);
         echo json_encode([
@@ -67,8 +109,9 @@ function saveAlumno($body)
             'alumno' => $alumnoDTO
         ]);
     } else {
+        header('Content-Type: application/json');
         http_response_code(400);
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => 'Error saving student']);
     }
 }
 
@@ -77,11 +120,20 @@ function saveFullAlumno(){
     
     try {
         $alumno = Adapter::formDataToAlumno();
-        $dbResponse = AlumnoRepo::save($alumno);
+        $alumnoId = AlumnoRepo::save($alumno);
 
-        if($dbResponse !== false){
+        if($alumnoId !== false){
+
+            $authData = Authorization::registeredUser($alumnoId);
+
+            if($authData){
+                Session::setSession($authData);
+            }
             http_response_code(201);
-            echo json_encode(['success' => true, 'alumno_id' => $dbResponse]);
+            echo json_encode([
+                'success' => true, 
+                'redirect' => '?menu=alumno-dashboard'
+            ]);
         }else{
             http_response_code(400);
             echo json_encode(['success' => false, 'error' => 'Error al guardar en BD']);
@@ -98,6 +150,7 @@ function saveGroupDTO($body)
     $resultado = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
 
     if (!empty($resultado['guardados']) || !empty($resultado['errores'])) {
+        header('Content-Type: application/json');
         http_response_code(200);
 
         $alumnosDTO = Adapter::AllAlumnoToDTO($resultado['guardados']);
@@ -105,13 +158,14 @@ function saveGroupDTO($body)
         $response = [
             'success' => true,
             'guardados' => $alumnosDTO,
-            'errores' => $resultado['errores'] // Array of indices with errors
+            'errores' => $resultado['errores']
         ];
 
         echo json_encode($response);
     } else {
+        header('Content-Type: application/json');
         http_response_code(404);
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => 'No data saved or found']);
     }
 }
 
@@ -120,11 +174,13 @@ function deleteAlumno($body)
     $data = json_decode($body, true);
     $id = $data['id'];
     if (AlumnoRepo::deleteById($id)) {
+        header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {
+        header('Content-Type: application/json');
         http_response_code(404);
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => 'Student not found']);
     };
 }
 
@@ -132,10 +188,12 @@ function editAlumno($body)
 {
     $data = json_decode($body, true);
     if (AlumnoRepo::updateDTO(Adapter::editedDatatoDTO($data))) {
+        header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {
+        header('Content-Type: application/json');
         http_response_code(400);
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => 'Could not update student data']);
     }
 }
