@@ -221,6 +221,7 @@ header {
 /* AJUSTE: Mantiene imagen y texto a la misma altura y separados */
 .pfp-username{
     display: flex;
+    margin-top: 0.585em;
     align-items: center;
     gap: 15px; 
 }

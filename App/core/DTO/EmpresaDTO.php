@@ -9,15 +9,17 @@ class EmpresaDTO
     private $nombre;
     private $email;
     private $telefono;
+    private $logo;
     private $validated;
 
-    public function __construct($id, $cif, $nom, $email, $tel, $val)
+    public function __construct($id, $cif, $nom, $email, $tel, $logo, $val)
     {
         $this->id = $id;
         $this->cif = $cif;
         $this->nombre = $nom;
         $this->email = $email;
         $this->telefono = $tel;
+        $this->logo = $logo;
         $this->validated = $val;
     }
 

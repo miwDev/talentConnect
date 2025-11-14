@@ -43,7 +43,7 @@ $this->layout('layout/layout', [
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="login-btn">Entrar</button>
+                        <button id="loginSubmit" type="submit" class="login-btn">Entrar</button>
                         <a href="#" class="forgot-password-link">¿Has olvidado tu contraseña?</a>
                     </div>
                 </form>

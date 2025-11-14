@@ -349,15 +349,25 @@ body{
 
 .avatar-upload-area {
     width: 100%;
-    padding: 20px;
+    margin-left: 15%;
 }
 
 .generic-avatar {
     width: 100%;
     max-width: 200px;
-    height: auto;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
     border: 5px solid #EBD3FD;
     margin-bottom: 20px;
+    
+    display: block; 
+    height: 200px;
+}
+
+.generic-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .register-avatar-card .company-logo {
@@ -726,4 +736,80 @@ background: #d7b4f2;
 }
 #btnVolver:hover { 
     background: #e0e0e0; 
+}
+
+/* ================================================= */
+/* 8. ESTILOS DE PANTALLA DE CONFIRMACIÓN (NUEVO) */
+/* ================================================= */
+
+/* Contenedor principal para centrar la caja en la pantalla.
+  Usa el color de fondo verde oscuro de tu .list-container
+ 
+*/
+.pending-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 80vh; /* Altura mínima para centrar verticalmente */
+    padding: 2em;
+    background-color: #16443D;
+    box-sizing: border-box;
+}
+
+/* La caja de contenido "más pequeña y centrada".
+  Copia los estilos de .list-container
+*/
+.pending-box {
+    background-color: #FFFFE9;
+    border: 3px solid #191919;
+    border-radius: 2em; /* Radio de borde de .list-container */
+    padding: 3em 2.5em;
+    max-width: 760px; /* La hacemos más pequeña que 1200px */
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(25, 25, 25, 0.2);
+}
+
+/* Estilo del título, basado en .list-container h1 
+ 
+*/
+.pending-box h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5em;
+    color: #191919;
+    font-weight: 800;
+    margin: 0 0 0.8em 0;
+}
+
+/* Estilo del párrafo, basado en .confirmation-message 
+ 
+*/
+.pending-box p {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.25em;
+    color: #191919;
+    line-height: 1.6;
+    margin: 1.5em 0 2.5em 0;
+}
+
+/* Estilo del botón, copiando .search-btn 
+ 
+*/
+.pending-button {
+    display: inline-block; /* Para que el padding funcione */
+    text-decoration: none;
+    background-color: #EBD3FD; /* Color de acento */
+    color: #191919;
+    border: 3px solid #191919;
+    padding: 0.8em 2em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+    border-radius: 0.6875em; /* Radio de borde */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pending-button:hover {
+    background-color: #d7b4f2; /* Color hover */
 }

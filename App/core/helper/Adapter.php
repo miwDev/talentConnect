@@ -10,6 +10,7 @@ use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
 use App\core\model\Alumno;
 use App\core\model\Empresa;
+use App\core\helper\Security;
 
 
 class Adapter
@@ -24,13 +25,13 @@ class Adapter
         $alumno = new Alumno(
             null, //id
             $data['username'], //email
-            "tempPass", //pass
+            Security::passEncrypter("tempPass"), //pass
             $data['nombre'], //nombre
             $data['apellido'], //apellido
             null, //dni
             $data['telefono'], //telefone
             $data['direccion'], //dir
-            null, //foto
+            '/assets/images/genericAvatar.svg', //foto
             null, //cv
             $data['provincia'], // provincia
             $data['localidad'], //localidad
@@ -100,7 +101,7 @@ class Adapter
         $alumnoFull = new Alumno(
             null,                           // id
             $_POST['email'] ?? '',          // username
-            $_POST['password'] ?? '',       // password
+            Security::passEncrypter($_POST['password'] ?? ''), // password
             $_POST['nombre'] ?? '',         // nombre
             $_POST['apellido'] ?? '',       // apellido
             $_POST['dni'] ?? '',            // dni
@@ -176,13 +177,13 @@ class Adapter
             $alumno = new Alumno(
                 null,
                 $aluDTO['email'],
-                "tempPass",
+                Security::passEncrypter("tempPass"),
                 $aluDTO['nombre'],
                 $aluDTO['apellido'],
                 null, // dni
                 900000000, // tel
                 null, // direccion
-                null, // foto
+                '/assets/images/genericAvatar.svg', // foto
                 null, // cv
                 null, // provincia
                 null,  // localidad
@@ -200,7 +201,7 @@ class Adapter
         return $fullAlumnos;
     }
 
-    public static function getDTObyToken($authHeaderValue){
+    public static function getAlumnoDTObyToken($authHeaderValue){
 
         $token = self::tokenRetrieve($authHeaderValue); 
 
@@ -226,19 +227,6 @@ class Adapter
         return $alumnoDTO;
     }
 
-    public static function tokenRetrieve($authHeaderValue){ 
-        
-        
-
-        if (empty($authHeaderValue)) {
-            $token = null;
-        }
-
-        $token = trim(preg_replace('/^Bearer:?\s*/i', '', $authHeaderValue));
-
-        return $token;
-    }
-
 
     //////////////////////////////////////
     /// EMPRESA                     /////
@@ -250,7 +238,7 @@ class Adapter
         $empresa = new Empresa(
             null,
             $_POST['email'],
-            "tempPass",
+            Security::passEncrypter("tempPass"),
             $_POST['cif'],
             $_POST['nombre'],
             $_POST['telefono'],
@@ -259,7 +247,7 @@ class Adapter
             null, //localidad
             null, //nombre persona
             null, //telPersona
-            null, //logo
+            '/assets/images/companyNull.svg', //logo
             0
         );
 
@@ -277,6 +265,7 @@ class Adapter
                 $empresa->nombre,
                 $empresa->username,
                 $empresa->telefono,
+                $empresa->logo,
                 $empresa->validacion
             );
         }
@@ -293,6 +282,7 @@ class Adapter
             $empresa->nombre,
             $empresa->username,
             $empresa->telefono,
+            $empresa->logo,
             $empresa->validacion,
         );
 
@@ -314,6 +304,80 @@ class Adapter
         return EmpresaRepo::update($empresaEdit);
     }
 
+    public static function postDatatoEmpresa(){
+
+        $fotoData = $_POST['fotoData'] ?? null;
+        $ruta_base = __DIR__ . '/../../public';
+        $carpeta_destino = $ruta_base . '/assets/images/companyPfp/';
+        $ruta_para_base_de_datos = '/assets/images/companyNull.svg'; // Default
+
+        if($fotoData && $fotoData !== 'default'){
+            if (preg_match('/^data:image\/(\w+);base64,(.+)$/', $fotoData, $matches)) {
+                $extension = $matches[1];
+                $datos_base64 = $matches[2];
+
+                $datos_binarios = base64_decode($datos_base64);
+                $nombre_archivo = 'foto_' . uniqid() . '.' . $extension;
+                $ruta_fisica_archivo = $carpeta_destino . $nombre_archivo;
+
+                if (file_put_contents($ruta_fisica_archivo, $datos_binarios)) {
+                    $ruta_para_base_de_datos = '/assets/images/companyPfp/' . $nombre_archivo; 
+                } else {
+                    error_log("No se pudo guardar la imagen: " . $ruta_fisica_archivo);
+                }
+            }
+        }
+
+        $empresaFull = new Empresa(
+            null,
+            $_POST["email"],
+            Security::passEncrypter($_POST["password"]),
+            $_POST["cif"],
+            $_POST["nombre_empresa"],
+            $_POST["telefono"],
+            $_POST["direccion"],
+            $_POST["provincia"],
+            $_POST["localidad"],
+            $_POST["contacto_persona"],
+            $_POST["contacto_telefono"],
+            $ruta_para_base_de_datos,
+            0 // verificacion siempre pendiente del admin
+        );
+
+        return $empresaFull;
+    }
+
+    public static function getEmpresaDTObyToken($authHeaderValue){
+
+        $token = self::tokenRetrieve($authHeaderValue); 
+
+        if (is_null($token)) {
+            $EmpresaDTO = false;
+        }
+
+        $empresa = EmpresaRepo::findByToken($token);
+
+        if($empresa){
+            
+            $empresaDTO = new EmpresaDTO(
+                $empresa->id,
+                $empresa->cif,
+                $empresa->nombre,
+                $empresa->username,
+                $empresa->telefono,
+                $empresa->logo,
+                $empresa->validacion
+            );
+        }else{
+            $empresaDTO = false;
+        }
+        return $empresaDTO;
+    }
+
+     //////////////////////////////////////
+    /// CICLOS                       /////
+    /////////////////////////////////////
+
     public static function ciclosToDTO($ciclos)
     {
         $ciclosDTO = [];
@@ -324,5 +388,23 @@ class Adapter
             );
         }
         return $ciclosDTO;
+    }
+
+
+    //////////////////////////////////////
+    /// TOKEN                        /////
+    /////////////////////////////////////
+
+     public static function tokenRetrieve($authHeaderValue){ 
+        
+        
+
+        if (empty($authHeaderValue)) {
+            $token = null;
+        }
+
+        $token = trim(preg_replace('/^Bearer:?\s*/i', '', $authHeaderValue));
+
+        return $token;
     }
 }

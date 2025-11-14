@@ -15,8 +15,6 @@ class EmpresaRepo implements RepoInterface
         $conn = DBC::getConnection();
         $empresaId = false;
 
-        $hashedPassword = password_hash($empresa->password, PASSWORD_DEFAULT);
-
 
         try {
             $conn->beginTransaction();
@@ -25,7 +23,7 @@ class EmpresaRepo implements RepoInterface
                           VALUES (:username, :pass, :role_id)';
             $stmtUser = $conn->prepare($queryUser);
             $stmtUser->bindValue(':username', $empresa->username);
-            $stmtUser->bindValue(':pass', $hashedPassword);
+            $stmtUser->bindValue(':pass', $empresa->password);
             $stmtUser->bindValue(':role_id', 3);
             $stmtUser->execute();
 
@@ -268,6 +266,60 @@ class EmpresaRepo implements RepoInterface
                 $resultado['logo'],
                 $resultado['validacion']
             );
+        }
+
+        return $empresa;
+    }
+
+    public static function findByToken($token)
+    {
+        $conn = DBC::getConnection();
+        $empresa = null;
+
+        $query = 'SELECT e.id AS empresa_id,
+                         u.user_name AS username,
+                         u.passwrd AS pass,
+                         e.nombre AS nombre,
+                         e.telefono AS telefono,
+                         e.direccion AS direccion,
+                         e.nombre_persona AS nombrePersona,
+                         e.telefono_persona AS telPersona,
+                         e.logo AS logo,
+                         e.validacion AS validacion,
+                         e.provincia AS provincia,
+                         e.localidad AS localidad,
+                         e.cif AS cif
+                  FROM EMPRESA e
+                  JOIN USER u ON e.user_id = u.id
+                  JOIN USER_TOKEN ut ON u.id = ut.user_id
+                  WHERE ut.token = :token';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) {
+                $empresa = new Empresa(
+                    $resultado['empresa_id'],
+                    $resultado['username'],
+                    $resultado['pass'],
+                    $resultado['cif'],
+                    $resultado['nombre'],
+                    $resultado['telefono'],
+                    $resultado['direccion'],
+                    $resultado['provincia'],
+                    $resultado['localidad'],
+                    $resultado['nombrePersona'],
+                    $resultado['telPersona'],
+                    $resultado['logo'],
+                    $resultado['validacion']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar Empresa por token: " . $e->getMessage());
         }
 
         return $empresa;

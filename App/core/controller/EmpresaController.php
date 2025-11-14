@@ -4,9 +4,19 @@ namespace App\core\controller;
 
 use App\core\data\EmpresaRepo;
 use App\core\helper\Adapter;
+use App\core\helper\Session;
 
 class EmpresaController
 {
+    public function renderDashboard($engine){
+        $role = Session::readRole();
+        $username = Session::readUser();
+
+        echo $engine->render('Empresa/empresaDashboard', [
+            'role' => $role,
+            'username' => Session::readUser()
+        ]);
+    }
     public function renderList($engine)
     {
         $this->handlePostActions($engine);
@@ -39,10 +49,6 @@ class EmpresaController
 
     private function handlePostActions($engine)
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
-        }
-
         $selfRoute = "Location: " . $_SERVER['PHP_SELF'] . "?menu=admin-empresas";
 
         if (isset($_POST["btnAdd"])) {
@@ -109,6 +115,18 @@ class EmpresaController
 
     public function deleteCompany($id)
     {
+        $empresa = EmpresaRepo::findById($id);
+
+        $rutaLogo = $empresa->logo;
+        $basePath = __DIR__ . '/../../public';
+
+        if ($rutaLogo && $rutaLogo !== '/assets/images/companyNull.svg') {
+            $fullLogoPath = $basePath . $rutaLogo;
+            
+            if (file_exists($fullLogoPath)) {
+                unlink($fullLogoPath);
+            }
+        }
         return EmpresaRepo::deleteById($id);
     }
 }

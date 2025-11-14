@@ -27,6 +27,25 @@ class Router
         $this->engine = new Engine($this->templatesPath);
     }
 
+    private function getDashboardRoute(string $role): string
+    {
+        switch ($role) {
+            case 'ROLE_ALUMNO':
+                $route ='alumno-dashboard';
+                break;
+            case 'ROLE_EMPRESA':
+                $route ='empresa-dashboard';
+                break;
+            case 'ROLE_ADMIN':
+                $route ='admin-dashboard';
+                break;
+            default:
+                 $route ='home';
+        }
+
+        return $route;
+    }
+
     public function router()
     {
         Session::start();
@@ -42,6 +61,7 @@ class Router
             case 'regRedirect':
             case 'regEmpresa':
             case 'regAlumno':
+            case 'empresaUnverified':
                 if ($role !== 'ROLE_GUEST') {
                     header("Location: ?menu={$dashboard}"); 
                     break;
@@ -49,15 +69,11 @@ class Router
                 $Auth = new AuthController();
                 $this->handlePublicAuthRoutes($menu, $Auth);
                 break; 
-            
-            // --- Ruta Home ---
             case 'home':
                 $landing = new LandingController();
                 $landing->renderLanding($this->engine);
                 break;
         }
-
-        // --- Rutas Privadas por Rol ---
         switch($role){
             case 'ROLE_ALUMNO':
                 $this->handleAlumnoRoutes($menu);
@@ -70,31 +86,7 @@ class Router
             case 'ROLE_ADMIN':
                 $this->handleAdminRoutes($menu);
                 break;
-
-            default:
-                header('Location: ?menu=login'); 
-                exit;
         }
-    }
-
-    private function getDashboardRoute(string $role): string
-    {
-        switch ($role) {
-            case 'ROLE_ALUMNO':
-                $route ='alumno-dashboard';
-                break;
-            case 'ROLE_EMPRESA':
-                $route ='empresa-dashboard';
-                break;
-            case 'ROLE_ADMIN':
-                return 'admin-dashboard';
-                $route ='admin-dashboard';
-                break;
-            default:
-                 $route ='home';
-        }
-
-        return $route;
     }
 
     private function handlePublicAuthRoutes($menu, AuthController $Auth) {
@@ -110,6 +102,9 @@ class Router
                 break;
             case 'regAlumno': 
                 $Auth->renderRegAlumno($this->engine); 
+                break;
+            case 'empresaUnverified': 
+                $Auth->renderNotVerified($this->engine); 
                 break;
         }
     }

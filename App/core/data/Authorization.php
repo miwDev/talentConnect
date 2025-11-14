@@ -39,6 +39,10 @@ class Authorization
             } elseif ($roleId === 3) {
 
                 $userObject = EmpresaRepo::findByUserId($userId);
+
+                if($userObject->validacion === 0){
+                    $userObject = false;
+                }
             } else {
                 $adminObject = new \stdClass();
                 $adminObject->id = $resultado['id'];
@@ -51,6 +55,8 @@ class Authorization
                     "user" => $userObject,
                     "token" => $token
                 ];
+            }else{
+                $verified = ["user" => "empresaNoVerificada"];
             }
         }
 
@@ -58,7 +64,7 @@ class Authorization
     }
 
 
-    public static function registeredUser($alumnoId)
+    public static function registeredAlumno($alumnoId)
     {
         $conn = DBC::getConnection();
         $verified = false;
@@ -140,7 +146,7 @@ class Authorization
             
             $success = $stmt->rowCount() > 0; 
         } catch (PDOException $e) {
-            error.log("error de borrado");
+            error_log("error de borrado");
         }
 
         return $success;

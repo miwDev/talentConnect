@@ -6,7 +6,7 @@ window.addEventListener("load", function(){
     const btnCamara = this.document.getElementById("cameraModal");
     const btnFoto = this.document.getElementById("uploadPicture");
     const subirCV = this.document.getElementById("uploadCV");
-    const btnRegister = this.document.getElementById("envioRegistro");
+
 
     new FormularioManager("formulario");
 

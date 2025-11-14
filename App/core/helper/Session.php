@@ -3,6 +3,7 @@
 namespace App\core\helper;
 
 use App\core\model\Alumno;
+use App\core\model\Empresa;
 
 class Session
 {

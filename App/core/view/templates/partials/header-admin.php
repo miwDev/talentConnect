@@ -14,7 +14,7 @@
     <div class="pfp-username">
         <span class="username-display" id="user-area-username">ADMIN</span>
         <span id="menuToggle" class="pfp-container">
-            <img src="/public/assets/images/adminPfp.svg" alt="Alumno PFP" class="profile-photo" id="alumnoPfp">
+            <img src="/public/assets/images/adminPfp.svg" alt="Admin PFP" class="profile-photo" id="alumnoPfp">
         </span>
     </div>
 

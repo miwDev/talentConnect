@@ -1,14 +1,13 @@
 // auth.js
 window.addEventListener("load", function() {
-    
+
     fetch('/API/ApiLogin.php', {
         method: 'GET',
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
+        if (data && data.success) {
             sessionStorage.setItem("token", data.token);
-            sessionStorage.setItem("role", data.role);
             loadUserProfile(data.token, data.role);
         }
     })
@@ -20,6 +19,7 @@ window.addEventListener("load", function() {
 
 function loadUserProfile(userToken, role) {
     const pfpAlumno = document.getElementById("alumnoPfp");
+    const pfpEmpresa = document.getElementById("empresaPfp");
     const username = document.getElementById("user-area-username");
     const cerrarSesion = document.getElementById("cerrarSesion");
 
@@ -89,7 +89,36 @@ function loadUserProfile(userToken, role) {
 
     } else if(userToken && role === "ROLE_EMPRESA"){
         
-        console.log("EMPRESA #TODO")
+         if (!pfpEmpresa || !username) {
+            console.warn('Elementos de Empresa no encontrados en el DOM');
+            return;
+        }
+
+        fetch("/API/ApiEmpresa.php?process=pfp", {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + userToken
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                pfpEmpresa.src = data.pictureRoute;
+                username.textContent = data.username;
+            } else {
+                console.error('Success es false');
+            }
+        })
+        .catch(error => {
+            console.error('Error cargando perfil:', error);
+            pfpEmpresa.src = "/public/assets/images/cross.svg";
+            username.textContent = "Error";
+        });
 
     } else if (userToken && role === "ROLE_ADMIN") {
         
