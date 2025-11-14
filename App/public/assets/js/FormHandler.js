@@ -16,9 +16,14 @@ class FormularioManager {
   }
 
   clearErrors(){
+    this.erroresSpans = this.form.querySelectorAll('span.input-error-message');
     this.erroresSpans.forEach(errorSpan => { 
         errorSpan.textContent = '';
     });
+    const generalError = this.form.querySelector('#login-error-display');
+    if (generalError) {
+        generalError.textContent = '';
+    }
   }
 
   displayError(inputName, message) {
@@ -41,10 +46,6 @@ class FormularioManager {
     const provincia = this.form.elements['provincia'];
     const localidad = this.form.elements['localidad'];
     const direccion = this.form.elements['direccion'];
-
-    const familia = this.form.elements['familia'];
-    const ciclo = this.form.elements['ciclo'];
-
     const cvInput = this.form.elements['cv'];
 
     this.clearErrors(); 
@@ -59,7 +60,7 @@ class FormularioManager {
         esValido = false;
     }
 
-    if(!dni.value.esDniValido()){
+    if(!dni.value.esDni()){
         this.displayError('dni', "DNI Inválido");
         esValido = false;
     }
@@ -94,15 +95,44 @@ class FormularioManager {
         esValido = false;
     }
 
-
-    if(familia.value === "-1"){
-        this.displayError('familia', "Seleccione una familia profesional");
-        esValido = false;
-    }
+    const familias = this.form.querySelectorAll('select[name^="familia["]');
     
-    if(ciclo.value === "-1"){
-        this.displayError('ciclo', "Seleccione un ciclo formativo");
+    if (familias.length === 0) {
+        this.displayError('login-error-display', "Debe añadir al menos un estudio.");
         esValido = false;
+    } else {
+        familias.forEach((familiaSelect) => {
+            const idIndex = familiaSelect.id.split('_')[1];
+            const cicloSelect = this.form.querySelector(`#ciclo_${idIndex}`);
+            const fechaInicioInput = this.form.querySelector(`#fecha_inicio_${idIndex}`);
+            const fechaFinInput = this.form.querySelector(`#fecha_fin_${idIndex}`);
+
+            if (familiaSelect.value === "-1") {
+                this.displayError(`familia_${idIndex}`, "Seleccione una familia");
+                esValido = false;
+            } else {
+                if (cicloSelect.value === "-1") {
+                    this.displayError(`ciclo_${idIndex}`, "Seleccione un ciclo");
+                    esValido = false;
+                } else {
+                    if (!fechaInicioInput.value) {
+                        this.displayError(`fecha_inicio_${idIndex}`, "Campo requerido");
+                        esValido = false;
+                    } else if (!fechaInicioInput.value.esFecha()) { 
+                        this.displayError(`fecha_inicio_${idIndex}`, "Fecha inválida (YYYY-MM-DD)");
+                        esValido = false;
+                    }
+
+                    // --- CAMBIO AQUÍ ---
+                    // El campo es opcional. Solo se valida si NO está vacío.
+                    if (fechaFinInput.value && !fechaFinInput.value.esFecha()) { 
+                        this.displayError(`fecha_fin_${idIndex}`, "Fecha inválida (YYYY-MM-DD)");
+                        esValido = false;
+                    }
+                    // --- FIN DEL CAMBIO ---
+                }
+            }
+        });
     }
     
     if (!cvInput || cvInput.files.length === 0) {

@@ -4,6 +4,7 @@ namespace App\core\data;
 
 use App\core\model\Alumno;
 use App\core\DTO\AlumnoDTO;
+use App\core\data\EstudiosRepo;
 use PDO;
 use PDOException;
 use Exception;
@@ -53,7 +54,10 @@ class AlumnoRepo implements RepoInterface
             $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
             $stmtToken->execute();
 
+            EstudiosRepo::saveEstudiosForAlumno($alumnoId, $alumno->estudios);
+            
             $conn->commit();
+
         } catch (Exception $e) {
             $conn->rollBack();
             error_log("Error al guardar alumno: " . $e->getMessage());

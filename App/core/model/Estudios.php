@@ -2,7 +2,9 @@
 
 namespace App\core\model;
 
-class Estudio
+
+
+class Estudios
 {
     private $id;
     private $ciclo;
@@ -12,7 +14,7 @@ class Estudio
     public function __construct($id, $ciclo, $fIni, $fFin)
     {
         $this->id = $id;
-        $this->ciclo = $fIni;
+        $this->ciclo = $ciclo;
         $this->fechaInicio = $fIni;
         $this->fechaFin = $fFin;
     }

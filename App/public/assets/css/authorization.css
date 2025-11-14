@@ -337,6 +337,21 @@ body{
     background-color: #FFFFE9;
 }
 
+/* --- Estilos de botones de añadir  --- */
+
+.add-estudios{
+    background: url("/public/assets/images/Add.svg");
+    visibility: hidden;
+    display: inline-block; 
+    width: 30px;  
+    height: 30px; 
+    margin-top: 48px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer; 
+}
+
 /* --- Estilos de la Tarjeta de Avatar --- */
 
 .register-avatar-card {
@@ -446,6 +461,109 @@ body{
 .input-wrapper input {
   /* Añade padding a la derecha del input */
   padding-right: 40px; 
+}
+
+/* ================================================= */
+/* 11. ESTILOS DE SELECTS DE CICLO */
+/* ================================================= */
+
+.add-estudios {
+    background-image: url("/public/assets/images/Add.svg");
+    visibility: hidden; 
+    display: inline-block; 
+    width: 30px;  
+    height: 30px; 
+    margin-top: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer; 
+}
+
+.subtract-estudios {
+    background-image: url("/public/assets/images/substract.svg");
+    visibility: hidden; 
+    display: inline-block; 
+    width: 40px;  
+    height: 40px;
+    margin-top: 35px; 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer; 
+}
+
+/* 1. Fila principal (Wrapper de Selects + Wrapper de Botones)
+   Alineada por la base.
+*/
+.education-colum {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 1em !important; 
+}
+
+/* 2. Wrapper de los Selects
+   Le decimos que crezca (flex: 1) y que alinee los
+   dos selects con un 'gap'.
+*/
+.education-selects-wrapper {
+    flex: 1; /* Ocupa todo el espacio posible */
+    display: flex;
+    gap: 20px; /* Espacio entre Familia y Ciclo */
+}
+
+/* 3. El .half-width (flex: 1) que ya tienes
+   hará que los dos selects se repartan el espacio
+   dentro del .education-selects-wrapper.
+*/
+.education-selects-wrapper .form-group {
+    margin-bottom: 0; /* Quitamos el margen inferior de los form-group */
+}
+
+/* 4. Wrapper de los Botones
+   Le decimos que NO crezca (flex: 0) y que 
+   ocupe solo su contenido.
+*/
+.education-buttons-group {
+    flex: 0 1 auto;
+    margin-bottom: 0; /* Quitamos el margen inferior */
+}
+
+/* 5. Contenedor de los iconos de botón */
+.education-buttons-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+/* 6. Fila de Fechas (sin cambios) */
+.education-dates {
+    padding-bottom: 1.5em;
+    margin-bottom: 1.5em;
+    border-bottom: 2px solid #e0e0e0;
+}
+#divEducacion .education-dates:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* 7. Estilos de Inputs de Fecha (sin cambios) */
+.education-dates .form-group label {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 0.4em;
+}
+.education-dates .form-group input {
+    font-size: 0.9em;
+    padding: 0.5em;
+    width: 100%;
+    box-sizing: border-box;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+}
+.education-dates .input-error-message {
+    min-height: 1em;
 }
 
 /* ================================================= */
