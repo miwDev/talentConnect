@@ -477,6 +477,44 @@ use App\core\helper\Security;
         return $oferta;
     }
 
+    public static function editedDataToOferta()
+{
+    $ciclos = [];
+    
+    // Asegurarse de que los valores se convierten a enteros y se validan
+    if (!empty($_POST['select1']) && $_POST['select1'] !== '' && $_POST['select1'] !== '-1') {
+        $ciclos[] = (int)$_POST['select1'];
+    }
+    
+    if (!empty($_POST['select2']) && $_POST['select2'] !== '' && $_POST['select2'] !== '-1') {
+        $ciclos[] = (int)$_POST['select2'];
+    }
+
+    // Log para debug
+    error_log("=== DEBUG EDICION OFERTA ===");
+    error_log("POST select1: " . ($_POST['select1'] ?? 'NO EXISTE'));
+    error_log("POST select2: " . ($_POST['select2'] ?? 'NO EXISTE'));
+    error_log("Ciclos procesados: " . print_r($ciclos, true));
+    error_log("Total ciclos: " . count($ciclos));
+    error_log("=========================");
+
+    $empresaId = Session::readUserId();
+
+    $oferta = new Oferta(
+        (int)$_POST['id'],           // Asegurar que el ID es entero
+        (int)$empresaId,             // empresaId
+        $ciclos,                      // array de ciclo IDs
+        null,                         // fechaCreacion
+        $_POST["fechaFin"],          // fechaFin
+        $_POST['salario'],           // salario
+        $_POST['descripcion'],       // descripcion
+        $_POST['titulo']             // titulo
+    );
+
+    return $oferta;
+}
+
+
     
 
 

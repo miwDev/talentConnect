@@ -1099,3 +1099,77 @@ body:has(.list-container) {
     opacity: 0.7;
     pointer-events: none; /* Permite hacer clic en el input "a través" del icono */
 }
+
+#hiddenBuscar{
+    display: none;
+}
+
+/* 13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column) */
+
+/* 1. Contenedor para la fila Título/Fecha.
+   Ocupa las 2 columnas del grid principal.
+*/
+.list-container .form-grid .form-row-full {
+    grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+    display: flex;
+    gap: 1.2em; /* Mismo 'gap' que el grid principal */
+}
+
+/* 2. Grupo de input (label + input) dentro de la fila flex.
+   Cada uno ocupa la mitad.
+*/
+.list-container .form-grid .form-group-half {
+    flex: 1; /* Crece para ocupar el espacio */
+    min-width: 0; 
+}
+
+/* 3. Estilos para labels e inputs DENTRO del .form-group-half.
+   (Para que el label esté ENCIMA del input)
+*/
+.list-container .form-grid .form-group-half label {
+    /* Sobrescribe el 'text-align: right' del grid principal */
+    text-align: left; 
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #191919;
+    display: block; /* Ocupa su propia línea */
+    margin-bottom: 0.5em; /* Espacio antes del input */
+}
+
+.list-container .form-grid .form-group-half input {
+    /* El input debe usar el 100% de su contenedor */
+    width: 100%; 
+    
+    /* Copiamos los estilos del input principal (Bloque 10) */
+    padding: 0.7em 1em;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    background-color: #FEFDF8;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    box-sizing: border-box; 
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* 4. Estilos para los campos que siguen en columna 
+      (Descripción, Salario, Ciclos)
+*/
+
+/* Para la Descripción (Label + Textarea) */
+.list-container .form-grid .form-span-label {
+    grid-column: 1 / -1; /* Etiqueta ocupa todo el ancho */
+    text-align: left;
+    margin-bottom: -1em; 
+}
+
+.list-container .form-grid .form-span-input {
+     grid-column: 1 / -1; /* Textarea ocupa todo el ancho */
+}
+
+/* Para los Ciclos (Label) */
+.list-container .form-grid .select-group-label {
+    align-self: start; 
+    padding-top: 0.7em; 
+}

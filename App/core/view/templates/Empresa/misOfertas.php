@@ -16,7 +16,7 @@ $this->layout('layout/layout', [
             <div class="search-bar-container">
                 <input type="text" name="busqueda" placeholder="Buscar Oferta..." class="search-input">
                 <img src="/public/assets/images/lupa.svg" alt="Buscar" class="search-icon">
-                <button type="submit" name="btnBuscar" style="display: none;"></button>
+                <button type="submit" name="btnBuscar" id="hiddenBuscar"></button>
             </div>
             <?php foreach ($ofertas as $oferta): ?>
                 <?php

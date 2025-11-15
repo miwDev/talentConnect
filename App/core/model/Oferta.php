@@ -6,7 +6,7 @@ class Oferta
 {
     private $id;
     private $empresaId;
-    private $ciclos = []; // Array de IDs de ciclos
+    public $ciclos = []; // Array de IDs de ciclos
     private $fechaCreacion;
     private $fechaFin;
     private $salario;

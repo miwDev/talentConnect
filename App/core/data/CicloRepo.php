@@ -197,4 +197,26 @@ class CicloRepo implements RepoInterface
 
         return $salida;
     }
+
+    public static function getIdByName(string $nombre)
+    {
+        $conn = DBC::getConnection();
+        $cicloId = null;
+
+        try {
+            $stmt = $conn->prepare('SELECT id FROM CICLO WHERE nombre = :nombre');
+            $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+            $stmt->execute();
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($res) {
+                $cicloId = (int)$res['id'];
+            }
+        } catch (\PDOException $e) {
+            error_log("Error al buscar ciclo por nombre: " . $e->getMessage());
+            $cicloId = null;
+        }
+
+        return $cicloId;
+    }
 }

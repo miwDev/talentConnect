@@ -171,13 +171,20 @@ class OfertaRepo implements RepoInterface
         try {
             $conn->beginTransaction();
 
+            // Log para debug
+            error_log("=== UPDATE OFERTA ===");
+            error_log("ID Oferta: " . $oferta->id);
+            error_log("Ciclos recibidos: " . print_r($oferta->ciclos, true));
+            error_log("Cantidad de ciclos: " . count($oferta->ciclos));
+
+            // Actualizar datos de la oferta
             $query = $conn->prepare(
                 'UPDATE OFERTA
-             SET fecha_fin_oferta = :fecha_fin,
-                 salario = :salario,
-                 descripcion = :descripcion,
-                 titulo = :titulo
-             WHERE id = :id'
+                SET fecha_fin_oferta = :fecha_fin,
+                    salario = :salario,
+                    descripcion = :descripcion,
+                    titulo = :titulo
+                WHERE id = :id'
             );
 
             $query->bindValue(':fecha_fin', $oferta->fechaFin);
@@ -187,31 +194,47 @@ class OfertaRepo implements RepoInterface
             $query->bindValue(':id', $oferta->id);
 
             $query->execute();
+            error_log("✅ Oferta actualizada correctamente");
 
-            // Actualizar ciclos: eliminar los viejos e insertar los nuevos
+            // Eliminar ciclos antiguos
             $deleteQuery = $conn->prepare('DELETE FROM OFERTA_CICLO WHERE oferta_id = :oferta_id');
             $deleteQuery->bindValue(':oferta_id', $oferta->id);
             $deleteQuery->execute();
+            error_log("✅ Ciclos antiguos eliminados");
 
-            if (!empty($oferta->ciclos)) {
+            // Insertar nuevos ciclos SOLO si hay ciclos válidos
+            if (!empty($oferta->ciclos) && is_array($oferta->ciclos)) {
                 $insertQuery = $conn->prepare(
                     'INSERT INTO OFERTA_CICLO (oferta_id, ciclo_id) VALUES (:oferta_id, :ciclo_id)'
                 );
+                
                 foreach ($oferta->ciclos as $cicloId) {
-                    if (!empty($cicloId) && is_numeric($cicloId)) {
-                        $insertQuery->bindValue(':oferta_id', $oferta->id);
-                        $insertQuery->bindValue(':ciclo_id', $cicloId, PDO::PARAM_INT);
+                    // Validación estricta
+                    if (!empty($cicloId) && is_numeric($cicloId) && $cicloId > 0) {
+                        $cicloIdInt = (int)$cicloId;
+                        
+                        $insertQuery->bindValue(':oferta_id', $oferta->id, PDO::PARAM_INT);
+                        $insertQuery->bindValue(':ciclo_id', $cicloIdInt, PDO::PARAM_INT);
                         $insertQuery->execute();
+                        
+                        error_log("✅ Ciclo insertado: ID=$cicloIdInt");
+                    } else {
+                        error_log("❌ Ciclo NO válido, valor: " . var_export($cicloId, true));
                     }
                 }
+            } else {
+                error_log("⚠️ ADVERTENCIA: No hay ciclos para insertar. Array vacío o inválido.");
             }
 
             $conn->commit();
             $salida = true;
+            error_log("✅ Transacción completada con éxito");
+            
         } catch (PDOException $e) {
             $conn->rollBack();
             $salida = false;
-            error_log("Error al actualizar Oferta: " . $e->getMessage());
+            error_log("❌ Error al actualizar Oferta: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
         }
 
         return $salida;
