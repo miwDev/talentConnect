@@ -17,6 +17,7 @@ class EmpresaController
             'username' => Session::readUser()
         ]);
     }
+
     public function renderList($engine)
     {
         $this->handlePostActions($engine);

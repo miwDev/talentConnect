@@ -5,20 +5,20 @@ namespace App\core\model;
 class Oferta
 {
     private $id;
-    private $empresa;
+    private $empresaId;
+    private $ciclos = []; // Array de IDs de ciclos
     private $fechaCreacion;
     private $fechaFin;
     private $salario;
     private $descripcion;
     private $titulo;
-
-    // arrays
     private $solicitudes = [];
 
-    public function __construct($id, $empresa, $fechaCreacion, $fechaFin, $salario, $descripcion, $titulo)
+    public function __construct($id, $empresaId, $ciclos, $fechaCreacion, $fechaFin, $salario, $descripcion, $titulo)
     {
         $this->id = $id;
-        $this->empresa = $empresa;
+        $this->empresaId = $empresaId;
+        $this->ciclos = $ciclos;
         $this->fechaCreacion = $fechaCreacion;
         $this->fechaFin = $fechaFin;
         $this->salario = $salario;

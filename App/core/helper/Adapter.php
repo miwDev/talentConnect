@@ -5,12 +5,14 @@ namespace App\core\helper;
 use App\core\data\AlumnoRepo;
 use App\core\data\CicloRepo;
 use App\core\data\EmpresaRepo;
+use App\core\model\OfertaRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
 use App\core\model\Alumno;
 use App\core\model\Empresa;
 use App\core\model\Estudios;
+use App\core\model\Oferta;
 use App\core\helper\Security;
 
 
@@ -437,6 +439,45 @@ use App\core\helper\Security;
         }
         return $ciclosDTO;
     }
+
+
+
+
+    //////////////////////////////////////
+    /// OFERTAS                      /////
+    /////////////////////////////////////
+
+    public static function postDataToOffer()
+    { 
+        $ciclos = [];
+        
+        if (!empty($_POST['select1']) && $_POST['select1'] !== '' && $_POST['select1'] !== '-1') {
+            $ciclos[] = (int)$_POST['select1'];
+        }
+        
+        if (!empty($_POST['select2']) && $_POST['select2'] !== '' && $_POST['select2'] !== '-1') {
+            $ciclos[] = (int)$_POST['select2']; // Convertir a entero
+        }
+
+        // Obtener el ID de la empresa del usuario actual
+        $empresaId = Session::readUserId();
+
+        // Crear la oferta con los datos del formulario
+        $oferta = new Oferta(
+            null,                    // id (se generará automáticamente)
+            (int)$empresaId,        // empresaId (convertir a entero)
+            $ciclos,                 // array de ciclo IDs
+            null,                    // fechaCreacion (se asigna por defecto en la BD)
+            $_POST["fechaFin"],      // fechaFin
+            $_POST['salario'],       // salario
+            $_POST['desc'],          // descripcion
+            $_POST['titulo']         // titulo
+        );
+
+        return $oferta;
+    }
+
+    
 
 
     //////////////////////////////////////

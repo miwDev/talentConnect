@@ -5,7 +5,7 @@
                 <a href="?menu=mis-ofertas" class="menu-enlace">Mis ofertas</a>
             </li>
             <li class="menu-item">
-                <a href="?menu=crear-oferta" class="menu-enlace">Crear oferta</a>
+                <a href="?menu=create-oferta" class="menu-enlace">Crear oferta</a>
             </li>
             <li class="menu-item">
                 <a href="?menu=empresa-dashboard" class="menu-enlace">Dashboard</a>

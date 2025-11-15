@@ -147,6 +147,14 @@ class Router
                 $empresaManage = new EmpresaController();
                 $empresaManage->renderDashboard($this->engine);
                 break;
+            case 'create-oferta':
+                $ofertaManage = new OfertaController();
+                $ofertaManage->renderAddOferta($this->engine);
+                break;
+            case 'mis-ofertas':
+                $ofertaManage = new OfertaController();
+                $ofertaManage->renderMyOffers($this->engine);
+                break;
             default:
                 header('Location: ?menu=empresa-dashboard'); 
                 break;
