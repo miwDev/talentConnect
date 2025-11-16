@@ -1077,6 +1077,19 @@ body:has(.list-container) {
     border-color: #191919;
 }
 
+.applied-success-message {
+    color: #4CAF50; 
+    font-weight: bold; 
+    font-size: 1.1em; 
+    padding: 10px 15px; 
+    text-align: center; 
+    border: 1px solid #c8e6c9; 
+    background-color: #e8f5e9; 
+    border-radius: 5px; 
+    display: block; 
+    margin-top: 5px; 
+}
+
 /* Botón Eliminar (estilo de peligro) */
 .list-container .btn-delete {
     background-color: #FEFDF8; /* Color #FEFDF8 (Blanco/Crema) */

@@ -41,107 +41,126 @@ window.addEventListener("load", () => {
     });
     
     botonesApply.forEach(btn => {
-    const card = btn.closest('.oferta-card');
-    const companyProf = card.querySelector(".companyPfp");
-    const companyName = card.querySelector(".companyName");
-    const cardTitle = card.querySelector(".card-titulo");
-    
-    btn.addEventListener("click", (e) => {
-        // Asegúrate de que 'crearModal' crea el contenedor general del modal
-        // y el elemento con ID="modalContent"
-        crearModal(); 
-        const modalContent = document.getElementById("modalContent");
+        const card = btn.closest('.oferta-card');
+        const companyProf = card.querySelector(".companyPfp");
+        const companyName = card.querySelector(".companyName");
+        const cardTitle = card.querySelector(".card-titulo");
+
+        const btnContainer = btn.parentNode;
         
-        // 1. Contenedor principal del cuerpo
-        const divContent = document.createElement("div");
-        // CLASE: Contenedor principal del cuerpo
-        divContent.classList.add("modal-body-container");
-        
-        // 2. Cabecera (Título y Empresa)
-        const divHeader = document.createElement("div");
-        // CLASE: Cabecera con título y empresa
-        divHeader.classList.add("modal-header-content");
-        
-        // 3. Título de la Oferta
-        const divTitleWrapper = document.createElement("div");
-        // CLASE: Envoltorio del título
-        divTitleWrapper.classList.add("modal-title-wrapper");
-        
-        const titulo = document.createElement("h2");
-        titulo.textContent = cardTitle.textContent;
-        divTitleWrapper.appendChild(titulo);
-        
-        // 4. Info de la Empresa (Logo y Nombre)
-        const divCompany = document.createElement("div");
-        // CLASE: Info de la empresa
-        divCompany.classList.add("modal-company-info");
-        
-        const companyProfClone = companyProf.cloneNode(true);
-        // Asegurarse de que el logo clonado tenga la clase 'companyPfp'
-        companyProfClone.classList.add("companyPfp"); 
-        
-        const companyNameClone = companyName.cloneNode(true);
-        // Asegurarse de que el nombre clonado tenga la clase 'companyName'
-        companyNameClone.classList.add("companyName");
-        
-        divCompany.appendChild(companyProfClone);
-        divCompany.appendChild(companyNameClone);
-        
-        // Estructura la cabecera
-        divHeader.appendChild(divTitleWrapper);
-        divHeader.appendChild(divCompany);
-        
-        // 5. Cuerpo (Textarea)
-        const divBody = document.createElement("div");
-        // CLASE: Cuerpo del modal (que contendrá el textarea)
-        divBody.classList.add("modal-body-comments");
-        
-        const comentarios = document.createElement("textarea");
-        // CLASE: Textarea
-        comentarios.classList.add("modal-textarea");
-        comentarios.placeholder = "Añade un comentario...";
-        divBody.appendChild(comentarios);
-        
-        // Agrega Header y Body al Content
-        divContent.appendChild(divHeader);
-        divContent.appendChild(divBody);
-        
-        // 6. Contenedor de Botones
-        const divBtns = document.createElement("div");
-        // CLASE: Contenedor de botones
-        divBtns.classList.add("modal-actions");
-        
-        const btnConfirmar = document.createElement("button");
-        // CLASE: Botón confirmar
-        btnConfirmar.classList.add("btn-confirm");
-        btnConfirmar.textContent = "Confirmar";
-        
-        const btnCancelar = document.createElement("button");
-        // CLASE: Botón cancelar
-        btnCancelar.classList.add("btn-cancel");
-        btnCancelar.textContent = "Cancelar";
-        
-        divBtns.appendChild(btnConfirmar);
-        divBtns.appendChild(btnCancelar);
-        
-        // Agrega todo al modalContent
-        modalContent.appendChild(divContent);
-        modalContent.appendChild(divBtns);
-        
-        // Agrega lógica de cierre/confirmación (dejado como estaba)
-        btnCancelar.addEventListener("click", () => {
-            window.cerrarModal();
-        });
-        
-        btnConfirmar.addEventListener("click", () => {
-            // Lógica para confirmar la aplicación
+        btn.addEventListener("click", function(){
+            crearModal(); 
+            // Correcto: 'this' es el botón btnApply, su valor es el offerId
+            const offerId = this.value; 
+            const modalContent = document.getElementById("modalContent");
+            
+            const divContent = document.createElement("div");
+            divContent.classList.add("modal-body-container");
+            
+            const divHeader = document.createElement("div");
+            divHeader.classList.add("modal-header-content");
+            
+            const divTitleWrapper = document.createElement("div");
+            divTitleWrapper.classList.add("modal-title-wrapper");
+            
+            const titulo = document.createElement("h2");
+            titulo.textContent = cardTitle.textContent;
+            divTitleWrapper.appendChild(titulo);
+            
+            const divCompany = document.createElement("div");
+            divCompany.classList.add("modal-company-info");
+            
+            const companyProfClone = companyProf.cloneNode(true);
+            companyProfClone.classList.add("companyPfp"); 
+            
+            const companyNameClone = companyName.cloneNode(true);
+            companyNameClone.classList.add("companyName");
+            
+            divCompany.appendChild(companyProfClone);
+            divCompany.appendChild(companyNameClone);
+            
+            divHeader.appendChild(divTitleWrapper);
+            divHeader.appendChild(divCompany);
+            
+            const divBody = document.createElement("div");
+            divBody.classList.add("modal-body-comments");
+            
+            const comentarios = document.createElement("textarea");
+            comentarios.classList.add("modal-textarea");
+            comentarios.placeholder = "Añade un comentario...";
+            divBody.appendChild(comentarios);
+            
+            divContent.appendChild(divHeader);
+            divContent.appendChild(divBody);
+            
+            const divBtns = document.createElement("div");
+            divBtns.classList.add("modal-actions");
+            
+            const btnConfirmar = document.createElement("button");
+            btnConfirmar.classList.add("btn-confirm");
+            btnConfirmar.textContent = "Confirmar";
+            
+            const btnCancelar = document.createElement("button");
+            btnCancelar.classList.add("btn-cancel");
+            btnCancelar.textContent = "Cancelar";
+            
+            divBtns.appendChild(btnConfirmar);
+            divBtns.appendChild(btnCancelar);
+            
+            modalContent.appendChild(divContent);
+            modalContent.appendChild(divBtns);
+            
+            btnCancelar.addEventListener("click", () => {
+                window.cerrarModal();
+            });
+            
+            btnConfirmar.addEventListener("click", function(){
+                const comentario = comentarios.value;
+                console.log(comentario);
+                console.log(offerId);
+                fetch("/API/ApiSolicitud.php", {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + userToken
+                },
+                body: JSON.stringify({ 
+                    ofertaId: offerId,
+                    comentario: comentario,
+                    finalizado:  true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Hell yea");
+                    
+                    window.cerrarModal();
+                    
+                    const appliedMessage = document.createElement("p");
+                    appliedMessage.textContent = "Already Applied!";
+                    appliedMessage.classList.add('applied-success-message');
+                    
+                    if (btnContainer) {
+                        btnContainer.insertBefore(appliedMessage, btn);
+                        btn.style.display = "none";
+                    } else {
+                        btn.replaceWith(appliedMessage);
+                    }
+                    
+                    btn.removeEventListener("click", this);
+
+                }else{
+                    console.log("Hell naah");
+                }
+            });
         });
     });
+    
 });
 
     botonesFav.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            console.log(btn.value);
+        btn.addEventListener("click", function(e){
+
         });
     });
 });

@@ -14,17 +14,14 @@ $this->layout('layout/layout', [
 <?php $this->start('pageContent') ?>
     <div class="list-container">
         <div class="header-section">
-            <h1>Ofertas</h1>
+            <h1>Mis Solicitudes</h1>
+            <?= var_dump($_POST) ?>
         </div>
-        <div class="search-bar-container">
-            <input type="text" name="busqueda" placeholder="Buscar Oferta..." class="search-input">
-            <img src="/public/assets/images/lupa.svg" alt="Buscar" class="search-icon">
-            <button type="submit" name="btnBuscar" id="hiddenBuscar"></button>
-        </div>
-        <?php foreach ($ofertas as $oferta): ?>
+        <?php foreach ($solicitudes as $solicitud): ?>
             <?php
-            $this->insert('Alumno/cards/card_ofertaAlu', [
-                'oferta' => $oferta
+            $this->insert('Alumno/cards/card_misSolicitudes', [
+                'oferta' => $oferta,
+                'solicitudes' => $solicitudes
             ]);
             ?>
         <?php endforeach; ?>

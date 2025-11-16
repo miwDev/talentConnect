@@ -9,10 +9,12 @@ use App\core\model\OfertaRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
+use App\core\DTO\OfertaDTO;
 use App\core\model\Alumno;
 use App\core\model\Empresa;
 use App\core\model\Estudios;
 use App\core\model\Oferta;
+use App\core\model\Solicitud;
 use App\core\helper\Security;
 
 
@@ -502,44 +504,76 @@ use App\core\helper\Security;
     }
 
     public static function editedDataToOferta()
-{
-    $ciclos = [];
-    
-    // Asegurarse de que los valores se convierten a enteros y se validan
-    if (!empty($_POST['select1']) && $_POST['select1'] !== '' && $_POST['select1'] !== '-1') {
-        $ciclos[] = (int)$_POST['select1'];
+    {
+        $ciclos = [];
+        
+        // Asegurarse de que los valores se convierten a enteros y se validan
+        if (!empty($_POST['select1']) && $_POST['select1'] !== '' && $_POST['select1'] !== '-1') {
+            $ciclos[] = (int)$_POST['select1'];
+        }
+        
+        if (!empty($_POST['select2']) && $_POST['select2'] !== '' && $_POST['select2'] !== '-1') {
+            $ciclos[] = (int)$_POST['select2'];
+        }
+
+        $empresaId = Session::readUserId();
+
+        $oferta = new Oferta(
+            (int)$_POST['id'],           // Asegurar que el ID es entero
+            (int)$empresaId,             // empresaId
+            $ciclos,                      // array de ciclo IDs
+            null,                         // fechaCreacion
+            $_POST["fechaFin"],          // fechaFin
+            $_POST['salario'],           // salario
+            $_POST['descripcion'],       // descripcion
+            $_POST['titulo']             // titulo
+        );
+
+        return $oferta;
     }
-    
-    if (!empty($_POST['select2']) && $_POST['select2'] !== '' && $_POST['select2'] !== '-1') {
-        $ciclos[] = (int)$_POST['select2'];
+
+    public static function AllOfertaToDTO($ofertas){
+        $ofertasDTO = [];
+        foreach ($ofertas as $oferta) {
+            $ofertasDTO[] = new OfertaDTO(
+                $oferta->id,
+                $oferta->empresaId,
+                $oferta->ciclos,
+                $oferta->fechaCreacion,
+                $oferta->titulo
+            );
+        }
+        return $ofertasDTO;
     }
 
-    // Log para debug
-    error_log("=== DEBUG EDICION OFERTA ===");
-    error_log("POST select1: " . ($_POST['select1'] ?? 'NO EXISTE'));
-    error_log("POST select2: " . ($_POST['select2'] ?? 'NO EXISTE'));
-    error_log("Ciclos procesados: " . print_r($ciclos, true));
-    error_log("Total ciclos: " . count($ciclos));
-    error_log("=========================");
-
-    $empresaId = Session::readUserId();
-
-    $oferta = new Oferta(
-        (int)$_POST['id'],           // Asegurar que el ID es entero
-        (int)$empresaId,             // empresaId
-        $ciclos,                      // array de ciclo IDs
-        null,                         // fechaCreacion
-        $_POST["fechaFin"],          // fechaFin
-        $_POST['salario'],           // salario
-        $_POST['descripcion'],       // descripcion
-        $_POST['titulo']             // titulo
-    );
-
-    return $oferta;
-}
+    //////////////////////////////////////
+    /// SOLICITUD                    /////
+    /////////////////////////////////////
 
 
-    
+
+    public static function DTOtoSolicitud($data, $header)
+    {
+        $token = self::tokenRetrieve($header); 
+        $solicitud = false;
+
+        if (!is_null($token)) {
+            $alumno = AlumnoRepo::findByToken($token);
+            if ($alumno) {
+                $solicitud = new Solicitud(
+                    null,           // id
+                    null,           // f_creacion
+                    $alumno->id,     // id del alumno extraida de la sesion
+                    $data['ofertaId'], // id de la oferta (Asumo 'idOferta' es la clave correcta)
+                    $data['comentario'], // comentarios
+                    $data['finalizado'] // finalizado
+                );
+            }
+        }
+        
+        return $solicitud;
+    }
+
 
 
     //////////////////////////////////////
