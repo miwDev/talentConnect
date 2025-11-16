@@ -8,6 +8,7 @@ class Solicitud
     private $fechaCreacion;
     private $alumno;
     private $oferta;
+    private $comentarios;
     private $finalizado; // borrador
 
     public function __construct($id, $fechaCreacion, $alumno, $oferta, $finalizado)

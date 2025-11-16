@@ -31,7 +31,8 @@ class OfertaController
 
         $role = Session::readRole();
         $username = Session::readUser();
-        $ofertas = OfertaRepo::findAll();
+        $empresaId = Session::readUserId();
+        $ofertas = OfertaRepo::findAllbyEmpresaId($empresaId);
 
 
         echo $engine->render('Empresa/misOfertas', [

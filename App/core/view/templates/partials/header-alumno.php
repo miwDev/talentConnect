@@ -5,10 +5,13 @@
     <nav class="menu-principal">
         <ul id="navParent" class="menu-lista">
             <li class="menu-item">
-                <a href="?menu=ver-ofertas" class="menu-enlace">Ver ofertas</a
+                <a href="?menu=ofertas-alumno" class="menu-enlace">Ver ofertas</a
             </li>
             <li class="menu-item">
                 <a href="?menu=mis-solicitudes" class="menu-enlace">Mis solicitudes</a>
+            </li>
+            <li class="menu-item">
+                <a href="?menu=ver-favs" class="menu-enlace">Favoritos</a
             </li>
             <li class="menu-item">
                 <a href="?menu=alumno-dashboard" class="menu-enlace">Dashboard</a>

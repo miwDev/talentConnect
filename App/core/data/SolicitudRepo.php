@@ -20,11 +20,12 @@ class solicitudRepo implements RepoInterface
             $conn->beginTransaction();
 
             $querySolicitud = 'INSERT INTO SOLICITUD
-                           (alumno_id, oferta_id, finalizado)
+                           (alumno_id, oferta_id, comentarios, finalizado)
                            VALUES (:alumno_id, :oferta_id, :finalizado)';
             $stmtSolicitud = $conn->prepare($querySolicitud);
-            $stmtSolicitud->bindValue(':alumno_id', $solicitud->alumno->id);
-            $stmtSolicitud->bindValue(':oferta_id', $solicitud->oferta->id);
+            $stmtSolicitud->bindValue(':alumno_id', $solicitud->alumno);
+            $stmtSolicitud->bindValue(':oferta_id', $solicitud->oferta);
+            $stmtSolicitud->bindValue(':oferta_id', $solicitud->comentarios);
             $stmtSolicitud->bindValue(':finalizado', $solicitud->finalizado);
 
             $stmtSolicitud->execute();

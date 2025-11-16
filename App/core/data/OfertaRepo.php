@@ -114,6 +114,120 @@ class OfertaRepo implements RepoInterface
         return $ofertas;
     }
 
+    public static function findAllForAlumno(){
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        // 1. Obtener todas las ofertas
+        $query = $conn->prepare(
+            'SELECT o.id AS oferta_id,
+                o.fecha_oferta AS fecha_creacion,
+                o.fecha_fin_oferta AS fecha_fin,
+                o.salario AS salario,
+                o.descripcion AS descripcion,
+                o.titulo AS titulo,
+                o.empresa_id AS empresa_id
+         FROM OFERTA o'
+        );
+
+        $query->execute();
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        // 2. Preparar la consulta para obtener nombres de ciclos (se reutilizará)
+        $queryCiclos = $conn->prepare(
+            'SELECT c.nombre
+             FROM OFERTA_CICLO oc
+             JOIN CICLO c ON oc.ciclo_id = c.id
+             WHERE oc.oferta_id = :oferta_id'
+        );
+
+        foreach ($resultados as $res) {
+            
+            // 3. Ejecutar la consulta de ciclos para CADA oferta
+            $queryCiclos->bindValue(':oferta_id', $res['oferta_id']);
+            $queryCiclos->execute();
+            
+            $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+            $ofertas[] = new Oferta(
+                $res['oferta_id'],
+                $res['empresa_id'],
+                $ciclosNombres, // <-- Se pasa el array de nombres
+                $res['fecha_creacion'],
+                $res['fecha_fin'],
+                $res['salario'],
+                $res['descripcion'],
+                $res['titulo']
+            );
+        }
+
+        return $ofertas;
+    }
+
+    /**
+     * Busca y devuelve todas las ofertas asociadas a un ID de empresa específico.
+     * * @param int $empresaId El ID de la empresa.
+     * @return Oferta[] Un array de objetos Oferta.
+     */
+    public static function findAllByEmpresaId(int $empresaId)
+    {
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT o.id AS oferta_id,
+                    o.fecha_oferta AS fecha_creacion,
+                    o.fecha_fin_oferta AS fecha_fin,
+                    o.salario AS salario,
+                    o.descripcion AS descripcion,
+                    o.titulo AS titulo,
+                    o.empresa_id AS empresa_id
+                FROM OFERTA o
+                WHERE o.empresa_id = :empresa_id'
+            );
+
+            $query->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $queryCiclos = $conn->prepare(
+                'SELECT c.nombre
+                FROM OFERTA_CICLO oc
+                JOIN CICLO c ON oc.ciclo_id = c.id
+                WHERE oc.oferta_id = :oferta_id'
+            );
+
+            foreach ($resultados as $res) {
+                
+                $queryCiclos->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $queryCiclos->execute();
+                
+                $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $ofertas[] = new Oferta(
+                    $res['oferta_id'],
+                    $res['empresa_id'],
+                    $ciclosNombres, // 
+                    $res['fecha_creacion'],
+                    $res['fecha_fin'],
+                    $res['salario'],
+                    $res['descripcion'],
+                    $res['titulo']
+                );
+            }
+
+        } catch (PDOException $e) {
+            error_log("❌ Error al buscar ofertas por empresa ID $empresaId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+             error_log("❌ Error general al buscar ofertas: " . $e->getMessage());
+             return [];
+        }
+
+        return $ofertas;
+    }
+
     public static function findById(int $id)
     {
         $conn = DBC::getConnection();

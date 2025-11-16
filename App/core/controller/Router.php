@@ -8,6 +8,7 @@ use App\core\controller\AuthController;
 use App\core\controller\AlumnoController;
 use App\core\controller\EmpresaController;
 use App\core\controller\AdminController;
+use App\core\controller\SolicitudController;
 use App\core\helper\Login;
 use App\core\helper\Session;
 use App\core\data\EmpresaRepo;
@@ -134,6 +135,10 @@ class Router
             case 'alumno-dashboard':
                 $alumnoManage = new AlumnoController();
                 $alumnoManage->renderDashboard($this->engine);
+                break;
+            case 'ofertas-alumno':
+                $solicitudManage = new SolicitudController();
+                $solicitudManage->renderOffers($this->engine);
                 break;
             default:
                 header('Location: ?menu=alumno-dashboard'); 

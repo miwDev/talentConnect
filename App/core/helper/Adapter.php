@@ -424,6 +424,30 @@ use App\core\helper\Security;
         return $empresaDTO;
     }
 
+    public static function getEmpresaDTObyId($id){
+
+        $empresa = EmpresaRepo::findById($id);
+
+        if(!$empresa){
+            $empresaDTO = false;
+        }
+        else if($empresa){
+            
+            $empresaDTO = new EmpresaDTO(
+                $empresa->id,
+                $empresa->cif,
+                $empresa->nombre,
+                $empresa->username,
+                $empresa->telefono,
+                $empresa->logo,
+                $empresa->validacion
+            );
+        }else{
+            $empresaDTO = false;
+        }
+        return $empresaDTO;
+    }
+
      //////////////////////////////////////
     /// CICLOS                       /////
     /////////////////////////////////////
