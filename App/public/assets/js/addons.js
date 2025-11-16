@@ -63,12 +63,38 @@ String.prototype.esTelefonoValido = function() {
 
 const dniRegexp = /^(\d{8}|[XYZxyz]\d{7})[A-Za-z]$/;
 
-String.prototype.esDniValido = function() {
-    return dniRegexp.test(this);
-};
-
 const direccionRegexp = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9\s,.\-ºª/]+$/;
 
 String.prototype.esDireccionValida = function() {
     return direccionRegexp.test(this);
 };
+
+
+String.prototype.esFecha=function(){
+    let p = this.split("-");
+    let respuesta = false;
+
+    if(p.length==3){
+        let f=new Date(p[0],p[1]-1,p[2]); 
+        if(f!="Invalid Date"){
+            if(f.getFullYear()==p[0] && 
+                f.getMonth()==p[1]-1 && 
+                f.getDate()==p[2]){
+                    respuesta=true;
+            }
+        }
+    }
+    return respuesta;
+}
+
+String.prototype.esDni=function(){
+    let respuesta = false;
+    const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+    let p=(/^(\d{8})([TRWAGMYFPDXBNJZSQVHLCKE])$/).exec(this.toUpperCase());
+    if(p!=null){
+        if(letras[p[1]%23]==p[2]){
+            respuesta = true;
+        }
+    }
+    return respuesta;
+}

@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
-    <script src="/public/assets/js/auth.js"></script>
+    <script src="/public/assets/js/profileLogic.js" defer></script>
 
     <?= $this->section('css') ?>
     <?= $this->section('js') ?>
@@ -39,8 +39,6 @@
                         break;
                     case 'ROLE_EMPRESA':
                         $this->insert('partials/header-empresa', [
-                            'username' => $username,
-                            'pfpPath' => $pfpPath
                         ]);
                         break;
                     case 'ROLE_ALUMNO':

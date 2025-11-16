@@ -20,7 +20,7 @@ class Security
     }
 
     public static function passEncrypter($pass){
-        return true;
+        return password_hash($pass, PASSWORD_DEFAULT);
     }
     public static function passVerify($pass){
         return true;

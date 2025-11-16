@@ -8,6 +8,7 @@ use App\core\controller\AuthController;
 use App\core\controller\AlumnoController;
 use App\core\controller\EmpresaController;
 use App\core\controller\AdminController;
+use App\core\controller\SolicitudController;
 use App\core\helper\Login;
 use App\core\helper\Session;
 use App\core\data\EmpresaRepo;
@@ -27,6 +28,25 @@ class Router
         $this->engine = new Engine($this->templatesPath);
     }
 
+    private function getDashboardRoute(string $role): string
+    {
+        switch ($role) {
+            case 'ROLE_ALUMNO':
+                $route ='alumno-dashboard';
+                break;
+            case 'ROLE_EMPRESA':
+                $route ='empresa-dashboard';
+                break;
+            case 'ROLE_ADMIN':
+                $route ='admin-dashboard';
+                break;
+            default:
+                 $route ='home';
+        }
+
+        return $route;
+    }
+
     public function router()
     {
         Session::start();
@@ -42,6 +62,7 @@ class Router
             case 'regRedirect':
             case 'regEmpresa':
             case 'regAlumno':
+            case 'empresaUnverified':
                 if ($role !== 'ROLE_GUEST') {
                     header("Location: ?menu={$dashboard}"); 
                     break;
@@ -49,15 +70,11 @@ class Router
                 $Auth = new AuthController();
                 $this->handlePublicAuthRoutes($menu, $Auth);
                 break; 
-            
-            // --- Ruta Home ---
             case 'home':
                 $landing = new LandingController();
                 $landing->renderLanding($this->engine);
                 break;
         }
-
-        // --- Rutas Privadas por Rol ---
         switch($role){
             case 'ROLE_ALUMNO':
                 $this->handleAlumnoRoutes($menu);
@@ -70,31 +87,7 @@ class Router
             case 'ROLE_ADMIN':
                 $this->handleAdminRoutes($menu);
                 break;
-
-            default:
-                header('Location: ?menu=login'); 
-                exit;
         }
-    }
-
-    private function getDashboardRoute(string $role): string
-    {
-        switch ($role) {
-            case 'ROLE_ALUMNO':
-                $route ='alumno-dashboard';
-                break;
-            case 'ROLE_EMPRESA':
-                $route ='empresa-dashboard';
-                break;
-            case 'ROLE_ADMIN':
-                return 'admin-dashboard';
-                $route ='admin-dashboard';
-                break;
-            default:
-                 $route ='home';
-        }
-
-        return $route;
     }
 
     private function handlePublicAuthRoutes($menu, AuthController $Auth) {
@@ -110,6 +103,9 @@ class Router
                 break;
             case 'regAlumno': 
                 $Auth->renderRegAlumno($this->engine); 
+                break;
+            case 'empresaUnverified': 
+                $Auth->renderNotVerified($this->engine); 
                 break;
         }
     }
@@ -140,6 +136,14 @@ class Router
                 $alumnoManage = new AlumnoController();
                 $alumnoManage->renderDashboard($this->engine);
                 break;
+            case 'ofertas-alumno':
+                $solicitudManage = new SolicitudController();
+                $solicitudManage->renderOffers($this->engine);
+                break;
+            case 'misSolicitudes-alumno':
+                $solicitudManage = new SolicitudController();
+                $solicitudManage->renderApplied($this->engine);
+                break;
             default:
                 header('Location: ?menu=alumno-dashboard'); 
                 break;
@@ -151,6 +155,14 @@ class Router
             case 'empresa-dashboard':
                 $empresaManage = new EmpresaController();
                 $empresaManage->renderDashboard($this->engine);
+                break;
+            case 'create-oferta':
+                $ofertaManage = new OfertaController();
+                $ofertaManage->renderAddOferta($this->engine);
+                break;
+            case 'mis-ofertas':
+                $ofertaManage = new OfertaController();
+                $ofertaManage->renderMyOffers($this->engine);
                 break;
             default:
                 header('Location: ?menu=empresa-dashboard'); 

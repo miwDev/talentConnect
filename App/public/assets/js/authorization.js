@@ -1,31 +1,11 @@
 window.addEventListener("load", function(){
 
     const togglePass = this.document.getElementById("toggle-password");
-    const divEducacion = this.document.getElementById("divEducacion");
-    const selFamilias = this.document.getElementById("familia");
     const btnCamara = this.document.getElementById("cameraModal");
     const btnFoto = this.document.getElementById("uploadPicture");
     const subirCV = this.document.getElementById("uploadCV");
-    const btnRegister = this.document.getElementById("envioRegistro");
 
     new FormularioManager("formulario");
-
-
-    //metodos
-
-    function populateSelect(selectElement, dataArray) {
-        dataArray.forEach(item => {
-            const option = document.createElement("option");
-            
-            option.value = item.id;
-        
-            option.textContent = item.nombre;
-
-            selectElement.appendChild(option);
-        });
-    }
-
-    //eventos
 
     togglePass.addEventListener("click", function() {
         const password = document.getElementById("password");
@@ -37,102 +17,235 @@ window.addEventListener("load", function(){
         }
     });
 
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "-1";
-    defaultOption.textContent = "--- Seleccione Familia ---";
-    defaultOption.selected = true;
+    let educationCounter = 0;
+    const divEducacionContainer = this.document.getElementById("divEducacion");
 
-    fetch('/API/ApiFamilia.php', {
-            method: 'GET'
-        })
-        .then((x)=>x.json())
-        .then((json)=>populateSelect(selFamilias, json));
+    function populateSelect(selectElement, dataArray) {
+        dataArray.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = item.nombre;
+            selectElement.appendChild(option);
+        });
+    }
 
-    selFamilias.appendChild(defaultOption);
+    function createAndAppendEducationRow() {
+        
+        const currentIndex = educationCounter; 
 
-    const divCiclos = document.createElement("div");
-    divCiclos.className = "form-group half-width";
+        const row = document.createElement("div");
+        row.className = "form-row education-colum";
 
-    const labelCiclos = document.createElement("label");
-    labelCiclos.textContent = "Ciclo:";
-    labelCiclos.htmlFor = "ciclo";
-    labelCiclos.style.visibility = 'hidden';
-    
-    const selCiclos = document.createElement("select");
-    selCiclos.id = "ciclo";
-    selCiclos.name = "ciclo";
-    selCiclos.className = "form-select";
-    selCiclos.style.visibility = 'hidden'; 
+        const dateRow = document.createElement("div");
+        dateRow.className = "form-row education-dates";
+        dateRow.style.display = "none"; 
 
-    const defaultOption1 = document.createElement("option");
-    defaultOption1.value = "-1";
-    defaultOption1.textContent = "--- Seleccione Ciclo ---";
-    defaultOption1.selected = true;
+        const divSelectsWrapper = document.createElement("div");
+        divSelectsWrapper.className = "education-selects-wrapper"; 
 
-    selCiclos.appendChild(defaultOption1);
-
-    const errorCiclo = document.createElement("div");
-    errorCiclo.className = "input-error-message";
-    errorCiclo.id = "error-ciclo";
-    errorCiclo.style.visibility = 'hidden';
-
-    selCiclos.addEventListener("change", function(){
-        const errorCiclo = document.getElementById("error-ciclo");
-        errorCiclo.textContent = ""; 
-    });
+        const divAdd = document.createElement("div");
+        divAdd.className = "form-group education-buttons-group";
 
 
-    selFamilias.addEventListener("change", function(){
-        const errorFamilia = document.getElementById("error-familia");
-        errorFamilia.textContent = "";
+        const divFamilia = document.createElement("div");
+        divFamilia.className = "form-group half-width";
 
-        if (this.value === "-1") {
-            labelCiclos.style.visibility = "hidden";
-            selCiclos.style.visibility = "hidden";
-            errorCiclo.style.visibility = "hidden";
-            
-            selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
-            return;
+        const labelFamilia = document.createElement("label");
+        labelFamilia.textContent = "Familia Profesional";
+        labelFamilia.htmlFor = "familia_" + currentIndex;
+
+        const selFamilias = document.createElement("select");
+        selFamilias.id = "familia_" + currentIndex;
+        selFamilias.name = "familia[" + currentIndex + "]"; 
+        selFamilias.className = "form-select";
+        selFamilias.innerHTML = '<option value="-1" selected>--- Seleccione Familia ---</option>';
+
+        const errorFamilia = document.createElement("div");
+        errorFamilia.className = "input-error-message";
+        errorFamilia.id = "error-familia_" + currentIndex;
+
+        divFamilia.appendChild(labelFamilia);
+        divFamilia.appendChild(selFamilias);
+        divFamilia.appendChild(errorFamilia);
+
+        const divCiclos = document.createElement("div");
+        divCiclos.className = "form-group half-width";
+
+        const labelCiclos = document.createElement("label");
+        labelCiclos.textContent = "Ciclo:";
+        labelCiclos.htmlFor = "ciclo_" + currentIndex;
+        labelCiclos.style.visibility = 'hidden';
+        
+        const selCiclos = document.createElement("select");
+        selCiclos.id = "ciclo_" + currentIndex;
+        selCiclos.name = "ciclo[" + currentIndex + "]"; 
+        selCiclos.className = "form-select";
+        selCiclos.style.visibility = 'hidden'; 
+        selCiclos.innerHTML = '<option value="-1" selected>--- Seleccione Ciclo ---</option>';
+
+        const errorCiclo = document.createElement("div");
+        errorCiclo.className = "input-error-message";
+        errorCiclo.id = "error-ciclo_" + currentIndex;
+        errorCiclo.style.visibility = 'hidden';
+
+        divCiclos.appendChild(labelCiclos);
+        divCiclos.appendChild(selCiclos);
+        divCiclos.appendChild(errorCiclo);
+
+        const labelFantasma = document.createElement("label");
+        labelFantasma.style.visibility = "hidden";
+        labelFantasma.textContent = "Botones";
+        divAdd.appendChild(labelFantasma);
+
+        const buttonWrapper = document.createElement("div");
+        buttonWrapper.className = "education-buttons-wrapper";
+
+        const spanAdd = document.createElement("span");
+        spanAdd.id = "btnAddEstudios_" + currentIndex;
+        spanAdd.className = "add-estudios";
+        
+        const spanSubtract = document.createElement("span");
+        spanSubtract.id = "btnSubtractEstudios_" + currentIndex;
+        spanSubtract.className = "subtract-estudios";
+        
+        if (currentIndex === 0) {
+            spanSubtract.style.visibility = "hidden";
         }
 
-        const familyId = this.value;
-
-        fetch('/API/ApiCiclo.php?familia=' + familyId, {
-            method: 'GET'
-        })
-        .then((x)=>x.json())
-        .then((json)=>{
-            
-            selCiclos.innerHTML = '';
-            const defaultOption = document.createElement("option");
-            defaultOption.value = "-1";
-            defaultOption.textContent = "--- Seleccione Ciclo ---";
-            defaultOption.selected = true;
-            selCiclos.appendChild(defaultOption);
-
-            
-            populateSelect(selCiclos, json);
-
-            labelCiclos.style.visibility = "visible";
-            selCiclos.style.visibility = "visible";
-            errorCiclo.style.visibility = "visible";
-        })
-        .catch(error => {
-            console.error('Error al cargar ciclos:', error);
-            selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
-            errorCiclo.textContent = "Error al cargar los ciclos. Intente nuevamente.";
+        spanSubtract.addEventListener("click", function() {
+            row.remove();
+            dateRow.remove();
         });
-    });
 
-    divCiclos.appendChild(labelCiclos);
-    divCiclos.appendChild(selCiclos);
-    divCiclos.appendChild(errorCiclo);
+        buttonWrapper.appendChild(spanAdd);
+        buttonWrapper.appendChild(spanSubtract); 
+        divAdd.appendChild(buttonWrapper);
 
-    divEducacion.appendChild(divCiclos);
+        const errorFantasma = document.createElement("div");
+        errorFantasma.className = "input-error-message";
+        divAdd.appendChild(errorFantasma);
+        // --- Fin Contenido de divAdd ---
 
+
+        const divStartDate = document.createElement("div");
+        divStartDate.className = "form-group half-width"; 
+
+        const labelStartDate = document.createElement("label");
+        labelStartDate.htmlFor = "fecha_inicio_" + currentIndex;
+        labelStartDate.textContent = "Fecha inicio";
+
+        const inputStartDate = document.createElement("input");
+        inputStartDate.type = "text";
+        inputStartDate.id = "fecha_inicio_" + currentIndex;
+        inputStartDate.name = "fecha_inicio[" + currentIndex + "]";
+        inputStartDate.placeholder = "YYYY-MM-DD";
+        // inputStartDate.required = true; // <-- ESTA LÍNEA CAUSA EL ERROR. ELIMINADA.
+
+        // --- AÑADIDO: Span de error para Fecha Inicio ---
+        const errorStartDate = document.createElement("div");
+        errorStartDate.className = "input-error-message";
+        errorStartDate.id = "error-fecha_inicio_" + currentIndex;
+
+        divStartDate.appendChild(labelStartDate);
+        divStartDate.appendChild(inputStartDate);
+        divStartDate.appendChild(errorStartDate); // --- AÑADIDO ---
+
+        const divEndDate = document.createElement("div");
+        divEndDate.className = "form-group half-width"; 
+
+        const labelEndDate = document.createElement("label");
+        labelEndDate.htmlFor = "fecha_fin_" + currentIndex;
+        labelEndDate.textContent = "Fecha fin";
+
+        const inputEndDate = document.createElement("input");
+        inputEndDate.type = "text";
+        inputEndDate.id = "fecha_fin_" + currentIndex;
+        inputEndDate.name = "fecha_fin[" + currentIndex + "]";
+        inputEndDate.placeholder = "YYYY-MM-DD";
+
+        // --- AÑADIDO: Span de error para Fecha Fin ---
+        const errorEndDate = document.createElement("div");
+        errorEndDate.className = "input-error-message";
+        errorEndDate.id = "error-fecha_fin_" + currentIndex;
+
+        divEndDate.appendChild(labelEndDate);
+        divEndDate.appendChild(inputEndDate);
+        divEndDate.appendChild(errorEndDate); // --- AÑADIDO ---
+
+
+        dateRow.appendChild(divStartDate);
+        dateRow.appendChild(divEndDate);
+
+        spanAdd.addEventListener("click", function() {
+            spanAdd.style.visibility = "hidden";
+            createAndAppendEducationRow();
+        });
+
+        selFamilias.addEventListener("change", function(){
+            errorFamilia.textContent = "";
+            dateRow.style.display = "none"; 
+
+            if (this.value === "-1") {
+                labelCiclos.style.visibility = "hidden";
+                selCiclos.style.visibility = "hidden";
+                errorCiclo.style.visibility = "hidden";
+                selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
+                spanAdd.style.visibility = "hidden"; 
+                spanSubtract.style.visibility = "hidden"; 
+                return;
+            }
+
+            const familyId = this.value;
+            fetch('/API/ApiCiclo.php?familia=' + familyId)
+                .then(x => x.json())
+                .then(json => {
+                    selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
+                    populateSelect(selCiclos, json);
+
+                    labelCiclos.style.visibility = "visible";
+                    selCiclos.style.visibility = "visible";
+                    errorCiclo.style.visibility = "visible";
+                    
+                    spanAdd.style.visibility = "visible"; 
+                    if (currentIndex > 0) {
+                        spanSubtract.style.visibility = "visible"; 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar ciclos:', error);
+                    selCiclos.innerHTML = '<option value="-1">Error al cargar</option>';
+                    errorCiclo.textContent = "Error al cargar los ciclos.";
+                });
+        });
+        
+        selCiclos.addEventListener("change", function(){
+            errorCiclo.textContent = ""; 
+            
+            if (this.value !== "-1") {
+                dateRow.style.display = "flex"; 
+            } else {
+                dateRow.style.display = "none";
+            }
+        });
+
+        fetch('/API/ApiFamilia.php', { method: 'GET' })
+            .then(x => x.json())
+            .then(json => populateSelect(selFamilias, json));
+
+        divSelectsWrapper.appendChild(divFamilia);
+        divSelectsWrapper.appendChild(divCiclos);
+
+        row.appendChild(divSelectsWrapper);
+        row.appendChild(divAdd);
+        
+        divEducacionContainer.appendChild(row); 
+        divEducacionContainer.appendChild(dateRow); 
+
+        educationCounter++;
+    }
+
+    createAndAppendEducationRow();
     
-
-
     btnCamara.addEventListener("click", function(){
         crearModal();
         const modalContent = document.getElementById("modalContent");

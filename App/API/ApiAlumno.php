@@ -77,7 +77,7 @@ function getFullList()
 }
 
 function getProfilePic($authHeaderValue){
-    $alumnoDTO = Adapter::getDTOByToken($authHeaderValue);
+    $alumnoDTO = Adapter::getAlumnoDTObyToken($authHeaderValue);
 
     if($alumnoDTO){
         header('Content-Type: application/json');
@@ -124,7 +124,7 @@ function saveFullAlumno(){
 
         if($alumnoId !== false){
 
-            $authData = Authorization::registeredUser($alumnoId);
+            $authData = Authorization::registeredAlumno($alumnoId);
 
             if($authData){
                 Session::setSession($authData);
@@ -173,15 +173,46 @@ function deleteAlumno($body)
 {
     $data = json_decode($body, true);
     $id = $data['id'];
+
+    $usuario = AlumnoRepo::findById($id);
+
+    if (!$usuario) {
+        header('Content-Type: application/json');
+        http_response_code(404);
+        echo json_encode(['success' => false, 'error' => 'Student not found']);
+        return;
+    }
+
+    $rutaFoto = $usuario->foto;
+    $rutaCv = $usuario->cv;
+    $basePath = __DIR__ . '/../public';
+
+    if ($rutaFoto && $rutaFoto !== '/assets/images/genericAvatar.svg') {
+        $fullFotoPath = $basePath . $rutaFoto;
+        
+        if (file_exists($fullFotoPath)) {
+            unlink($fullFotoPath);
+        }
+    }
+
+    if ($rutaCv) {
+        $fullCvPath = $basePath . $rutaCv;
+        
+        if (file_exists($fullCvPath)) {
+            unlink($fullCvPath);
+        }
+    }
+    
     if (AlumnoRepo::deleteById($id)) {
         header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode(['success' => true]);
     } else {
         header('Content-Type: application/json');
-        http_response_code(404);
-        echo json_encode(['success' => false, 'error' => 'Student not found']);
-    };
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Error deleting student from database']);
+    }
+    
 }
 
 function editAlumno($body)

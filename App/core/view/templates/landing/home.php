@@ -64,10 +64,26 @@ $this->layout('layout/layout', [
                     Nuestras empresas
                 </h2>
             </div>
+            
             <div class="companies-container">
-                <h1 class="placeholder" style="color: #FFFFE9;">carrusel en proceso</h1>
+                <div class="logo-slider">
+                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
+                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
+                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
+                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
+                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
+
+                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
+                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
+                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
+                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
+                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
+                </div>
             </div>
-        </div>
+            </div>
+    </section>
+
+    </div>
     </section>
 
     <section id="section3">

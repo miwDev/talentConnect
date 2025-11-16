@@ -88,13 +88,7 @@ $this->layout('layout/layout', [
                         </div>
                     </div>
 
-                    <div class="form-row education-colum" id="divEducacion">
-                        <div class="form-group half-width">
-                            <label for="familia">Familia Profesional</label>
-                            <select id="familia" name="familia" class="form-select">
-                            </select>
-                            <span id="error-familia" class="input-error-message"></span>
-                        </div>
+                    <div id="divEducacion" class="education-container">
                     </div>
 
                     <div class="form-actions">

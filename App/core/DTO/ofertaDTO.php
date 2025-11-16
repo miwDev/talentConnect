@@ -2,25 +2,21 @@
 
 namespace App\core\DTO;
 
-class EmpresaDTO
+class OfertaDTO
 {
     private $id;
-    private $cif;
-    private $nombre;
-    private $email;
-    private $telefono;
-    private $logo;
-    private $validated;
+    private $empresaId;
+    public $ciclos = []; // Array de IDs de ciclos
+    private $fechaCreacion;
+    private $titulo;
 
-    public function __construct($id, $cif, $nom, $email, $tel, $logo, $val)
+    public function __construct($id, $empresaId, $ciclos, $fechaCreacion, $titulo)
     {
         $this->id = $id;
-        $this->cif = $cif;
-        $this->nombre = $nom;
-        $this->email = $email;
-        $this->telefono = $tel;
-        $this->logo = $logo;
-        $this->validated = $val;
+        $this->empresaId = $empresaId;
+        $this->ciclos = $ciclos;
+        $this->fechaCreacion = $fechaCreacion;
+        $this->titulo = $titulo;
     }
 
     public function __get($propiedad)

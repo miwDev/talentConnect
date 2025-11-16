@@ -1,6 +1,6 @@
 window.addEventListener("load", function(){
 
-    const togglePass = this.document.getElementById("toggle-password");
+    const togglePass = document.getElementById("toggle-password");
 
     togglePass.addEventListener("click", function() {
         const password = document.getElementById("password");

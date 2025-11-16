@@ -9,6 +9,11 @@
     7. REGISTER EMPRESA CONTENT
     8. ERROR STYLES
     9. ADMIN STYLES
+    10. ESTILOS PARA FORMULARIO DE CREACIÓN DE OFERTA
+    11. ESTILOS PARA TARJETA DE OFERTA <--- AQUÍ ESTÁ EL CAMBIO
+    12. ESTILOS DE BARRA DE BÚSQUEDA (MIS OFERTAS)
+    13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column)
+    14. ESTILOS PARA TARJETA DE SOLICITUD <--- ¡NUEVO BLOQUE!
 
 */
 
@@ -221,6 +226,7 @@ header {
 /* AJUSTE: Mantiene imagen y texto a la misma altura y separados */
 .pfp-username{
     display: flex;
+    margin-top: 0.585em;
     align-items: center;
     gap: 15px; 
 }
@@ -376,24 +382,75 @@ header {
 
 /* SECTION 2 - Placeholder con fondo oscuro */
 
-#section2{
+/* SECTION 2 - Carrusel de empresas */
+
+#section2 {
     background-color: #191919;
     border-radius: 2em;
     position: relative;
     z-index: 2;
+    padding-bottom: 4em; /* Añadimos espacio inferior */
+    overflow: hidden; /* Ocultamos lo que se salga */
 }
 
-h2{
+/* Hacemos este H2 más específico */
+#section2 h2 {
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
     padding: 1.5em;
+    padding-bottom: 1em; /* Menos padding para acercar el carrusel */
     color: #FFFFE9;
+    margin: 0;
 }
 
-.placeholder{
-    text-align: center;
-    padding: 3em
+/* Contenedor principal del carrusel */
+.companies-container {
+    width: 100%;
+    overflow: hidden;
+    /* Efecto de máscara para que los logos desaparezcan suavemente en los bordes */
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+    );
+}
+
+.logo-slider {
+    display: flex;
+    width: fit-content;
+    animation: scroll 40s linear infinite;
+    padding: 75px;
+}
+
+/* Estilo para cada logo */
+.logo-slider img {
+    height: 230px;
+    width: auto;
+    margin: 0 45px;
+    border-radius: 12px;
+    border: 3px solid #505050;
+    transition: filter 0.3s ease;
+}
+
+/* Definición de la animación */
+@keyframes scroll {
+    0% {
+        /* Posición inicial */
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 /* SECTION 3 - Call to Action (CTA) */
@@ -676,3 +733,871 @@ footer > div:last-child {
 .sidebar-footer a:hover {
     color: #EBD3FD;
 }
+
+
+
+/* 10. ESTILOS PARA FORMULARIO DE CREACIÓN DE OFERTA */
+
+body:has(.list-container) {
+    background-color: #16443D;
+}
+
+/* Contenedor principal del formulario, basado en .s3-container */
+.list-container {
+    background-color: #FFFFE9;
+    border: 1.5px solid #191919;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em; /* Radio de .s3-container */
+    padding: 2.5em 3em;
+    margin: 3em auto; /* Centrado */
+    max-width: 900px;
+    font-family: 'Libre Baskerville', serif; /* Fuente global */
+    color: #191919;
+}
+
+/* Sección de la cabecera (título y var_dump) */
+.list-container .header-section {
+    text-align: center;
+    margin-bottom: 2.5em;
+    padding-bottom: 1.5em;
+}
+
+/* Título H1, basado en .feature-text h3 y .section1-title */
+.list-container .header-section h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5em; /* Tamaño intermedio */
+    color: #191919;
+    margin: 0;
+}
+
+/* Estilo para el var_dump (si está activo) */
+.list-container .header-section pre {
+    background-color: #fefdf8;
+    border: 1px solid #191919;
+    padding: 10px;
+    border-radius: 0.68em;
+    font-family: monospace;
+    text-align: left;
+    margin-top: 1.5em;
+    overflow-x: auto; /* Para volcados de datos grandes */
+}
+
+/* Grid del formulario */
+.list-container .form-grid {
+    display: grid;
+    /* Columnas: Etiqueta (tamaño auto) | Campo (ocupa el resto) */
+    grid-template-columns: auto 1fr;
+    gap: 1.5em 1.2em; /* 1.5em entre filas, 1.2em entre columnas */
+    align-items: center; /* Centra verticalmente etiqueta y campo */
+}
+
+/* Etiquetas del formulario */
+.list-container .form-grid label {
+    font-family: 'Poppins', sans-serif; /* Fuente de UI */
+    font-size: 1.1em;
+    font-weight: 600; /* Basado en #logo p */
+    color: #191919;
+    text-align: right; /* Alinea a la derecha para un look limpio */
+}
+
+/* Campos de texto, textarea y select */
+.list-container .form-grid input[type="text"],
+.list-container .form-grid textarea,
+.list-container .form-grid select {
+    width: 100%;
+    padding: 0.7em 1em; /* Basado en #nav li padding */
+    border: 3px solid #191919; /* Basado en .user-area */
+    border-radius: 0.6875em; /* Basado en .a-section3 */
+    background-color: #FEFDF8; /* Basado en .user-area:hover */
+    font-family: 'Libre Baskerville', serif; /* Fuente de contenido */
+    font-size: 1.1em;
+    color: #191919;
+    box-sizing: border-box; /* Clave para que padding no rompa el 100% */
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* Estilo específico para textarea */
+.list-container .form-grid textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Estilo para los placeholders */
+.list-container .form-grid input::placeholder,
+.list-container .form-grid textarea::placeholder {
+    color: #505050;
+    opacity: 0.8;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+}
+
+/* Ajustes para el grupo de 'selects' (CICLOS) */
+.list-container .form-grid .select-group-label {
+    align-self: start; /* Alinea la etiqueta arriba */
+    padding-top: 0.7em; /* Coincide con el padding del select */
+}
+
+.list-container .form-grid .select-group {
+    display: flex;
+    gap: 1em;
+    width: 100%;
+}
+
+.list-container .form-grid .select-group select {
+    width: 50%;
+}
+
+/* Contenedor de botones */
+.list-container .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-top: 2.5em;
+    padding-top: 2em;
+    border-top: 2px solid #505050;
+}
+
+/* Estilo de botones, basado en .a-section3 */
+.list-container .button-container input[type="submit"] {
+    background-color: #EBD3FD; 
+    color: #191919;
+    padding: 0.7em 3em;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3em;
+    font-weight: 500;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Hover para el botón principal */
+.list-container .button-container input[type="submit"]:hover {
+    background-color: #d7b4f2; /* Color de .a-section3:hover */
+}
+
+/* Estilo específico para el botón Cancelar */
+.list-container .button-container input#btnCancelar {
+    background-color: #fef8f8; /* Color neutro de la paleta */
+    border-color: #505050;
+}
+
+.list-container .button-container input#btnCancelar:hover {
+    border-color: #191919;
+}
+
+
+/* 11. ESTILOS PARA TARJETA DE OFERTA */
+
+/* Contenedor principal de la tarjeta.
+   Usa colores de la paleta (#FEFDF8, #191919) 
+*/
+.list-container .oferta-card {
+    background-color: #FEFDF8;
+    border: 2px solid #191919;
+    border-radius: 0.6875em; /* Radio estándar de la paleta */
+    margin-bottom: 2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden; /* Para contener los bordes redondeados */
+    font-family: 'Libre Baskerville', serif;
+}
+
+/* Div para el contenido (padding) */
+.list-container .card-content {
+    padding: 1.5em;
+}
+
+/* === MODIFICACIÓN: Contenedor de la información de la compañía (Logo + Texto) === */
+.list-container .card-CompanyInfo {
+    display: flex; /* Habilitamos Flexbox */
+    align-items: center; /* Alineamos verticalmente al centro */
+    gap: 0.75em; /* Espacio entre el logo y el texto */
+    margin-bottom: 1em; /* Espacio debajo de este bloque */
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #50505030; /* Línea separadora suave */
+}
+
+/* Estilo para el logo */
+.list-container .card-CompanyInfo img {
+    width: 35px; /* Tamaño del logo */
+    height: 35px;
+    object-fit: contain;
+    flex-shrink: 0; /* Evita que la imagen se encoja */
+}
+
+/* Estilo para el nombre de la empresa */
+.list-container .card-CompanyInfo p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    color: #505050; /* Color más sutil para el nombre genérico */
+    margin: 0; /* Quitamos márgenes por defecto del párrafo */
+    line-height: 1.2;
+}
+/* ============================================================================== */
+
+
+/* Cabecera: Título y Fecha (flex) */
+.list-container .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1em;
+    border-bottom: 1px solid #505050; /* Color de borde sutil */
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+}
+
+.list-container .card-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #191919;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.list-container .card-fecha-fin {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: 700;
+    color: #E53E3E; /* Rojo para la fecha, como pediste */
+    background-color: #fef8f8;
+    border: 1px solid #E53E3E;
+    padding: 0.25em 0.5em;
+    border-radius: 0.68em;
+    white-space: nowrap; /* Evita que se parta la fecha */
+    flex-shrink: 0;
+}
+
+/* Cuerpo: Descripción */
+.list-container .card-body {
+    margin-bottom: 1.5em;
+}
+
+.list-container .card-descripcion {
+    color: #191919;
+    font-size: 1em;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Pie: Salario y Ciclos (flex) */
+.list-container .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+}
+
+.list-container .card-salario {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #FFFFE9; /* Color de letra claro */
+    background-color: #16443D; /* Verde oscuro de la paleta */
+    padding: 0.25em 0.75em; /* Padding para crear el recuadro */
+    border-radius: 0.6875em; /* Radio estándar */
+    white-space: nowrap; /* Evitar que se parta */
+}
+
+/* Ciclos a la derecha */
+.list-container .card-ciclos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25em;
+}
+
+.list-container .ciclo-tag {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500;
+    background-color: #EBD3FD; /* Morado de la paleta */
+    color: #191919;
+    padding: 0.25em 0.75em;
+    border-radius: 0.68em;
+}
+
+/* --- ESTILOS DE BOTONES --- */
+
+/* Contenedor de acciones (flex) */
+.list-container .card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Usamos un color de fondo ligeramente distinto */
+    background-color: #F8F6F0; 
+    padding: 1em 1.5em;
+    border-top: 2px solid #191919;
+}
+
+.list-container .actions-left {
+    display: flex;
+    gap: 0.5em;
+}
+
+/* Estilo base del botón (copiado de tus botones de formulario) */
+.list-container .card-btn {
+    background-color: #EBD3FD; 
+    color: #191919;
+    padding: 0.5em 1em; /* Un poco más pequeños para la tarjeta */
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 500;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    line-height: 1.2;
+}
+
+.list-container .card-btn:hover {
+    background-color: #d7b4f2;
+}
+
+/* Botón Editar (estilo secundario) */
+.list-container .btn-edit {
+    background-color: #FEFDF8; /* Blanco de la paleta */
+    border-color: #505050;
+}
+.list-container .btn-edit:hover {
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+/* Botón Aplicar (estilo secundario) */
+.list-container .btn-apply {
+    background-color: #FEFDF8; /* Blanco de la paleta */
+    border-color: #505050;
+}
+.list-container .btn-apply:hover {
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+.applied-success-message {
+    color: #4CAF50; 
+    font-weight: bold; 
+    font-size: 1.1em; 
+    padding: 10px 15px; 
+    text-align: center; 
+    border: 1px solid #c8e6c9; 
+    background-color: #e8f5e9; 
+    border-radius: 5px; 
+    display: block; 
+    margin-top: 5px; 
+}
+
+/* Botón Eliminar (estilo de peligro) */
+.list-container .btn-delete {
+    background-color: #FEFDF8; /* Color #FEFDF8 (Blanco/Crema) */
+    color: #191919; /* Texto oscuro */
+    border-color: #191919; /* Borde oscuro */
+    
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em 1em; 
+}
+
+ .list-container .btn-delete {
+    background-color: #E53E3E; /* Rojo */
+    color: #FFFFE9;
+    border-color: #E53E3E;
+}
+
+.list-container .btn-delete:hover {
+    background-color: #C53030;
+    border-color: #C53030;
+    color: #FFFFE9;
+} 
+
+/* Icono por defecto (fav.svg) */
+.list-container .btn-fav::before {
+    content: ''; /* El content ahora está vacío, usaremos background-image */
+    width: 1.6em; /* Ancho deseado para el icono (ej. 1.2 veces el tamaño de la fuente del botón) */
+    height: 1.6em; /* Alto deseado para el icono */
+    display: inline-block;
+    
+    /* Cargar la imagen SVG como fondo */
+    background-image: url('/public/assets/images/fav.svg');
+    background-size: contain; /* Ajusta la imagen dentro de las dimensiones del pseudo-elemento */
+    background-repeat: no-repeat;
+    background-position: center; /* Centra el icono por si las moscas */
+    
+    /* Eliminar el borde y padding por si acaso (del botón) */
+    border: none; 
+    padding: 0;
+    margin-top: 5px;
+    line-height: 1; /* Para ayudar a la alineación vertical si el texto es variable */
+}
+
+#idEmpresa{
+    display: none;
+}
+
+.list-container .btn-fav:hover {
+    background-color: #EBD3FD; /* Cambia a color Morado (#EBD3FD) */
+    border-color: #191919;
+    color: #191919;
+}
+
+/* Icono al pasar el ratón (faved.svg) */
+.list-container .btn-fav:hover::before {
+    background-image: url('/public/assets/images/faved.svg'); /* Cambia la imagen de fondo */
+}
+
+/* 12. ESTILOS DE BARRA DE BÚSQUEDA (MIS OFERTAS) */
+
+.list-container .search-bar-container {
+    position: relative; /* Clave para posicionar el icono */
+    width: 350px; /* Ancho "normal" para la barra de búsqueda */
+    max-width: 100%; /* Para que sea responsive en pantallas pequeñas */
+    margin-bottom: 2em; /* <-- Espacio movido aquí */
+}
+
+/* Estilo basado en tus inputs de formulario */
+.list-container .search-input {
+    width: 100%;
+    /* Padding: 1em izq, 2.5em dcha (para icono) */
+    padding: 0.7em 2.5em 0.7em 1em; 
+    /* margin-bottom: 25px; <-- ELIMINADO DE AQUÍ */
+    border: 3px solid #191919; 
+    border-radius: 0.6875em; 
+    background-color: #FEFDF8; 
+    font-family: 'Libre Baskerville', serif; 
+    font-size: 1.1em;
+    color: #191919;
+    box-sizing: border-box; /* Importante */
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.list-container .search-input:focus {
+    outline: none;
+    border-color: #EBD3FD; /* Color de acento de la paleta */
+}
+
+/* Placeholder con tu estilo */
+.list-container .search-input::placeholder {
+    color: #505050;
+    opacity: 0.8;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+}
+
+/* Icono de la lupa */
+.list-container .search-icon {
+    position: absolute;
+    right: 1em; /* Posición del icono */
+    top: 50%;   /* <-- Ahora esto funcionará bien */
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    pointer-events: none; /* Permite hacer clic en el input "a través" del icono */
+}
+
+#hiddenBuscar{
+    display: none;
+}
+
+/* 13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column) */
+
+/* 1. Contenedor para la fila Título/Fecha.
+   Ocupa las 2 columnas del grid principal.
+*/
+.list-container .form-grid .form-row-full {
+    grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+    display: flex;
+    gap: 1.2em; /* Mismo 'gap' que el grid principal */
+}
+
+/* 2. Grupo de input (label + input) dentro de la fila flex.
+   Cada uno ocupa la mitad.
+*/
+.list-container .form-grid .form-group-half {
+    flex: 1; /* Crece para ocupar el espacio */
+    min-width: 0; 
+}
+
+/* 3. Estilos para labels e inputs DENTRO del .form-group-half.
+   (Para que el label esté ENCIMA del input)
+*/
+.list-container .form-grid .form-group-half label {
+    /* Sobrescribe el 'text-align: right' del grid principal */
+    text-align: left; 
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #191919;
+    display: block; /* Ocupa su propia línea */
+    margin-bottom: 0.5em; /* Espacio antes del input */
+}
+
+.list-container .form-grid .form-group-half input {
+    /* El input debe usar el 100% de su contenedor */
+    width: 100%; 
+    
+    /* Copiamos los estilos del input principal (Bloque 10) */
+    padding: 0.7em 1em;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    background-color: #FEFDF8;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    box-sizing: border-box; 
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* 4. Estilos para los campos que siguen en columna 
+      (Descripción, Salario, Ciclos)
+*/
+
+/* Para la Descripción (Label + Textarea) */
+.list-container .form-grid .form-span-label {
+    grid-column: 1 / -1; /* Etiqueta ocupa todo el ancho */
+    text-align: left;
+    margin-bottom: -1em; 
+}
+
+.list-container .form-grid .form-span-input {
+     grid-column: 1 / -1; /* Textarea ocupa todo el ancho */
+}
+
+/* Para los Ciclos (Label) */
+.list-container .form-grid .select-group-label {
+    align-self: start; 
+    padding-top: 0.7em; 
+}
+
+
+/*ESTILOS MODAL DE APLICACION*/
+
+.velo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1005;
+}
+
+
+/* MODAL MÁS GRANDE Y ESPACIOS ADAPTADOS */
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80em;
+    max-height: 90vh;
+    min-width: 600px;
+    min-height: 500px;
+    height: auto;
+    overflow-y: auto;
+    background: #FFFFE9;
+    border: 3px solid #191919;
+    z-index: 1006;
+    box-shadow: 0 4px 28px rgba(0,0,0,0.32);
+    padding: 48px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border-radius: 2em;
+}
+
+#modalContent h2 {
+color: #191919;
+font-family: 'Poppins', sans-serif;
+font-size: 1.8em;
+margin: 0 0 30px 0;
+font-weight: 800;
+text-align: center;
+}
+
+#cerrarModal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #EBD3FD;
+    color: #191919;
+    border: 3px solid #191919;
+    border-radius: 0.5em;
+    width: 38px;
+    height: 38px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1.2em;
+    z-index: 1010;
+}
+
+
+
+#cerrarModal:hover {
+background: #d7b4f2;
+}
+
+/* ESTILOS ESPECÍFICOS PARA EL CONTENIDO DEL MODAL (USANDO CLASES) */
+
+/* Contenedor principal del cuerpo del modal */
+.modal-body-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+    gap: 30px; 
+}
+
+/* === Cabecera del Modal (Título, Logo y Nombre de Empresa) === */
+.modal-header-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    border-bottom: 2px solid #505050; 
+    padding-bottom: 20px;
+    margin-bottom: 10px; 
+}
+
+/* Estilo para el Envoltorio del Título de la Oferta */
+.modal-title-wrapper {
+    flex-grow: 1; 
+    margin: 0;
+    text-align: left;
+    max-width: 60%; 
+}
+
+.modal-title-wrapper h2 {
+    /* Título H2 */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #191919;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Contenedor del Logo y Nombre de la Empresa */
+.modal-company-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0; 
+}
+
+/* El logo de la empresa ya tiene la clase .companyPfp por defecto */
+.modal-company-info .companyPfp {
+    width: 75px; 
+    height: 75px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* El nombre de la empresa ya tiene la clase .companyName por defecto */
+.modal-company-info .companyName {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em;
+    font-weight: 600;
+    color: #191919;
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* === Cuerpo del Modal (Área de Comentarios) === */
+.modal-body-comments {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Etiqueta/Título de Comentarios */
+.modal-body-comments::before {
+    content: "Añade tu Comentario de Aplicación";
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #191919;
+    margin-bottom: 15px;
+    display: block;
+    text-align: left;
+}
+
+/* Textarea de Comentarios */
+.modal-textarea {
+    width: 90%;
+    flex-grow: 1; 
+    min-height: 220px; 
+    
+    padding: 1em;
+    margin-bottom: 50px;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    background-color: #FEFDF8;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    box-sizing: border-box;
+    resize: vertical; 
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.modal-textarea:focus {
+    outline: none;
+    border-color: #EBD3FD;
+}
+
+/* Estilo para el placeholder */
+.modal-textarea::placeholder {
+    color: #505050;
+    opacity: 0.8;
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+}
+
+/* === Pie del Modal (Botones) === */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 20px;
+    padding-top: 30px;
+    border-top: 2px solid #50505030;
+    margin-top: auto; 
+}
+
+/* Estilo base para los botones */
+.btn-confirm,
+.btn-cancel {
+    padding: 0.7em 2em;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+/* Botón Confirmar (Estilo principal/Morado) */
+.btn-confirm {
+    background-color: #EBD3FD; 
+    color: #191919;
+}
+
+.btn-confirm:hover {
+    background-color: #d7b4f2;
+}
+
+/* Botón Cancelar (Estilo secundario/Claro) */
+.btn-cancel {
+    background-color: #FEFDF8; 
+    color: #191919;
+    border-color: #505050;
+}
+
+.btn-cancel:hover {
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+/* 14. ESTILOS PARA TARJETA DE SOLICITUD */
+
+/* Contenedor principal para la lista de solicitudes (cambiado a flujo vertical) */
+.solicitudes-grid {
+    /* Eliminamos el display: grid para volver al flujo normal (vertical) */
+    display: block; 
+    width: 100%;
+    box-sizing: border-box;
+    /* Agregamos el espacio vertical entre tarjetas */
+}
+
+/* Estilos de la tarjeta de Solicitud (Hereda de .oferta-card) */
+.misSolicitudes-card {
+    /* Asegura que la tarjeta ocupe el ancho completo de su contenedor (solicitudes-grid) */
+    width: 100%;
+    /* Añade espacio después de cada tarjeta para separarlas verticalmente */
+    margin-bottom: 2em; 
+    /* El ancho de la tarjeta es ajustado aquí para que no se vea demasiado ancha
+       asumiendo que .list-container tiene un max-width. */
+    max-width: 900px; /* Limita el ancho como un list-container/oferta típica */
+    margin-left: auto; /* Centra la tarjeta */
+    margin-right: auto; /* Centra la tarjeta */
+}
+
+/* === AJUSTES DE CONTENIDO DENTRO DE LA TARJETA SOLICITUD === */
+
+/* Ajuste específico para la Fecha de Solicitud (reemplaza a card-fecha-fin) */
+.misSolicitudes-card .card-fecha-solicitud {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500; /* Menos peso que la de caducidad */
+    color: #16443D; /* Verde oscuro (menos 'peligro') */
+    background-color: #e6f2f0; /* Fondo más claro y verdoso */
+    border: 1px solid #16443D;
+    padding: 0.25em 0.5em;
+    border-radius: 0.68em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Estilo para los Comentarios (usando la clase 'card-descripcion') */
+.misSolicitudes-card .card-comentarios {
+    /* Permite que los comentarios se expandan a la altura necesaria */
+    max-height: none; 
+    overflow: visible; 
+    /* Eliminamos las propiedades de límite de línea */
+    display: block; 
+    -webkit-line-clamp: unset; 
+    -webkit-box-orient: unset;
+    
+    margin-bottom: 0.5em; /* Espacio después de los comentarios */
+    font-style: italic; /* Para diferenciar el comentario de la descripción de la oferta */
+    color: #505050;
+}
+
+/* Ajuste de acciones para que los botones Edit y Delete queden bien */
+.misSolicitudes-card .card-actions {
+    /* Asegura que los botones se justifiquen a la izquierda */
+    justify-content: flex-start;
+}
+
+.misSolicitudes-card .actions-group {
+    display: flex;
+    gap: 1em; /* Espacio entre los botones */
+}
+
+/* Usamos las clases de botones ya definidas en tu CSS para mantener la coherencia */
+.misSolicitudes-card .btn-edit {
+    /* Hereda .list-container .btn-apply (secundario) */
+    background-color: #FEFDF8; 
+    border-color: #505050;
+}
+.misSolicitudes-card .btn-edit:hover {
+    /* Hereda .list-container .btn-apply:hover */
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+.misSolicitudes-card .btn-delete {
+    /* Hereda .list-container .btn-delete (peligro) */
+    background-color: #E53E3E; 
+    color: #FFFFE9;
+    border-color: #E53E3E;
+}
+.misSolicitudes-card .btn-delete:hover {
+    /* Hereda .list-container .btn-delete:hover */
+    background-color: #C53030;
+    border-color: #C53030;
+}
+
+/* Eliminamos el media query de grid ya que no es necesario */
