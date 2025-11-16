@@ -1,47 +1,40 @@
 <?php
 $oferta = $this->data['oferta'] ?? null;
+$solicitud = $this->data['solicitud'] ?? null; 
 ?>
 
-<div class="misSolicitudes-card">
+<div class="solicitudes-grid"> 
     
-    <div class="card-content">
-        <div class="card-CompanyInfo">
-            <span id="idEmpresa"><?= $this->e($oferta->empresaId) ?></span>
-            <img src="" alt="picInProg" class="companyPfp">
-            <p class="companyName"></p>
-        </div>
+    <div class="misSolicitudes-card oferta-card">
         
-        <div class="card-header">
-            <h3 class="card-titulo"><?= $this->e($oferta->titulo) ?></h3>
-            <span class="card-fecha-fin">Fecha de Finalización: <?= $this->e($oferta->fechaFin) ?></span>
+        <div class="card-content">
+            
+            <div class="card-CompanyInfo">
+                <span id="idEmpresa"><?= $this->e($oferta->empresaId) ?></span>
+                <img src="" alt="Logo Empresa" class="companyPfp">
+                <p class="companyName"></p> 
+            </div>
+            
+            <div class="card-header">
+                <h3 class="card-titulo"><?= $this->e($oferta->titulo) ?></h3>
+                <span class="card-fecha-solicitud">Solicitado: <?= $this->e($solicitud->fechaCreacion) ?></span>
+            </div>
+
+            <div class="card-body">
+                <p class="card-descripcion card-comentarios"><?= $this->e($solicitud->comentarios) ?></p>
+            </div>
         </div>
 
-        <div class="card-body">
-            <p class="card-descripcion"><?= $this->e($oferta->descripcion) ?></p>
-        </div>
-
-        <div class="card-footer">
-            <span class="card-salario"><?= $this->e($oferta->salario) ?> €/Año</span>
-            <div class="card-ciclos">
-                <?php if (!empty($oferta->ciclos[0])): ?>
-                    <span class="ciclo-tag"><?= $this->e($oferta->ciclos[0]) ?></span>
-                <?php endif; ?>
-                <?php if (!empty($oferta->ciclos[1])): ?>
-                    <span class="ciclo-tag"><?= $this->e($oferta->ciclos[1]) ?></span>
-                <?php endif; ?>
+        <div class="card-actions">
+            <div class="actions-group">
+                <button name="btnEdit" value="<?= $solicitud->id ?>" class="card-btn btn-apply btn-edit">
+                    Edit
+                </button>
+                <button name="btnDelete" value="<?= $solicitud->id ?>" class="card-btn btn-delete">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
-
-    <div class="card-actions">
-        <div class="actions-left">
-            <button type="submit" name="btnApply" value="<?= $oferta->id ?>" class="card-btn btn-apply btnApply">
-                Apply
-            </button>
-        </div>
-        <div class="actions-right">
-            <button type="submit" name="btnFav" value="<?= $oferta->id ?>" class="card-btn btn-fav btnFav">
-            </button>
-        </div>
+    
     </div>
-</div>

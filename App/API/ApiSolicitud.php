@@ -28,6 +28,7 @@ switch ($method) {
         saveSolicitud($body_content, $authHeaderValue);
         break;
     case 'PUT':
+        updateSolicitud($body_content, $authHeaderValue);
         break;
     case 'DELETE':
         break;
@@ -72,6 +73,9 @@ function saveSolicitud($body, $auth){
     }
     
     exit();
+}
+
+function updateSolicitud($body, $auth){
 }
 
 function getAuthorizationHeader() {

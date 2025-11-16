@@ -13,6 +13,7 @@
     11. ESTILOS PARA TARJETA DE OFERTA <--- AQUÍ ESTÁ EL CAMBIO
     12. ESTILOS DE BARRA DE BÚSQUEDA (MIS OFERTAS)
     13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column)
+    14. ESTILOS PARA TARJETA DE SOLICITUD <--- ¡NUEVO BLOQUE!
 
 */
 
@@ -1067,7 +1068,7 @@ body:has(.list-container) {
     border-color: #191919;
 }
 
-/* Botón Editar (estilo secundario) */
+/* Botón Aplicar (estilo secundario) */
 .list-container .btn-apply {
     background-color: #FEFDF8; /* Blanco de la paleta */
     border-color: #505050;
@@ -1508,3 +1509,95 @@ background: #d7b4f2;
     background-color: #FFFFE9;
     border-color: #191919;
 }
+
+/* 14. ESTILOS PARA TARJETA DE SOLICITUD */
+
+/* Contenedor principal para la lista de solicitudes (cambiado a flujo vertical) */
+.solicitudes-grid {
+    /* Eliminamos el display: grid para volver al flujo normal (vertical) */
+    display: block; 
+    width: 100%;
+    box-sizing: border-box;
+    /* Agregamos el espacio vertical entre tarjetas */
+}
+
+/* Estilos de la tarjeta de Solicitud (Hereda de .oferta-card) */
+.misSolicitudes-card {
+    /* Asegura que la tarjeta ocupe el ancho completo de su contenedor (solicitudes-grid) */
+    width: 100%;
+    /* Añade espacio después de cada tarjeta para separarlas verticalmente */
+    margin-bottom: 2em; 
+    /* El ancho de la tarjeta es ajustado aquí para que no se vea demasiado ancha
+       asumiendo que .list-container tiene un max-width. */
+    max-width: 900px; /* Limita el ancho como un list-container/oferta típica */
+    margin-left: auto; /* Centra la tarjeta */
+    margin-right: auto; /* Centra la tarjeta */
+}
+
+/* === AJUSTES DE CONTENIDO DENTRO DE LA TARJETA SOLICITUD === */
+
+/* Ajuste específico para la Fecha de Solicitud (reemplaza a card-fecha-fin) */
+.misSolicitudes-card .card-fecha-solicitud {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500; /* Menos peso que la de caducidad */
+    color: #16443D; /* Verde oscuro (menos 'peligro') */
+    background-color: #e6f2f0; /* Fondo más claro y verdoso */
+    border: 1px solid #16443D;
+    padding: 0.25em 0.5em;
+    border-radius: 0.68em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Estilo para los Comentarios (usando la clase 'card-descripcion') */
+.misSolicitudes-card .card-comentarios {
+    /* Permite que los comentarios se expandan a la altura necesaria */
+    max-height: none; 
+    overflow: visible; 
+    /* Eliminamos las propiedades de límite de línea */
+    display: block; 
+    -webkit-line-clamp: unset; 
+    -webkit-box-orient: unset;
+    
+    margin-bottom: 0.5em; /* Espacio después de los comentarios */
+    font-style: italic; /* Para diferenciar el comentario de la descripción de la oferta */
+    color: #505050;
+}
+
+/* Ajuste de acciones para que los botones Edit y Delete queden bien */
+.misSolicitudes-card .card-actions {
+    /* Asegura que los botones se justifiquen a la izquierda */
+    justify-content: flex-start;
+}
+
+.misSolicitudes-card .actions-group {
+    display: flex;
+    gap: 1em; /* Espacio entre los botones */
+}
+
+/* Usamos las clases de botones ya definidas en tu CSS para mantener la coherencia */
+.misSolicitudes-card .btn-edit {
+    /* Hereda .list-container .btn-apply (secundario) */
+    background-color: #FEFDF8; 
+    border-color: #505050;
+}
+.misSolicitudes-card .btn-edit:hover {
+    /* Hereda .list-container .btn-apply:hover */
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+.misSolicitudes-card .btn-delete {
+    /* Hereda .list-container .btn-delete (peligro) */
+    background-color: #E53E3E; 
+    color: #FFFFE9;
+    border-color: #E53E3E;
+}
+.misSolicitudes-card .btn-delete:hover {
+    /* Hereda .list-container .btn-delete:hover */
+    background-color: #C53030;
+    border-color: #C53030;
+}
+
+/* Eliminamos el media query de grid ya que no es necesario */

@@ -140,6 +140,10 @@ class Router
                 $solicitudManage = new SolicitudController();
                 $solicitudManage->renderOffers($this->engine);
                 break;
+            case 'misSolicitudes-alumno':
+                $solicitudManage = new SolicitudController();
+                $solicitudManage->renderApplied($this->engine);
+                break;
             default:
                 header('Location: ?menu=alumno-dashboard'); 
                 break;

@@ -228,13 +228,7 @@ class OfertaRepo implements RepoInterface
         return $ofertas;
     }
 
-    /**
-     * Busca y devuelve todas las ofertas a las que un alumno NO ha aplicado.
-     * La lógica se basa en el ID de alumno (ALUMNO.id).
-     * @param int $alumnoId El ID del alumno (ALUMNO.id).
-     * @return Oferta[] Un array de objetos Oferta.
-     */
-    public static function findAllNotApplied(int $alumnoId)
+    public static function findAllNotApplied($alumnoId)
     {
         $conn = DBC::getConnection();
         $ofertas = [];
@@ -307,19 +301,12 @@ class OfertaRepo implements RepoInterface
     }
 
 
-    /**
-     * Busca y devuelve todas las ofertas a las que un alumno SÍ ha aplicado.
-     * La lógica se basa en el ID de alumno (ALUMNO.id).
-     * @param int $alumnoId El ID del alumno (ALUMNO.id).
-     * @return Oferta[] Un array de objetos Oferta.
-     */
-    public static function findAllApplied(int $alumnoId)
+    public static function findAllApplied($alumnoId)
     {
         $conn = DBC::getConnection();
         $ofertas = [];
 
         try {
-            // 1. Obtener las ofertas a las que el alumno ha aplicado (JOIN con SOLICITUD)
             $query = $conn->prepare(
                 'SELECT
                     o.id AS oferta_id,
@@ -338,7 +325,6 @@ class OfertaRepo implements RepoInterface
             $query->execute();
             $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            // 2. Preparar la consulta para obtener nombres de ciclos (se reutilizará)
             $queryCiclos = $conn->prepare(
                 'SELECT c.nombre
                  FROM OFERTA_CICLO oc

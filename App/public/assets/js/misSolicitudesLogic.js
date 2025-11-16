@@ -1,12 +1,12 @@
-window.addEventListener("load", () => {
+window.addEventListener("load", function(){
 
     const userToken = sessionStorage.getItem("token");
 
-    const botonesApply = document.querySelectorAll(".btnApply");
-    const botonesFav = document.querySelectorAll(".btnFav");
+
+    const botonesEdit = document.querySelectorAll(".btn-edit");
+    const botonesDelete = document.querySelectorAll(".btn-delete");
     const companyData = document.querySelectorAll(".card-CompanyInfo");
-    
-    
+
     companyData.forEach(profile => {
         const empresaid = profile.querySelector("#idEmpresa");
         const profilePic = profile.querySelector(".companyPfp");
@@ -36,27 +36,22 @@ window.addEventListener("load", () => {
             profilePic.src = "/public/assets/images/cross.svg";
             username.textContent = "Error";
         });
-
-        
     });
-    
-    botonesApply.forEach(btn => {
+
+    botonesEdit.forEach(btn => {
         const card = btn.closest('.oferta-card');
         const companyProf = card.querySelector(".companyPfp");
         const companyName = card.querySelector(".companyName");
         const cardTitle = card.querySelector(".card-titulo");
 
-        const btnContainer = btn.parentNode;
-        
         btn.addEventListener("click", function(){
             crearModal(); 
-            // Correcto: 'this' es el botón btnApply, su valor es el offerId
-            const offerId = this.value; 
+
+            const applianceId = this.value; 
             const modalContent = document.getElementById("modalContent");
             
             const divContent = document.createElement("div");
             divContent.classList.add("modal-body-container");
-            
             const divHeader = document.createElement("div");
             divHeader.classList.add("modal-header-content");
             
@@ -66,33 +61,20 @@ window.addEventListener("load", () => {
             const titulo = document.createElement("h2");
             titulo.textContent = cardTitle.textContent;
             divTitleWrapper.appendChild(titulo);
-            
-            const divCompany = document.createElement("div");
-            divCompany.classList.add("modal-company-info");
-            
-            const companyProfClone = companyProf.cloneNode(true);
-            companyProfClone.classList.add("companyPfp"); 
-            
-            const companyNameClone = companyName.cloneNode(true);
-            companyNameClone.classList.add("companyName");
-            
-            divCompany.appendChild(companyProfClone);
-            divCompany.appendChild(companyNameClone);
-            
-            divHeader.appendChild(divTitleWrapper);
-            divHeader.appendChild(divCompany);
-            
+
             const divBody = document.createElement("div");
             divBody.classList.add("modal-body-comments");
             
             const comentarios = document.createElement("textarea");
             comentarios.classList.add("modal-textarea");
-            comentarios.placeholder = "Añade un comentario...";
+            comentarios.value = card.querySelector(".card-comentarios").textContent;
+
             divBody.appendChild(comentarios);
-            
+            divHeader.appendChild(divTitleWrapper);
             divContent.appendChild(divHeader);
             divContent.appendChild(divBody);
-            
+
+
             const divBtns = document.createElement("div");
             divBtns.classList.add("modal-actions");
             
@@ -106,61 +88,46 @@ window.addEventListener("load", () => {
             
             divBtns.appendChild(btnConfirmar);
             divBtns.appendChild(btnCancelar);
-            
+            divContent.appendChild(divBtns);
+
             modalContent.appendChild(divContent);
-            modalContent.appendChild(divBtns);
-            
-            btnCancelar.addEventListener("click", () => {
-                window.cerrarModal();
+
+            btnCancelar.addEventListener("click", function(){
+                cerrarModal();
             });
-            
+
             btnConfirmar.addEventListener("click", function(){
-                const comentario = comentarios.value;
-                console.log(comentario);
-                console.log(offerId);
+                const contentTextArea = divContent.querySelector(".modal-textarea");
+
+                //fetch
+                console.log(contentTextArea.value);
+
                 fetch("/API/ApiSolicitud.php", {
-                method: "POST",
-                headers: {
-                    'Authorization': 'Bearer ' + userToken
-                },
-                body: JSON.stringify({ 
-                    ofertaId: offerId,
-                    comentario: comentario,
-                    finalizado:  true
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + userToken
+                    },
+                    body: JSON.stringify({ 
+                        solicitudId: applianceId,
+                        comentario: contentTextArea.value,
+                        finalizado:  true
+                    })
+
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log("Hell yea");
-                    
-                    window.cerrarModal();
-                    
-                    const appliedMessage = document.createElement("p");
-                    appliedMessage.textContent = "Already Applied!";
-                    appliedMessage.classList.add('applied-success-message');
-                    
-                    if (btnContainer) {
-                        btnContainer.insertBefore(appliedMessage, btn);
-                        btn.style.display = "none";
-                    } else {
-                        btn.replaceWith(appliedMessage);
-                    }
-                    
-                    btn.removeEventListener("click", this);
-
-                }else{
-                    console.log("Hell naah");
-                }
-            });
-        });
-    });
-    
-});
-
-    botonesFav.forEach(btn => {
-        btn.addEventListener("click", function(e){
+            
 
         });
     });
-});
+
+    botonesDelete.forEach(btn => {
+        const card = btn.closest('.oferta-card');
+        const companyProf = card.querySelector(".companyPfp");
+        const companyName = card.querySelector(".companyName");
+        const cardTitle = card.querySelector(".card-titulo");
+
+        
+    });
+
+})

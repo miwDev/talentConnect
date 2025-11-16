@@ -5,7 +5,7 @@ namespace App\core\helper;
 use App\core\data\AlumnoRepo;
 use App\core\data\CicloRepo;
 use App\core\data\EmpresaRepo;
-use App\core\model\OfertaRepo;
+use App\core\data\OfertaRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;

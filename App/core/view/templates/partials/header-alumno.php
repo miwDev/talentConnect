@@ -8,10 +8,7 @@
                 <a href="?menu=ofertas-alumno" class="menu-enlace">Ver ofertas</a
             </li>
             <li class="menu-item">
-                <a href="?menu=mis-solicitudes" class="menu-enlace">Mis solicitudes</a>
-            </li>
-            <li class="menu-item">
-                <a href="?menu=ver-favs" class="menu-enlace">Favoritos</a
+                <a href="?menu=misSolicitudes-alumno" class="menu-enlace">Mis solicitudes</a>
             </li>
             <li class="menu-item">
                 <a href="?menu=alumno-dashboard" class="menu-enlace">Dashboard</a>

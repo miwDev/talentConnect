@@ -1,8 +1,8 @@
 <?php
 
-namespace App\core\model;
+namespace App\core\DTO;
 
-class Oferta
+class OfertaDTO
 {
     private $id;
     private $empresaId;
