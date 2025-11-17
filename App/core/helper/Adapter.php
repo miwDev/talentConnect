@@ -401,31 +401,29 @@ use App\core\helper\Security;
     }
 
     public static function getEmpresaDTObyToken($authHeaderValue){
+    $token = self::tokenRetrieve($authHeaderValue); 
 
-        $token = self::tokenRetrieve($authHeaderValue); 
+    if (is_null($token) || empty($token)) {
+        return false;
+    }
 
-        if (is_null($token)) {
-            $EmpresaDTO = false;
-        }
+    $empresa = EmpresaRepo::findByToken($token);
 
-        $empresa = EmpresaRepo::findByToken($token);
-
-        if($empresa){
-            
-            $empresaDTO = new EmpresaDTO(
-                $empresa->id,
-                $empresa->cif,
-                $empresa->nombre,
-                $empresa->username,
-                $empresa->telefono,
-                $empresa->logo,
-                $empresa->validacion
-            );
-        }else{
-            $empresaDTO = false;
-        }
+    if($empresa){
+        $empresaDTO = new EmpresaDTO(
+            $empresa->id,
+            $empresa->cif,
+            $empresa->nombre,
+            $empresa->username,
+            $empresa->telefono,
+            $empresa->logo,
+            $empresa->validacion
+        );
         return $empresaDTO;
     }
+    
+    return false;
+}
 
     public static function getEmpresaDTObyId($id){
 

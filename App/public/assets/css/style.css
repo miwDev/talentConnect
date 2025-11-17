@@ -1981,3 +1981,135 @@ background: #d7b4f2;
 .btn-decision.approve:hover .icon-action { 
     filter: brightness(0) invert(1); 
 }
+
+/* 17. ESTILOS DASHBOARD EMPRESA */
+
+/* Contenedor principal: Reutiliza estilos de .list-container pero para el dashboard */
+.list-container.dashboard-container {
+    padding: 3.5em 5em; /* Más padding para los gráficos */
+    max-width: 1200px; /* Un poco más ancho que el formulario/lista */
+}
+
+.dashboard-container .header-section {
+    text-align: center;
+    margin-bottom: 3.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-container .header-section h1 {
+    font-size: 3em;
+    margin-top: 0.1em;
+}
+
+.dashboard-container .dashboard-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.3em;
+    color: #505050;
+    margin-top: 0.5em;
+}
+
+.dashboard-container .icon-dashboard-title {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 0 5px #EBD3FD); /* Añade un pequeño brillo al icono */
+}
+
+
+/* --- KPIs --- */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2em;
+    margin-bottom: 3.5em;
+}
+
+.kpi-card {
+    background-color: #FEFDF8;
+    border: 2px solid #191919;
+    border-radius: 0.6875em;
+    padding: 2em;
+    text-align: center;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75em 1.5em rgba(0, 0, 0, 0.15);
+}
+
+.kpi-icon {
+    width: 3.5em;
+    height: 3.5em;
+    object-fit: contain; 
+    display: block;
+    margin: 0 auto 0.3em auto;
+}
+
+.kpi-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #505050;
+    margin: 0.2em 0;
+}
+
+.kpi-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em;
+    font-weight: 700;
+    color: #191919;
+    margin: 0;
+}
+
+/* Colores de acento para KPIs */
+.kpi-offers {
+    border-left: 8px solid #EBD3FD; /* Morado de acento */
+}
+
+.kpi-solicitudes {
+    border-left: 8px solid #16443D; /* Verde Oscuro */
+}
+
+
+/* --- Gráficos --- */
+
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.chart-card {
+    background-color: #FEFDF8;
+    border: 2px solid #191919;
+    border-radius: 0.6875em;
+    padding: 1.5em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chart-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #191919;
+    text-align: center;
+    margin: 0 0 1em 0;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #50505030;
+}
+
+.chart-canvas-container {
+    position: relative;
+    /* Ajustes de altura específicos para mantener la relación de aspecto en las columnas */
+    height: 400px; 
+}
+
+/* Ajuste específico para el gráfico Top Offers (Barras Horizontales) */
+.chart-bar-h .chart-canvas-container {
+    height: 450px; /* Más alto para que quepan las etiquetas largas */
+}
