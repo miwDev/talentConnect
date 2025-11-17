@@ -9,7 +9,7 @@ $this->layout('layout/layout', [
     <div class="list-container">
         <div class="header-section">
             <h1>Mis ofertas</h1>
-            <?= var_dump($_POST) ?>
+            <?php var_dump($_POST) ?>
         </div>
         
         <form action="" method="post" id="editForm">

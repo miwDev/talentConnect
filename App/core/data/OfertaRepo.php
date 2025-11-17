@@ -164,12 +164,7 @@ class OfertaRepo implements RepoInterface
         return $ofertas;
     }
 
-    /**
-     * Busca y devuelve todas las ofertas asociadas a un ID de empresa específico.
-     * @param int $empresaId El ID de la empresa.
-     * @return Oferta[] Un array de objetos Oferta.
-     */
-    public static function findAllByEmpresaId(int $empresaId)
+    public static function findAllByEmpresaId($empresaId)
     {
         $conn = DBC::getConnection();
         $ofertas = [];
@@ -198,6 +193,12 @@ class OfertaRepo implements RepoInterface
                 WHERE oc.oferta_id = :oferta_id'
             );
 
+            $querySolicitudes = $conn->prepare(
+                'SELECT s.id
+                FROM SOLICITUD s
+                WHERE s.oferta_id = :oferta_id'
+            );
+
             foreach ($resultados as $res) {
                 
                 $queryCiclos->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
@@ -205,24 +206,34 @@ class OfertaRepo implements RepoInterface
                 
                 $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
 
-                $ofertas[] = new Oferta(
+                $querySolicitudes->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $querySolicitudes->execute();
+                
+                $solicitudesIds = $querySolicitudes->fetchAll(PDO::FETCH_COLUMN);
+
+                $oferta = new Oferta(
                     $res['oferta_id'],
                     $res['empresa_id'],
-                    $ciclosNombres, // 
+                    $ciclosNombres,
                     $res['fecha_creacion'],
                     $res['fecha_fin'],
                     $res['salario'],
                     $res['descripcion'],
                     $res['titulo']
                 );
+
+                $oferta->solicitudes = $solicitudesIds;
+
+                $ofertas[] = $oferta;
+                
             }
 
         } catch (PDOException $e) {
             error_log("Error al buscar ofertas por empresa ID $empresaId: " . $e->getMessage());
             return [];
         } catch (Exception $e) {
-             error_log("Error general al buscar ofertas: " . $e->getMessage());
-             return [];
+            error_log("Error general al buscar ofertas: " . $e->getMessage());
+            return [];
         }
 
         return $ofertas;

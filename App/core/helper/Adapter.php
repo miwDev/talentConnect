@@ -591,6 +591,16 @@ use App\core\helper\Security;
         return $solicitud;
     }
 
+    public static function SolicitudForDeletion($data, $header){
+        $token = self::tokenRetrieve($header); 
+        $solicitud = false;
+        
+        if(!is_null($token) && $data['solicitudId'] != null){
+            $solicitud = SolicitudRepo::findById($data['solicitudId']);
+        }
+        return $solicitud;
+    }
+
 
 
     //////////////////////////////////////

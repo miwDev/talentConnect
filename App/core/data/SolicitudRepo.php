@@ -5,6 +5,8 @@ namespace App\core\data;
 use App\core\model\Solicitud;
 use App\core\data\DBC;
 use App\core\data\RepoInterface;
+use App\core\data\AlumnoRepo;
+use App\core\model\Alumno;
 
 use PDO;
 use PDOException;
@@ -166,6 +168,89 @@ class SolicitudRepo implements RepoInterface
         }
 
         return $solicitud;
+    }
+
+    /**
+     * Busca una solicitud específica basada en el ID de la oferta y el ID del alumno.
+     *
+     * @param int $ofertaId
+     * @param int $alumnoId
+     * @return Solicitud|null
+     */
+    public static function findByOfertaAndAlumno($ofertaId, $alumnoId)
+    {
+        $conn = DBC::getConnection();
+        $solicitud = null;
+
+        // Buscamos la solicitud específica donde coincidan el alumno y la oferta
+        $query = 'SELECT id AS solicitud_id, 
+                         fecha_solicitud, 
+                         alumno_id, 
+                         oferta_id, 
+                         comentarios AS solicitud_comentarios, 
+                         finalizado AS solicitud_finalizada
+                  FROM SOLICITUD 
+                  WHERE oferta_id = :oferta_id 
+                  AND alumno_id = :alumno_id';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':oferta_id', $ofertaId, PDO::PARAM_INT);
+            $stmt->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($res) {
+                // Constructor consistente con los otros métodos find
+                $solicitud = new Solicitud(
+                    $res['solicitud_id'],
+                    $res['fecha_solicitud'],
+                    $res['alumno_id'],
+                    $res['oferta_id'],
+                    $res['solicitud_comentarios'],
+                    $res['solicitud_finalizada']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar la solicitud específica (Oferta: $ofertaId, Alumno: $alumnoId): " . $e->getMessage());
+        }
+
+        return $solicitud;
+    }
+
+    /**
+     * Obtiene el objeto Alumno completo asociado a una Solicitud.
+     * * Patrón de Colaboración: SolicitudRepo encuentra la clave (alumno_id) 
+     * y delega la construcción del objeto Alumno al AlumnoRepo.
+     *
+     * @param int $solicitudId
+     * @return Alumno|null
+     */
+    public static function getAlumnoBySolicitudId(int $solicitudId): ?Alumno
+    {
+        $conn = DBC::getConnection();
+        
+        try {
+            // 1. Obtener el alumno_id a partir del ID de la solicitud
+            $stmt = $conn->prepare('SELECT alumno_id FROM SOLICITUD WHERE id = :solicitud_id');
+            $stmt->bindValue(':solicitud_id', $solicitudId, PDO::PARAM_INT);
+            $stmt->execute();
+            $alumnoId = $stmt->fetchColumn();
+
+            if (!$alumnoId) {
+                return null; // La solicitud no existe o no tiene alumno asociado
+            }
+
+            // 2. Delegar la construcción del objeto Alumno al AlumnoRepo
+            // Se asume que AlumnoRepo tiene un método findById o findByAlumnoId (usaremos findById)
+            // Nota: Si usas findByUserId en AlumnoRepo, necesitarías primero la user_id
+            return AlumnoRepo::findById($alumnoId);
+
+        } catch (PDOException $e) {
+            error_log("Error al obtener alumno por Solicitud ID $solicitudId: " . $e->getMessage());
+            return null;
+        }
     }
 
 

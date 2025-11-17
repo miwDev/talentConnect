@@ -1,0 +1,7 @@
+# Usamos la imagen oficial ligera de Mailhog
+FROM mailhog/mailhog:latest
+
+# Exponemos los puertos necesarios:
+# 1025: Para que tu PHP envíe los correos (SMTP)
+# 8025: Para que tú veas la bandeja de entrada en el navegador
+EXPOSE 1025 8025

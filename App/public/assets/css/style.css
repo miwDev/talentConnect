@@ -482,7 +482,6 @@ header {
 }
 
 h3{
-    text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 2.3em;
     color: #191919;
@@ -887,6 +886,41 @@ body:has(.list-container) {
     border-color: #191919;
 }
 
+
+/*ESTILO PARA BOTON VOLVER EN CANDIDATE*/
+
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.7em 1.5em;
+    background-color: #FFFFE9;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    color: #191919;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-volver:hover {
+    background-color: #FEFDF8;
+    border-color: #191919;
+    color: #191919;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-volver:active {
+    transform: translateX(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-volver-icon {
+    width: 22px;
+    height: 22px;
+}
 
 /* 11. ESTILOS PARA TARJETA DE OFERTA */
 
@@ -1658,4 +1692,292 @@ background: #d7b4f2;
 .modal-body-container.delete-mode .btn-cancel:hover {
     background-color: #e2e2e2;
     border-color: #191919;
+}
+
+
+/* 16. ESTILOS PARA TARJETA DE CANDIDATO (V2 - Con Iconos SVG y Caja Comentarios) */
+
+/* Wrapper Principal */
+.candidate-wrapper {
+    background-color: transparent; 
+    border: none; 
+    margin-bottom: 2em;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Grid Layout de la Tarjeta */
+.candidate-card {
+    background-color: #FEFDF8;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    
+    display: grid;
+    /* Estructura: 38% Imagen | Resto Info */
+    grid-template-columns: 38% 1fr 1fr; 
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.5em; 
+    padding: 1.5em; 
+    overflow: hidden; 
+}
+
+/* 1. Imagen Visual */
+.candidate-visual {
+    grid-row: span 4; 
+    background-color: #191919; 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Márgenes negativos para ocupar todo el lateral */
+    margin: -1.5em 0 -1.5em -1.5em; 
+    height: calc(100% + 3em); 
+}
+
+.candidate-visual img.profile-image {
+    width: 80%; 
+    height: 80%;
+    object-fit: contain; 
+    z-index: 2;
+}
+
+.candidate-visual .bg-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, #333 10%, #191919 90%);
+    z-index: 1;
+}
+
+/* 2. Nombre */
+.candidate-name { 
+    grid-column-start: 2; 
+    grid-row-start: 1; 
+    align-self: end; 
+}
+
+.candidate-name h3 { 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.8em; 
+    color: #191919; 
+    margin: 0; 
+}
+
+/* 3. Detalles y Caja de Comentarios */
+.candidate-details {
+    grid-row: span 2;
+    grid-column-start: 2;
+    grid-row-start: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em; 
+    min-width: 0;
+}
+
+.candidate-details .dni-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25em; /* AUMENTADO */
+    font-weight: 600;
+    color: #191919;
+    margin: 0;
+}
+
+/* --- ESTILOS DE LA NUEVA CAJA DE COMENTARIOS --- */
+.candidate-comment-block {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.comment-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95em; /* AUMENTADO LIGERAMENTE */
+    font-weight: 700;
+    color: #16443D; /* Verde oscuro */
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.comment-box {
+    background-color: #FFFFE9;
+    border: 1px solid #50505030;
+    border-left: 4px solid #EBD3FD; /* Borde morado a la izquierda */
+    border-radius: 0.4em;
+    padding: 0.8em;
+}
+
+.candidate-details .comment-text {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em; /* AUMENTADO */
+    color: #505050;
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
+
+/* 4. Ubicación */
+.candidate-location { 
+    grid-column-start: 2; 
+    grid-row-start: 4; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.2em; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.2em; /* AUMENTADO */
+}
+
+/* 5. Etiquetas (Estudios) */
+.candidate-tags { 
+    grid-row: span 2; 
+    grid-column-start: 3; 
+    grid-row-start: 1; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.6em; 
+    align-items: flex-end; 
+}
+
+.candidate-tags .study-tag-candidate {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.0em; /* Se mantiene */
+    color: #191919;      
+    font-weight: 500;
+    text-align: right;   
+    margin-top: 0.2em; 
+}
+
+.candidate-tags .study-tag-candidate::before {
+    content: '• ';
+    color: #505050; 
+    font-weight: bold;
+}
+
+/* 6. Meta (Fecha y CV) */
+.candidate-meta { 
+    grid-row: span 2; 
+    grid-column-start: 3; 
+    grid-row-start: 3; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end; 
+    align-items: flex-end; 
+    gap: 1em; 
+}
+
+.candidate-meta .date-text { 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.15em; /* AUMENTADO */
+    color: #505050; 
+    margin: 0; 
+    display: flex;
+    align-items: center;
+}
+
+.candidate-meta .btn-view-cv { 
+    text-decoration: none; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.1em; /* AUMENTADO */
+    font-weight: 600; 
+    color: #191919; 
+    background: #FEFDF8; 
+    border: 2px solid #191919; 
+    padding: 0.6em 1.3em; /* Ajuste el padding con el nuevo tamaño de fuente */
+    border-radius: 0.5em; 
+    transition: all 0.2s; 
+    display: flex;
+    align-items: center;
+}
+.candidate-meta .btn-view-cv:hover { 
+    background: #EBD3FD; 
+    transform: translateY(-2px); 
+}
+
+/* --- ICONOS SVG --- */
+.icon-mini {
+    width: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
+    height: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 0.4em;
+    opacity: 0.8;
+}
+
+.icon-mini-btn {
+    width: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
+    height: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
+    margin-left: 0.4em;
+    vertical-align: middle;
+}
+
+.icon-action {
+    width: 1.5em;
+    height: 1.5em;
+    object-fit: contain;
+}
+
+/* --- BOTONES DE ACCIÓN --- */
+.candidate-actions-group {
+    display: flex;
+    gap: 20px; 
+}
+
+.btn-decision {
+    flex: 1;
+    padding: 0.8em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em; 
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8em;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1); 
+}
+
+.btn-decision:active { 
+    transform: translateY(2px); 
+    box-shadow: none; 
+}
+
+/* Botón Rechazar */
+.btn-decision.reject { 
+    background-color: #FEFDF8; 
+    color: #E53E3E; 
+    border-color: #E53E3E; 
+}
+.btn-decision.reject:hover { 
+    background-color: #E53E3E; 
+    color: #FFFFE9; 
+    border-color: #191919; 
+}
+/* Invertir color del icono en hover para que se vea blanco */
+.btn-decision.reject:hover .icon-action { 
+    filter: brightness(0) invert(1); 
+}
+
+/* Botón Aprobar */
+.btn-decision.approve { 
+    background-color: #FEFDF8; 
+    color: #16443D; 
+    border-color: #16443D; 
+}
+.btn-decision.approve:hover { 
+    background-color: #16443D; 
+    color: #FFFFE9; 
+    border-color: #191919;
+    box-shadow: 0 4px 8px rgba(22, 68, 61, 0.3);
+}
+/* Filtro para invertir color del icono a blanco en hover */
+.btn-decision.approve:hover .icon-action { 
+    filter: brightness(0) invert(1); 
 }

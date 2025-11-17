@@ -13,13 +13,6 @@ class Solicitud
 
     public function __construct($id, $fechaCreacion, $alumnoId, $ofertaId, $comentarios, $finalizado)
     {
-        error_log("=== Solicitud Constructor ===");
-        error_log("id: " . ($id ?? 'NULL'));
-        error_log("fechaCreacion: " . ($fechaCreacion ?? 'NULL'));
-        error_log("alumnoId: " . ($alumnoId ?? 'NULL'));
-        error_log("ofertaId: " . ($ofertaId ?? 'NULL'));
-        error_log("comentarios: " . ($comentarios ?? 'NULL'));
-        error_log("finalizado: " . ($finalizado ?? 'NULL'));
         
         $this->id = $id;
         $this->fechaCreacion = $fechaCreacion;
@@ -28,7 +21,6 @@ class Solicitud
         $this->comentarios = $comentarios;
         $this->finalizado = $finalizado;
         
-        error_log("Solicitud object created successfully");
     }
 
     public function __get($propiedad)
@@ -36,7 +28,6 @@ class Solicitud
         if (property_exists($this, $propiedad)) {
             return $this->$propiedad;
         }
-        error_log("WARNING: Trying to access non-existent property: " . $propiedad);
         return null;
     }
 

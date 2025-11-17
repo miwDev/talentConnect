@@ -3,11 +3,14 @@
 namespace App\core\controller;
 
 use App\core\data\EmpresaRepo;
+use App\core\data\AlumnoRepo;
 use App\core\data\OfertaRepo;
+use App\core\data\SolicitudRepo;
 use App\core\data\CicloRepo;
 use App\core\model\Oferta;
 use App\core\helper\Adapter;
 use App\core\helper\Session;
+use App\mail\Mailer;
 
 class OfertaController
 {
@@ -141,7 +144,7 @@ class OfertaController
             $success = OfertaRepo::deleteById($_POST['btnDelete']);
 
             if ($success) {
-                header($selfRoute);pter::editedDataToOferta(); 
+                header($selfRoute);
                 exit();
             }else{
                 error_log("Error: No se pudo borrar la oferta en la base de datos");
@@ -154,5 +157,76 @@ class OfertaController
                 exit();
             }
         }
+        
+        if (isset($_POST["btnHire"])) {
+
+            $solicitudId = $_POST['btnHire'];
+            $solicitud = SolicitudRepo::findById($solicitudId);
+            $alumno = SolicitudRepo::getAlumnoBySolicitudId($solicitudId);
+
+            if ($solicitud && $alumno) {
+                $oferta = OfertaRepo::findById($solicitud->ofertaId);
+                $empresa = EmpresaRepo::findById($oferta->empresaId);
+
+                if ($oferta && $empresa) {
+                    $dbResponse = SolicitudRepo::deleteById($solicitudId);
+                    
+                    if ($dbResponse) {
+                        $mailer = new Mailer();
+                        $mailer->sendApplicationAccepted($alumno->username, $oferta->titulo, $empresa->nombre); 
+                        
+                        header($selfRoute);
+                        exit();
+                    } else {
+                        error_log("Error: No se pudo borrar la solicitud en la base de datos");
+                    }
+                    header($selfRoute);
+                    exit();
+                }
+            }
+        }
+
+        if (isset($_POST["btnReject"])) {
+
+            $solicitudId = $_POST['btnReject'];
+            $solicitud = SolicitudRepo::findById($solicitudId);
+            $alumno = SolicitudRepo::getAlumnoBySolicitudId($solicitudId);
+
+            if ($solicitud && $alumno) {
+                $oferta = OfertaRepo::findById($solicitud->ofertaId);
+                $empresa = EmpresaRepo::findById($oferta->empresaId);
+
+                if ($oferta && $empresa) {
+                    $dbResponse = SolicitudRepo::deleteById($solicitudId);
+                    
+                    if ($dbResponse) {
+                        $mailer = new Mailer();
+                        $mailer->sendApplicationRejected($alumno->username, $oferta->titulo, $empresa->nombre); 
+                        
+                        header($selfRoute);
+                        exit();
+                    } else {
+                        error_log("Error: No se pudo borrar la solicitud en la base de datos");
+                    }
+                    header($selfRoute);
+                    exit();
+                }
+            }
+        }
+
+
+        if(isset($_POST["btnCandidatos"])){
+
+            $oferta = OfertaRepo::findById($_POST['btnCandidatos']);
+            $candidatos = AlumnoRepo::findAllByOfertaId($_POST['btnCandidatos']);
+            echo $engine->render('Empresa/verCandidatos', [
+                'role' => $role,
+                'candidatos' => $candidatos,
+                'oferta' => $oferta
+            ]);
+            
+            exit();
+
+        }        
     }
 }

@@ -175,7 +175,36 @@ window.addEventListener("load", function(){
             });
             
             btnConfirmar.addEventListener("click", function() {
-                console.log(applianceId);
+                fetch("/API/ApiSolicitud.php", {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + userToken
+                    },
+                    body: JSON.stringify({
+                        solicitudId: parseInt(applianceId)
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert("Solicitud eliminada correctamente");
+                        card.remove();
+                        cerrarModal();
+                    } else {
+                        alert("Error al eliminar");
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    alert("Error de conexión: " + error.message);
+                    cerrarModal();
+                });
             });
 
             divBtns.appendChild(btnCancelar);
