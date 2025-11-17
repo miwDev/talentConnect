@@ -6,6 +6,7 @@ use App\core\data\AlumnoRepo;
 use App\core\data\CicloRepo;
 use App\core\data\EmpresaRepo;
 use App\core\data\OfertaRepo;
+use App\core\data\SolicitudRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
@@ -571,6 +572,22 @@ use App\core\helper\Security;
             }
         }
         
+        return $solicitud;
+    }
+
+    public static function editedDatatoSolicitud($data, $header){
+        $token = self::tokenRetrieve($header); 
+        $solicitud = false;
+
+        if (!is_null($token)){
+            $solicitud = SolicitudRepo::findById($data['solicitudId']);
+            
+            if ($solicitud) {
+                $solicitud->comentarios = $data['comentario'];
+                $solicitud->finalizado = $data['finalizado'] ? 1 : 0;
+            }
+        }
+
         return $solicitud;
     }
 

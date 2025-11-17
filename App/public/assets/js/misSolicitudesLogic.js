@@ -40,9 +40,8 @@ window.addEventListener("load", function(){
 
     botonesEdit.forEach(btn => {
         const card = btn.closest('.oferta-card');
-        const companyProf = card.querySelector(".companyPfp");
-        const companyName = card.querySelector(".companyName");
         const cardTitle = card.querySelector(".card-titulo");
+        const cardComentarios = card.querySelector(".card-comentarios");
 
         btn.addEventListener("click", function(){
             crearModal(); 
@@ -67,7 +66,7 @@ window.addEventListener("load", function(){
             
             const comentarios = document.createElement("textarea");
             comentarios.classList.add("modal-textarea");
-            comentarios.value = card.querySelector(".card-comentarios").textContent;
+            comentarios.value = cardComentarios.textContent.trim();
 
             divBody.appendChild(comentarios);
             divHeader.appendChild(divTitleWrapper);
@@ -98,9 +97,7 @@ window.addEventListener("load", function(){
 
             btnConfirmar.addEventListener("click", function(){
                 const contentTextArea = divContent.querySelector(".modal-textarea");
-
-                //fetch
-                console.log(contentTextArea.value);
+                const nuevoComentario = contentTextArea.value.trim();
 
                 fetch("/API/ApiSolicitud.php", {
                     method: "PUT",
@@ -108,26 +105,87 @@ window.addEventListener("load", function(){
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + userToken
                     },
-                    body: JSON.stringify({ 
-                        solicitudId: applianceId,
-                        comentario: contentTextArea.value,
-                        finalizado:  true
+                    body: JSON.stringify({
+                        solicitudId: parseInt(applianceId),
+                        comentario: nuevoComentario,
+                        finalizado: 1
                     })
-
                 })
-            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        cardComentarios.textContent = nuevoComentario;
+                        cerrarModal();
+                    } else {
+                        alert("Error al actualizar: " + (data.error || "Error desconocido"));
+                        cerrarModal();
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    alert("Error de conexión: " + error.message);
+                    cerrarModal();
+                });
+            });
             
 
         });
     });
 
     botonesDelete.forEach(btn => {
-        const card = btn.closest('.oferta-card');
-        const companyProf = card.querySelector(".companyPfp");
-        const companyName = card.querySelector(".companyName");
-        const cardTitle = card.querySelector(".card-titulo");
+        btn.addEventListener("click", function(){
+            const card = btn.closest('.oferta-card');
+            crearModal();
+            const applianceId = this.value; 
+            const modalContent = document.getElementById("modalContent");
+            
+            const divContent = document.createElement("div");
+            divContent.classList.add("modal-body-container", "delete-mode");
+            
+            const divHeader = document.createElement("div");
+            divHeader.classList.add("modal-header-content");
+            
+            const divTitleWrapper = document.createElement("div");
+            divTitleWrapper.classList.add("modal-title-wrapper");
+            
+            const titulo = document.createElement("h2");
+            titulo.textContent = "¿Confirmar eliminación de la Solicitud?";
+            divTitleWrapper.appendChild(titulo);
 
-        
+            divHeader.appendChild(divTitleWrapper);
+
+            const divBtns = document.createElement("div");
+            divBtns.classList.add("modal-actions");
+            
+            const btnConfirmar = document.createElement("button");
+            btnConfirmar.classList.add("btn-confirm", "btn-danger"); 
+            btnConfirmar.textContent = "Eliminar Solicitud";
+            
+            const btnCancelar = document.createElement("button");
+            btnCancelar.classList.add("btn-cancel");
+            btnCancelar.textContent = "Cancelar";
+            
+            btnCancelar.addEventListener("click", function() {
+                cerrarModal();
+            });
+            
+            btnConfirmar.addEventListener("click", function() {
+                console.log(applianceId);
+            });
+
+            divBtns.appendChild(btnCancelar);
+            divBtns.appendChild(btnConfirmar);
+            
+            divContent.appendChild(divHeader);
+            divContent.appendChild(divBtns);
+
+            modalContent.appendChild(divContent);   
+        });
     });
 
 })

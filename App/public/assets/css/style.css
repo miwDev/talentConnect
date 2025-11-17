@@ -1557,9 +1557,6 @@ background: #d7b4f2;
     overflow: visible; 
     /* Eliminamos las propiedades de límite de línea */
     display: block; 
-    -webkit-line-clamp: unset; 
-    -webkit-box-orient: unset;
-    
     margin-bottom: 0.5em; /* Espacio después de los comentarios */
     font-style: italic; /* Para diferenciar el comentario de la descripción de la oferta */
     color: #505050;
@@ -1600,4 +1597,65 @@ background: #d7b4f2;
     border-color: #C53030;
 }
 
-/* Eliminamos el media query de grid ya que no es necesario */
+/* 15. ESTILOS ESPECÍFICOS PARA MODAL DE ELIMINACIÓN (DELETE MODE) */
+
+/* Ajuste del contenedor cuando está en modo eliminación */
+.modal-body-container.delete-mode {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 0;
+}
+
+/* Quitamos la línea divisoria del header para que se vea más limpio */
+.modal-body-container.delete-mode .modal-header-content {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 1em;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Centramos el título y aumentamos un poco el peso visual */
+.modal-body-container.delete-mode .modal-title-wrapper {
+    max-width: 100%;
+    text-align: center;
+}
+
+.modal-body-container.delete-mode .modal-title-wrapper h2 {
+    font-size: 2.2em; /* Un poco más grande para llamar la atención */
+    color: #191919;
+}
+
+/* Ajuste de la botonera para centrarla */
+.modal-body-container.delete-mode .modal-actions {
+    border-top: none; /* Quitamos la línea superior */
+    justify-content: center; /* Centramos los botones */
+    width: 100%;
+    padding-top: 10px;
+    gap: 2em; /* Más separación entre botones */
+}
+
+/* ESTILO PELIGRO (ROJO) para el botón de confirmar eliminación */
+/* Hereda la forma de .btn-confirm pero cambia los colores */
+.btn-confirm.btn-danger {
+    background-color: #E53E3E; /* Rojo de tu paleta (#E53E3E) */
+    color: #FFFFE9; /* Texto claro */
+    border-color: #191919;
+}
+
+.btn-confirm.btn-danger:hover {
+    background-color: #C53030; /* Rojo más oscuro al hover */
+    border-color: #191919;
+}
+
+/* Opcional: Hacer el botón cancelar un poco más sutil en este contexto */
+.modal-body-container.delete-mode .btn-cancel {
+    background-color: transparent;
+    border-color: #505050;
+}
+
+.modal-body-container.delete-mode .btn-cancel:hover {
+    background-color: #e2e2e2;
+    border-color: #191919;
+}

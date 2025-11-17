@@ -43,14 +43,6 @@ function saveSolicitud($body, $auth){
     
     $data = json_decode($body, true);
     
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        error_log("ERROR JSON: " . json_last_error_msg());
-        header('Content-Type: application/json');
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Invalid JSON: ' . json_last_error_msg()]);
-        exit();
-    }
-    
     $solicitud = Adapter::DTOtoSolicitud($data, $auth);
     
     if($solicitud){
@@ -76,6 +68,30 @@ function saveSolicitud($body, $auth){
 }
 
 function updateSolicitud($body, $auth){
+    
+    $data = json_decode($body, true);
+
+    $solicitud = Adapter::editedDatatoSolicitud($data, $auth);
+
+    if($solicitud){
+        $dbResponse = SolicitudRepo::update($solicitud);
+
+        if($dbResponse){
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['success' => true]);
+        }else{
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false]);
+        }
+
+    }else{
+        error_log("ERROR Authorization: UNAUTHORIZED");
+        http_response_code(401);
+        exit();
+    }
+
 }
 
 function getAuthorizationHeader() {
