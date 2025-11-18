@@ -196,6 +196,78 @@ class AlumnoRepo implements RepoInterface
         return $alumnos;
     }
 
+    public static function findAllByOfertaId($ofertaId)
+    {
+        $conn = DBC::getConnection();
+        $alumnos = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT a.id AS alumno_id,
+                    u.user_name AS username,
+                    u.passwrd AS pass,
+                    a.nombre AS nombre,
+                    a.apellido AS ape,
+                    a.telefono AS tel,
+                    a.direccion AS direccion,
+                    a.foto AS foto,
+                    a.cv AS cv,
+                    a.provincia AS provincia,
+                    a.localidad AS localidad,
+                    a.dni AS dni,
+                    a.confirmed AS confirmed
+                FROM ALUMNO a
+                JOIN USER u ON a.user_id = u.id
+                JOIN SOLICITUD s ON a.id = s.alumno_id
+                WHERE s.oferta_id = :oferta_id'
+            );
+
+            $query->bindValue(':oferta_id', $ofertaId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmtCiclos = $conn->prepare(
+                'SELECT c.nombre 
+                FROM ALUMNO_CICLO ac
+                JOIN CICLO c ON ac.ciclo_id = c.id
+                WHERE ac.alumno_id = :alumno_id'
+            );
+
+            foreach ($resultados as $res) {
+                $alumno = new Alumno(
+                    $res['alumno_id'],
+                    $res['username'],
+                    $res['pass'],
+                    $res['nombre'],
+                    $res['ape'],
+                    $res['dni'],
+                    $res['tel'],
+                    $res['direccion'],
+                    $res['foto'],
+                    $res['cv'],
+                    $res['provincia'],
+                    $res['localidad'],
+                    $res['confirmed']
+                );
+
+                $stmtCiclos->bindValue(':alumno_id', $res['alumno_id'], PDO::PARAM_INT);
+                $stmtCiclos->execute();
+                
+                $ciclosNombres = $stmtCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $alumno->estudios = $ciclosNombres; 
+
+                $alumnos[] = $alumno;
+            }
+
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage());
+            return [];
+        }
+
+        return $alumnos;
+    }
+
     public static function findById($id)
     {
         $conn = DBC::getConnection();

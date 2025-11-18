@@ -3,8 +3,10 @@
 namespace App\core\controller;
 
 use App\core\data\EmpresaRepo;
+use App\core\data\OfertaRepo;
 use App\core\helper\Adapter;
 use App\core\helper\Session;
+use App\mail\Mailer;
 
 class EmpresaController
 {
@@ -47,6 +49,36 @@ class EmpresaController
             'pendientes' => $empresasPendientes
         ]);
     }
+
+    public function renderFicha($engine)
+    {
+        $role = Session::readRole();
+        $idEmpresa = $_GET["empresa"];
+
+        $empresa = EmpresaRepo::findById($idEmpresa);
+
+        $filterType = "active";
+        
+        if (isset($_POST['ofertasFilter'])) {
+            $filterType = $_POST['ofertasFilter'];
+        }
+
+        $ofertas = [];
+        
+        if ($filterType === "expired") {
+            $ofertas = OfertaRepo::findExpiredByEmpresaId($idEmpresa);
+        } else {
+            $ofertas = OfertaRepo::findActiveByEmpresaId($idEmpresa);
+        }
+        
+        echo $engine->render('Empresa/verEmpresaInfo', [
+            'role' => $role,
+            'empresa' => $empresa,
+            'ofertas' => $ofertas
+        ]);
+    }
+
+
 
     private function handlePostActions($engine)
     {
@@ -111,7 +143,11 @@ class EmpresaController
     {
         $empresa = EmpresaRepo::findById($id);
         $empresa->validacion = 1;
-        return EmpresaRepo::update($empresa);
+        EmpresaRepo::update($empresa);
+
+        $mail = new Mailer();
+        $mail->sendCompanyVerified($empresa->username);
+        return true;
     }
 
     public function deleteCompany($id)

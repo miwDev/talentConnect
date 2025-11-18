@@ -10,10 +10,6 @@ use App\core\helper\Adapter;
 use App\core\helper\Session;
 use Exception;
 
-// ✅ IMPORTANTE: NO mostrar errores, solo loguearlos
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
 
 $method = strtoupper($_SERVER["REQUEST_METHOD"] ?? 'GET');
 $body_content = file_get_contents('php://input');
@@ -31,6 +27,7 @@ switch ($method) {
         updateSolicitud($body_content, $authHeaderValue);
         break;
     case 'DELETE':
+        deleteSolicitud($body_content, $authHeaderValue);
         break;
     default:
         http_response_code(405);
@@ -42,14 +39,6 @@ switch ($method) {
 function saveSolicitud($body, $auth){
     
     $data = json_decode($body, true);
-    
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        error_log("ERROR JSON: " . json_last_error_msg());
-        header('Content-Type: application/json');
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Invalid JSON: ' . json_last_error_msg()]);
-        exit();
-    }
     
     $solicitud = Adapter::DTOtoSolicitud($data, $auth);
     
@@ -76,6 +65,52 @@ function saveSolicitud($body, $auth){
 }
 
 function updateSolicitud($body, $auth){
+    
+    $data = json_decode($body, true);
+
+    $solicitud = Adapter::editedDatatoSolicitud($data, $auth);
+
+    if($solicitud){
+        $dbResponse = SolicitudRepo::update($solicitud);
+
+        if($dbResponse){
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['success' => true]);
+        }else{
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false]);
+        }
+
+    }else{
+        error_log("ERROR Authorization: UNAUTHORIZED");
+        http_response_code(401);
+        exit();
+    }
+
+}
+
+function deleteSolicitud($body, $auth){
+    $data = json_decode($body, true);
+    $solicitud = Adapter::SolicitudForDeletion($data, $auth);
+
+    if($solicitud){
+        $dbResponse = SolicitudRepo::deleteById($solicitud->id);
+        if($dbResponse){
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['success' => true]);
+        }else{
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false]);
+        }
+    }else{
+        error_log("ERROR Authorization: UNAUTHORIZED");
+        http_response_code(401);
+        exit();
+    }
 }
 
 function getAuthorizationHeader() {

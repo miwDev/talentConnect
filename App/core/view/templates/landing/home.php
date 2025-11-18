@@ -67,23 +67,42 @@ $this->layout('layout/layout', [
             
             <div class="companies-container">
                 <div class="logo-slider">
-                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
-                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
-                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
-                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
-                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
+                    <?php
+                    // 1. Obtener la lista de URLs de los logos
+                    $logo_urls = [];
+                    // Acceder a la variable 'empresas' pasada a la vista a través de $this->data
+                    foreach ($this->data['empresas'] as $empresa) {
+                        // Asumimos que $empresa->logo contiene la ruta relativa (ej: '/assets/images/logo.png').
+                        // Aseguramos que empiece con '/public' si es necesario.
+                        $logo_path = $empresa->logo ?? '/assets/images/genericAvatar.svg'; 
+                        
+                        // Si $logo_path no empieza con '/public', lo añadimos. Si ya empieza, no hacemos nada.
+                        $logo_url = (strpos($logo_path, '/public') === 0) ? $logo_path : '/public' . $logo_path;
 
-                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
-                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
-                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
-                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
-                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
+                        $logo_urls[] = $logo_url; 
+                    }
+
+                    // Si hay logos, los duplicamos para el efecto infinito
+                    if (!empty($logo_urls)) {
+                        $all_logos = array_merge($logo_urls, $logo_urls);
+
+                        // 2. Generar las etiquetas HTML para el carrusel
+                        foreach ($all_logos as $logo_url) {
+                            ?>
+                            <img src="<?php echo htmlspecialchars($logo_url); ?>" 
+                                 alt="Logo Empresa" 
+                                 class="company-logo"
+                                 onerror="this.onerror=null; this.src='/public/assets/images/genericAvatar.svg';">
+                            <?php
+                        }
+                    } else {
+                        // Mensaje si no hay empresas
+                        echo '<p style="color: #FFFFE9; text-align: center; width: 100%; margin: 30px;">Aún no hay empresas registradas.</p>';
+                    }
+                    ?>
                 </div>
             </div>
-            </div>
-    </section>
-
-    </div>
+        </div>
     </section>
 
     <section id="section3">

@@ -164,12 +164,7 @@ class OfertaRepo implements RepoInterface
         return $ofertas;
     }
 
-    /**
-     * Busca y devuelve todas las ofertas asociadas a un ID de empresa específico.
-     * @param int $empresaId El ID de la empresa.
-     * @return Oferta[] Un array de objetos Oferta.
-     */
-    public static function findAllByEmpresaId(int $empresaId)
+    public static function findAllByEmpresaId($empresaId)
     {
         $conn = DBC::getConnection();
         $ofertas = [];
@@ -198,6 +193,12 @@ class OfertaRepo implements RepoInterface
                 WHERE oc.oferta_id = :oferta_id'
             );
 
+            $querySolicitudes = $conn->prepare(
+                'SELECT s.id
+                FROM SOLICITUD s
+                WHERE s.oferta_id = :oferta_id'
+            );
+
             foreach ($resultados as $res) {
                 
                 $queryCiclos->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
@@ -205,24 +206,190 @@ class OfertaRepo implements RepoInterface
                 
                 $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
 
-                $ofertas[] = new Oferta(
+                $querySolicitudes->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $querySolicitudes->execute();
+                
+                $solicitudesIds = $querySolicitudes->fetchAll(PDO::FETCH_COLUMN);
+
+                $oferta = new Oferta(
                     $res['oferta_id'],
                     $res['empresa_id'],
-                    $ciclosNombres, // 
+                    $ciclosNombres,
                     $res['fecha_creacion'],
                     $res['fecha_fin'],
                     $res['salario'],
                     $res['descripcion'],
                     $res['titulo']
                 );
+
+                $oferta->solicitudes = $solicitudesIds;
+
+                $ofertas[] = $oferta;
+                
             }
 
         } catch (PDOException $e) {
             error_log("Error al buscar ofertas por empresa ID $empresaId: " . $e->getMessage());
             return [];
         } catch (Exception $e) {
-             error_log("Error general al buscar ofertas: " . $e->getMessage());
-             return [];
+            error_log("Error general al buscar ofertas: " . $e->getMessage());
+            return [];
+        }
+
+        return $ofertas;
+    }
+
+    /**
+     * Busca ofertas activas (fecha_fin_oferta >= CURDATE()) por ID de empresa.
+     * Nombre sugerido: findActiveByEmpresaId.
+     */
+    public static function findActiveByEmpresaId(int $empresaId)
+    {
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT o.id AS oferta_id,
+                    o.fecha_oferta AS fecha_creacion,
+                    o.fecha_fin_oferta AS fecha_fin,
+                    o.salario AS salario,
+                    o.descripcion AS descripcion,
+                    o.titulo AS titulo,
+                    o.empresa_id AS empresa_id
+                FROM OFERTA o
+                WHERE o.empresa_id = :empresa_id
+                AND o.fecha_fin_oferta >= CURDATE()'
+            );
+
+            $query->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            // Preparación para ciclos y solicitudes (reutilización)
+            $queryCiclos = $conn->prepare(
+                'SELECT c.nombre
+                FROM OFERTA_CICLO oc
+                JOIN CICLO c ON oc.ciclo_id = c.id
+                WHERE oc.oferta_id = :oferta_id'
+            );
+
+            $querySolicitudes = $conn->prepare(
+                'SELECT s.id
+                FROM SOLICITUD s
+                WHERE s.oferta_id = :oferta_id'
+            );
+
+            foreach ($resultados as $res) {
+                
+                $queryCiclos->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $queryCiclos->execute();
+                $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $querySolicitudes->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $querySolicitudes->execute();
+                $solicitudesIds = $querySolicitudes->fetchAll(PDO::FETCH_COLUMN);
+
+                $oferta = new Oferta(
+                    $res['oferta_id'],
+                    $res['empresa_id'],
+                    $ciclosNombres,
+                    $res['fecha_creacion'],
+                    $res['fecha_fin'],
+                    $res['salario'],
+                    $res['descripcion'],
+                    $res['titulo']
+                );
+
+                $oferta->solicitudes = $solicitudesIds;
+                $ofertas[] = $oferta;
+                
+            }
+
+        } catch (PDOException $e) {
+            error_log("Error al buscar ofertas activas por empresa ID $empresaId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+            error_log("Error general al buscar ofertas activas: " . $e->getMessage());
+            return [];
+        }
+
+        return $ofertas;
+    }
+
+    /**
+     * Busca ofertas expiradas (fecha_fin_oferta < CURDATE()) por ID de empresa.
+     * Nombre sugerido: findExpiredByEmpresaId.
+     */
+    public static function findExpiredByEmpresaId(int $empresaId)
+    {
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT o.id AS oferta_id,
+                    o.fecha_oferta AS fecha_creacion,
+                    o.fecha_fin_oferta AS fecha_fin,
+                    o.salario AS salario,
+                    o.descripcion AS descripcion,
+                    o.titulo AS titulo,
+                    o.empresa_id AS empresa_id
+                FROM OFERTA o
+                WHERE o.empresa_id = :empresa_id
+                AND o.fecha_fin_oferta < CURDATE()'
+            );
+
+            $query->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            // Preparación para ciclos y solicitudes (reutilización)
+            $queryCiclos = $conn->prepare(
+                'SELECT c.nombre
+                FROM OFERTA_CICLO oc
+                JOIN CICLO c ON oc.ciclo_id = c.id
+                WHERE oc.oferta_id = :oferta_id'
+            );
+
+            $querySolicitudes = $conn->prepare(
+                'SELECT s.id
+                FROM SOLICITUD s
+                WHERE s.oferta_id = :oferta_id'
+            );
+
+            foreach ($resultados as $res) {
+                
+                $queryCiclos->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $queryCiclos->execute();
+                $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $querySolicitudes->bindValue(':oferta_id', $res['oferta_id'], PDO::PARAM_INT);
+                $querySolicitudes->execute();
+                $solicitudesIds = $querySolicitudes->fetchAll(PDO::FETCH_COLUMN);
+
+                $oferta = new Oferta(
+                    $res['oferta_id'],
+                    $res['empresa_id'],
+                    $ciclosNombres,
+                    $res['fecha_creacion'],
+                    $res['fecha_fin'],
+                    $res['salario'],
+                    $res['descripcion'],
+                    $res['titulo']
+                );
+
+                $oferta->solicitudes = $solicitudesIds;
+                $ofertas[] = $oferta;
+                
+            }
+
+        } catch (PDOException $e) {
+            error_log("Error al buscar ofertas expiradas por empresa ID $empresaId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+            error_log("Error general al buscar ofertas expiradas: " . $e->getMessage());
+            return [];
         }
 
         return $ofertas;
@@ -234,10 +401,10 @@ class OfertaRepo implements RepoInterface
         $ofertas = [];
 
         try {
-            // 1. Obtener las ofertas a las que el alumno NO ha aplicado
-            // Se usa NOT IN con un subquery que lista los oferta_id a los que el alumno SÍ ha aplicado
+            // 1. Obtener las ofertas a las que el alumno NO ha aplicado, que NO han expirado, 
+            //    y que coinciden con al menos uno de los ciclos del alumno.
             $query = $conn->prepare(
-                'SELECT
+                'SELECT DISTINCT
                     o.id AS oferta_id,
                     o.fecha_oferta AS fecha_creacion,
                     o.fecha_fin_oferta AS fecha_fin,
@@ -246,7 +413,11 @@ class OfertaRepo implements RepoInterface
                     o.titulo AS titulo,
                     o.empresa_id AS empresa_id
                  FROM OFERTA o
-                 WHERE o.id NOT IN (
+                 JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                 JOIN ALUMNO_CICLO ac ON oc.ciclo_id = ac.ciclo_id
+                 WHERE ac.alumno_id = :alumno_id
+                 AND o.fecha_fin_oferta >= CURDATE()
+                 AND o.id NOT IN (
                     SELECT
                         s.oferta_id
                     FROM
@@ -307,8 +478,10 @@ class OfertaRepo implements RepoInterface
         $ofertas = [];
 
         try {
+            // 1. Obtener las ofertas aplicadas, que NO han expirado, 
+            //    y que coinciden con al menos uno de los ciclos del alumno.
             $query = $conn->prepare(
-                'SELECT
+                'SELECT DISTINCT
                     o.id AS oferta_id,
                     o.fecha_oferta AS fecha_creacion,
                     o.fecha_fin_oferta AS fecha_fin,
@@ -318,7 +491,11 @@ class OfertaRepo implements RepoInterface
                     o.empresa_id AS empresa_id
                  FROM OFERTA o
                  JOIN SOLICITUD s ON o.id = s.oferta_id
-                 WHERE s.alumno_id = :alumno_id'
+                 JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                 JOIN ALUMNO_CICLO ac ON oc.ciclo_id = ac.ciclo_id
+                 WHERE s.alumno_id = :alumno_id
+                 AND ac.alumno_id = :alumno_id
+                 AND o.fecha_fin_oferta >= CURDATE()'
             );
 
             $query->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
@@ -358,6 +535,72 @@ class OfertaRepo implements RepoInterface
             return [];
         } catch (Exception $e) {
              error_log("Error general al buscar ofertas aplicadas: " . $e->getMessage());
+             return [];
+        }
+
+        return $ofertas;
+    }
+
+
+
+    public static function getLast5OffersByCiclo($alumnoId)
+    {
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT DISTINCT
+                    o.id AS oferta_id,
+                    o.fecha_oferta AS fecha_creacion,
+                    o.fecha_fin_oferta AS fecha_fin,
+                    o.salario AS salario,
+                    o.descripcion AS descripcion,
+                    o.titulo AS titulo,
+                    o.empresa_id AS empresa_id
+                 FROM OFERTA o
+                 JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                 JOIN ALUMNO_CICLO ac ON oc.ciclo_id = ac.ciclo_id
+                 WHERE ac.alumno_id = :alumno_id
+                 AND o.fecha_fin_oferta >= CURDATE()
+                 ORDER BY o.fecha_oferta DESC, o.id DESC
+                 LIMIT 5'
+            );
+
+            $query->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $queryCiclos = $conn->prepare(
+                'SELECT c.nombre
+                 FROM OFERTA_CICLO oc
+                 JOIN CICLO c ON oc.ciclo_id = c.id
+                 WHERE oc.oferta_id = :oferta_id'
+            );
+
+            foreach ($resultados as $res) {
+
+                $queryCiclos->bindValue(':oferta_id', $res['oferta_id']);
+                $queryCiclos->execute();
+
+                $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $ofertas[] = new Oferta(
+                    $res['oferta_id'],
+                    $res['empresa_id'],
+                    $ciclosNombres,
+                    $res['fecha_creacion'],
+                    $res['fecha_fin'],
+                    $res['salario'],
+                    $res['descripcion'],
+                    $res['titulo']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar las últimas 5 ofertas por ciclo para el alumno ID $alumnoId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+             error_log("Error general al buscar las últimas 5 ofertas: " . $e->getMessage());
              return [];
         }
 
@@ -519,5 +762,107 @@ class OfertaRepo implements RepoInterface
         }
 
         return $salida;
+    }
+
+    // =========================================================
+    // MÉTODOS AÑADIDOS PARA ESTADÍSTICAS DEL DASHBOARD EMPRESA
+    // =========================================================
+
+    /**
+     * Cuenta el total de ofertas publicadas por una empresa específica.
+     */
+    public static function countTotalOffersByEmpresa(int $empresaId) {
+        $conn = DBC::getConnection();
+        $query = 'SELECT COUNT(id) FROM OFERTA WHERE empresa_id = :empresa_id';
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Cuenta el total de solicitudes recibidas por una empresa a todas sus ofertas.
+     */
+    public static function countTotalSolicitudesByEmpresa(int $empresaId) {
+        $conn = DBC::getConnection();
+        $query = 'SELECT COUNT(s.id)
+                  FROM SOLICITUD s
+                  JOIN OFERTA o ON s.oferta_id = o.id
+                  WHERE o.empresa_id = :empresa_id';
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Cuenta las ofertas de una empresa por estado (Activas vs. Expiradas).
+     */
+    public static function countActiveAndExpiredOffers(int $empresaId) {
+        $conn = DBC::getConnection();
+        $query = 'SELECT
+                    CASE WHEN fecha_fin_oferta >= CURDATE() THEN "Activa" ELSE "Expirada" END AS status,
+                    COUNT(id) AS count
+                  FROM OFERTA
+                  WHERE empresa_id = :empresa_id
+                  GROUP BY status';
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Devuelve las N ofertas de una empresa con el mayor número de solicitudes.
+     */
+    public static function findTopOffersBySolicitudesForEmpresa(int $empresaId, int $limit = 5) {
+        $conn = DBC::getConnection();
+        $query = 'SELECT o.titulo, COUNT(s.id) AS count
+                  FROM OFERTA o
+                  JOIN SOLICITUD s ON o.id = s.oferta_id
+                  WHERE o.empresa_id = :empresa_id
+                  GROUP BY o.id, o.titulo
+                  ORDER BY count DESC
+                  LIMIT :limit';
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Cuenta cuántas veces cada Ciclo Formativo es solicitado en las ofertas de la empresa.
+     */
+    public static function countCyclesByEmpresa(int $empresaId) {
+        $conn = DBC::getConnection();
+        $query = 'SELECT c.nombre AS ciclo, COUNT(oc.oferta_id) AS count
+                  FROM OFERTA o
+                  JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                  JOIN CICLO c ON oc.ciclo_id = c.id
+                  WHERE o.empresa_id = :empresa_id
+                  GROUP BY c.nombre
+                  ORDER BY count DESC';
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Devuelve el histórico mensual de solicitudes recibidas por la empresa.
+     */
+    public static function getSolicitudesMonthlyTrend(int $empresaId) {
+        $conn = DBC::getConnection();
+        $query = "SELECT DATE_FORMAT(s.fecha_solicitud, '%Y-%m') AS month, COUNT(s.id) AS count
+                  FROM SOLICITUD s
+                  JOIN OFERTA o ON s.oferta_id = o.id
+                  WHERE o.empresa_id = :empresa_id
+                  GROUP BY month
+                  ORDER BY month ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':empresa_id', $empresaId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

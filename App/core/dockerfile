@@ -1,29 +1,61 @@
+# FROM php:8.2-apache
+
+# # Directorio de trabajo
+# WORKDIR /var/www/html
+
+# # Instalar dependencias necesarias
+# RUN apt-get update && apt-get install -y \
+#     libzip-dev \
+#     unzip \
+#     git \
+#     libmariadb-dev \
+#     curl \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # Extensiones PHP
+# RUN docker-php-ext-install pdo pdo_mysql zip
+
+# # Instalar Composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+# COPY . /var/www/html/
+
+
+# RUN composer install --no-dev --no-interaction
+# RUN composer dump-autoload -o
+
+# # Ajustar permisos
+# RUN chown -R www-data:www-data /var/www/html
+
+
 FROM php:8.2-apache
 
-# Directorio de trabajo
 WORKDIR /var/www/html
 
-# Instalar dependencias necesarias
+# 1. Instalar dependencias del sistema y extensiones requeridas por Dompdf y DB
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
     libmariadb-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
     curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql zip \
+    && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
-# Extensiones PHP
-RUN docker-php-ext-install pdo pdo_mysql zip
-
-# Instalar Composer
+# 2. Instalar Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-
+# 3. Copiar código (respaldo para producción)
 COPY . /var/www/html/
 
-
+# 4. Instalar dependencias iniciales
 RUN composer install --no-dev --no-interaction
-RUN composer dump-autoload -o
 
-# Ajustar permisos
+# 5. Permisos
 RUN chown -R www-data:www-data /var/www/html

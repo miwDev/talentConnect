@@ -1,5 +1,7 @@
 window.addEventListener("load", function(){
 
+    const userToken = sessionStorage.getItem("token");
+    
     const tbody = document.querySelector("tbody");
     const btnAdd = document.getElementById("add");
     const btnCarga = document.getElementById("cargaMasiva");
@@ -336,12 +338,12 @@ window.addEventListener("load", function(){
             const labelCiclos = document.createElement("label");
             labelCiclos.textContent = "Ciclo:";
             labelCiclos.htmlFor = "selCiclos";
-            labelCiclos.style.visibility = 'hidden';
+            labelCiclos.style.display = 'none';
             
             const selCiclos = document.createElement("select");
             selCiclos.id = "selCiclos";
             selCiclos.className = "form-select";
-            selCiclos.style.visibility = 'hidden'; 
+            selCiclos.style.display = 'none'; 
 
             const defaultOption1 = document.createElement("option");
             defaultOption1.value = "-1";
@@ -354,23 +356,103 @@ window.addEventListener("load", function(){
             const errorCiclo = document.createElement("div");
             errorCiclo.className = "error-message";
             errorCiclo.id = "error-ciclo";
-            errorCiclo.style.visibility = 'hidden';
+            errorCiclo.style.display = 'none'; 
+
+            const dateRow = document.createElement("div");
+            dateRow.className = "form-row education-dates";
+            dateRow.style.justifyContent = "flex-end"; 
+            dateRow.style.gap = "20px";
+            dateRow.style.display = "none";
+
+            // FECHA DE Ciclos: Inicio
+            const divStartDate = document.createElement("div");
+            divStartDate.className = "form-field half-width"; 
+
+            const labelStartDate = document.createElement("label");
+            labelStartDate.htmlFor = "fecha_inicio"; 
+            labelStartDate.textContent = "Fecha inicio:";
+
+            const inputStartDate = document.createElement("input");
+            inputStartDate.type = "text";
+            inputStartDate.id = "fecha_inicio"; 
+            inputStartDate.name = "fecha_inicio";
+            inputStartDate.placeholder = "YYYY-MM-DD";
+            // APLICACIÓN DE ESTILO
+            inputStartDate.className = "tableInput-style"; 
+
+            const errorStartDate = document.createElement("div");
+            errorStartDate.className = "error-message"; 
+            errorStartDate.id = "error-fecha_inicio";
+
+            divStartDate.appendChild(labelStartDate);
+            divStartDate.appendChild(inputStartDate);
+            divStartDate.appendChild(errorStartDate);
+
+            // FECHA DE Ciclos: Fin
+            const divEndDate = document.createElement("div");
+            divEndDate.className = "form-field half-width"; 
+
+            const labelEndDate = document.createElement("label");
+            labelEndDate.htmlFor = "fecha_fin";
+            labelEndDate.textContent = "Fecha fin:";
+
+            const inputEndDate = document.createElement("input");
+            inputEndDate.type = "text";
+            inputEndDate.id = "fecha_fin"
+            inputEndDate.name = "fecha_fin";
+            inputEndDate.placeholder = "YYYY-MM-DD";
+            // APLICACIÓN DE ESTILO
+            inputEndDate.className = "tableInput-style"; 
+
+            const errorEndDate = document.createElement("div");
+            errorEndDate.className = "error-message"; 
+            errorEndDate.id = "error-fecha_fin";
+
+            divEndDate.appendChild(labelEndDate);
+            divEndDate.appendChild(inputEndDate);
+            divEndDate.appendChild(errorEndDate);
+
+
+            dateRow.appendChild(divStartDate);
+            dateRow.appendChild(divEndDate);
             
 
             selFamilias.addEventListener("change", function(){
             // Limpiar error de familia al cambiar
             errorFamilia.textContent = "";
+            // Limpiar errores de fecha y ocultar el row
+            errorStartDate.textContent = "";
+            errorEndDate.textContent = "";
+            dateRow.style.display = "none";
+            inputStartDate.value = "";
+            inputEndDate.value = "";
+
 
             // 1. Ocultar los campos de ciclo si se selecciona la opción por defecto de familia (-1)
             if (this.value === "-1") {
-                labelCiclos.style.visibility = "hidden";
-                selCiclos.style.visibility = "hidden";
-                errorCiclo.style.visibility = "hidden";
+                labelCiclos.style.display = "none";
+                selCiclos.style.display = "none";
+                errorCiclo.style.display = "none";
                 
                 // Limpiar ciclos
                 selCiclos.innerHTML = '<option value="-1">--- Seleccione Ciclo ---</option>';
                 return;
             }
+
+            // Handler para el cambio de ciclo
+            selCiclos.onchange = function(){
+                errorCiclo.textContent = ""; 
+                
+                if (this.value !== "-1") {
+                    dateRow.style.display = "flex"; // MOSTRAR la fila de fechas
+                } else {
+                    dateRow.style.display = "none";
+                    errorStartDate.textContent = "";
+                    errorEndDate.textContent = "";
+                    inputStartDate.value = "";
+                    inputEndDate.value = "";
+                }
+            };
 
 
             // Codificación de URL para robustez (buena práctica)
@@ -394,9 +476,9 @@ window.addEventListener("load", function(){
                 populateSelect(selCiclos, json);
 
                 // Mostrar los campos
-                labelCiclos.style.visibility = "visible";
-                selCiclos.style.visibility = "visible";
-                errorCiclo.style.visibility = "visible";
+                labelCiclos.style.display = "block";
+                selCiclos.style.display = "block";
+                errorCiclo.style.display = "block";
             })
             .catch(error => {
                 console.error('Error al cargar ciclos:', error);
@@ -415,6 +497,9 @@ window.addEventListener("load", function(){
             formGrid.appendChild(btnEjemplo);   
             formGrid.appendChild(divCiclos);    
             form.appendChild(formGrid);
+            
+            // POSICIONAMIENTO CORREGIDO: dateRow aparecerá justo debajo del grid.
+            form.appendChild(dateRow); 
 
             // Span de error para validación general (debajo del grid)
             const errorValidacion = document.createElement("div");
@@ -574,27 +659,70 @@ window.addEventListener("load", function(){
                 errorCarga.id = "error-carga-resultado";
                 modalContent.appendChild(errorCarga);
 
+                // Función auxiliar para validar formato YYYY-MM-DD
+                const isValidDate = (dateString) => /^\d{4}-\d{2}-\d{2}$/.test(dateString);
+
+
+                // --- Lógica del botón CARGAR (btnCargaDatos) ---
                 btnCargaDatos.addEventListener("click", function(){
                                 const alumnosCargar = [];
                                 const filasCheck = Array.from(tbodyC.rows);
                                 const cicloId = document.getElementById("selCiclos").value;
+                                const fechaInicio = document.getElementById("fecha_inicio").value; // Obtener fecha
+                                const fechaFin = document.getElementById("fecha_fin").value; // Obtener fecha
                                 
                                 // Limpiar errores previos
                                 errorFamilia.textContent = "";
                                 errorCiclo.textContent = "";
                                 errorValidacion.textContent = "";
                                 errorCarga.textContent = "";
+                                errorStartDate.textContent = "";
+                                errorEndDate.textContent = "";
+                                
+                                
+                                // 1. Validaciones de Familia y Ciclo
+                                if (!selFamilias.value || selFamilias.value === "-1") {
+                                    errorFamilia.textContent = "Debe seleccionar una familia.";
+                                    return;
+                                }
+                                
+                                if (!selCiclos.value || selCiclos.value === "-1") {
+                                    errorCiclo.textContent = "Debe seleccionar un ciclo.";
+                                    return;
+                                }
+
+                                // 2. Validaciones de Fechas
+                                // Solo validar si el dateRow está visible (implica que se seleccionó un ciclo)
+                                if (dateRow.style.display === "flex") {
+                                    if (!fechaInicio || !isValidDate(fechaInicio)) {
+                                        errorStartDate.textContent = "Fecha de inicio requerida (YYYY-MM-DD).";
+                                        return;
+                                    }
+
+                                    if (!fechaFin || !isValidDate(fechaFin)) {
+                                        errorEndDate.textContent = "Fecha de fin requerida (YYYY-MM-DD).";
+                                        return;
+                                    }
+                                    
+                                    if (new Date(fechaInicio) >= new Date(fechaFin)) {
+                                        errorEndDate.textContent = "La fecha de fin debe ser posterior a la de inicio.";
+                                        return;
+                                    }
+                                }
                                 
                                 let alumnosMarcados = 0;
                                 for (let i = 0; i < filasCheck.length; i++) {
                                     if (document.getElementById('check' + i).checked) {
                                         let obj = {};
-                                        let claves = ["nombre", "apellido", "email", "cicloId"];
+                                        // AÑADIDO: Agregar fechas al objeto del alumno
+                                        let claves = ["nombre", "apellido", "email", "cicloId", "fecha_inicio", "fecha_fin"];
                                         let valores = [
                                             document.getElementById('nombre' + i).value,
                                             document.getElementById('apellido' + i).value,
                                             document.getElementById('email' + i).value,
-                                            cicloId
+                                            cicloId,
+                                            fechaInicio, 
+                                            fechaFin 
                                         ];
 
                                         alumnosMarcados++;
@@ -606,24 +734,14 @@ window.addEventListener("load", function(){
                                     }
                                 }
                                 
-                                // Validaciones con mensajes en spans
-                                if (!selFamilias.value || selFamilias.value === "-1") {
-                                    errorFamilia.textContent = "Debe seleccionar una familia.";
-                                    return;
-                                }
-                                
-                                if (!selCiclos.value || selCiclos.value === "-1") {
-                                    errorCiclo.textContent = "Debe seleccionar un ciclo.";
-                                    return;
-                                }
-                                
+                                // 3. Validar que haya alumnos marcados
                                 if (alumnosMarcados === 0) {
                                     errorValidacion.textContent = "Debe seleccionar al menos un alumno para cargar.";
                                     return;
                                 }
 
                                 fetch('/API/ApiAlumno.php?process=saveAll', {
-                                    method: 'PUT',
+                                    method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify(alumnosCargar)
                                 })
@@ -669,6 +787,8 @@ window.addEventListener("load", function(){
                                     // Mostrar resultados en span
                                     if (data.errores.length > 0) {
                                         errorCarga.textContent = `Se guardaron ${data.guardados.length} alumnos. ${data.errores.length} emails ya existían: ${emailsErrores.join(', ')}`;
+                                    } else {
+                                        errorCarga.textContent = `¡Éxito! Se guardaron ${data.guardados.length} alumnos.`;
                                     }
                                 })
                                 .catch(error => {
@@ -707,6 +827,7 @@ window.addEventListener("load", function(){
             
             const divNombre = crearCampo("Nombre:", "text", "nombre", true);
             const divApellido = crearCampo("Apellido:", "text", "apellido", true);
+            const divDni = crearCampo("DNI:", "text", "dni", true);
             const divEmail = crearCampo("Email:", "email", "email", true);
             const divTelefono = crearCampo("Teléfono:", "tel", "telefono", true);
             const divProvincia = crearCampo("Provincia:", "text", "provincia");
@@ -723,6 +844,7 @@ window.addEventListener("load", function(){
             formGrid.appendChild(divNombre);
             formGrid.appendChild(divApellido);
             formGrid.appendChild(divEmail);
+            formGrid.appendChild(divDni);
             formGrid.appendChild(divTelefono);
             formGrid.appendChild(divProvincia);
             formGrid.appendChild(divLocalidad);
@@ -742,20 +864,10 @@ window.addEventListener("load", function(){
 
                 const formData = new FormData(this);
 
-                    const data = { // se envian los datos en una variable para no usar $_POST en backend
-                        nombre: formData.get('nombre'),
-                        apellido: formData.get('apellido'),
-                        username: formData.get('email'),
-                        telefono: formData.get('telefono'),
-                        provincia: formData.get('provincia'),
-                        localidad: formData.get('localidad'),
-                        direccion: formData.get('direccion'),
-                    };
-
                 fetch('/API/ApiAlumno.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    headers: {'Authorization': 'Bearer ' + userToken},
+                    body: formData
                     })
                 .then((response)=>response.json())
                 .then((data)=>{

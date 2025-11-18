@@ -82,13 +82,8 @@ class EstudiosRepo
     public static function saveEstudiosForAlumno($alumnoId, $estudiosArray)
     {
         if (empty($estudiosArray)) {
-            error_log("⚠️ saveEstudiosForAlumno: Array de estudios vacío");
             return;
         }
-
-        error_log("=== GUARDANDO ESTUDIOS ===");
-        error_log("Alumno ID: $alumnoId");
-        error_log("Cantidad de estudios: " . count($estudiosArray));
 
         $conn = DBC::getConnection();   
         $sql = "INSERT INTO ALUMNO_CICLO (alumno_id, ciclo_id, fecha_inicio, fecha_fin) 

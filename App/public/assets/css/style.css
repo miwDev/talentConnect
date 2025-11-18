@@ -380,34 +380,36 @@ header {
     margin: 0;
 }
 
-/* SECTION 2 - Placeholder con fondo oscuro */
-
-/* SECTION 2 - Carrusel de empresas */
+/* SECTION 2 - Carrusel de empresas (SOLUCIÓN FINAL DE ANIMACIÓN) */
 
 #section2 {
     background-color: #191919;
     border-radius: 2em;
     position: relative;
     z-index: 2;
-    padding-bottom: 4em; /* Añadimos espacio inferior */
-    overflow: hidden; /* Ocultamos lo que se salga */
+    padding-bottom: 8em;
+    overflow: hidden; /* Oculta los logos fuera de la vista para la animación */
 }
 
-/* Hacemos este H2 más específico */
+/* Título de la sección */
 #section2 h2 {
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
     padding: 1.5em;
-    padding-bottom: 1em; /* Menos padding para acercar el carrusel */
+    padding-bottom: 1em;
     color: #FFFFE9;
     margin: 0;
 }
 
-/* Contenedor principal del carrusel */
-.companies-container {
+/* Contenedor principal de la ventana de visualización */
+/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
+#section2 .companies-container {
     width: 100%;
     overflow: hidden;
+    /* Revertimos cualquier flex-wrap no deseado que pudiera venir del dashboard */
+    display: block; 
+    
     /* Efecto de máscara para que los logos desaparezcan suavemente en los bordes */
     mask-image: linear-gradient(
         to right,
@@ -425,27 +427,33 @@ header {
     );
 }
 
-.logo-slider {
-    display: flex;
-    width: fit-content;
-    animation: scroll 40s linear infinite;
-    padding: 75px;
+/* Contenedor de logos: FUERZA la línea y aplica la animación. */
+/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
+#section2 .logo-slider {
+    display: flex; 
+    flex-wrap: nowrap !important; /* <--- CLAVE: Ignora cualquier "flex-wrap: wrap" anterior */
+    justify-content: flex-start !important; /* Asegura que no se centre, lo que podría ocultar el inicio/fin del carrusel */
+    width: fit-content; /* Permite que el ancho sea la suma total de los logos duplicados */
+    animation: scroll 40s linear infinite !important; /* <--- CLAVE: Vuelve a activar la animación sobre cualquier anulación */
+    padding: 75px 0;
 }
 
 /* Estilo para cada logo */
-.logo-slider img {
-    height: 230px;
+#section2 .logo-slider img { /* Usamos #section2 para los logos también */
+    height: 240px;
     width: auto;
-    margin: 0 45px;
+    margin: 0 40px;
     border-radius: 12px;
-    border: 3px solid #505050;
-    transition: filter 0.3s ease;
+    object-fit: contain;
+    background-color: #FEFDF8;
+    padding: 15px;
+    border: 1px solid #505050;
+    flex-shrink: 0; /* Impide que las imágenes se compriman */
 }
 
-/* Definición de la animación */
+/* Definición de la animación de scroll */
 @keyframes scroll {
     0% {
-        /* Posición inicial */
         transform: translateX(0);
     }
     100% {
@@ -482,7 +490,6 @@ header {
 }
 
 h3{
-    text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 2.3em;
     color: #191919;
@@ -888,6 +895,41 @@ body:has(.list-container) {
 }
 
 
+/*ESTILO PARA BOTON VOLVER EN CANDIDATE*/
+
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.7em 1.5em;
+    background-color: #FFFFE9;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    color: #191919;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-volver:hover {
+    background-color: #FEFDF8;
+    border-color: #191919;
+    color: #191919;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-volver:active {
+    transform: translateX(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-volver-icon {
+    width: 22px;
+    height: 22px;
+}
+
 /* 11. ESTILOS PARA TARJETA DE OFERTA */
 
 /* Contenedor principal de la tarjeta.
@@ -916,6 +958,16 @@ body:has(.list-container) {
     margin-bottom: 1em; /* Espacio debajo de este bloque */
     padding-bottom: 0.5em;
     border-bottom: 1px solid #50505030; /* Línea separadora suave */
+}
+
+/* AÑADIDO: Estilo para el enlace <a> dentro de .card-CompanyInfo para que parezca un div */
+.list-container .card-CompanyInfo a {
+    display: flex; /* Replica el display: flex del contenedor padre para el contenido interno */
+    align-items: center;
+    gap: 0.75em;
+    text-decoration: none; /* Elimina el subrayado por defecto del enlace */
+    color: inherit; /* Hereda el color del texto del padre */
+    width: 100%; /* Ocupa todo el ancho del contenedor padre */
 }
 
 /* Estilo para el logo */
@@ -1557,9 +1609,6 @@ background: #d7b4f2;
     overflow: visible; 
     /* Eliminamos las propiedades de límite de línea */
     display: block; 
-    -webkit-line-clamp: unset; 
-    -webkit-box-orient: unset;
-    
     margin-bottom: 0.5em; /* Espacio después de los comentarios */
     font-style: italic; /* Para diferenciar el comentario de la descripción de la oferta */
     color: #505050;
@@ -1600,4 +1649,905 @@ background: #d7b4f2;
     border-color: #C53030;
 }
 
-/* Eliminamos el media query de grid ya que no es necesario */
+/* 15. ESTILOS ESPECÍFICOS PARA MODAL DE ELIMINACIÓN (DELETE MODE) */
+
+/* Ajuste del contenedor cuando está en modo eliminación */
+.modal-body-container.delete-mode {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 1em 0;
+}
+
+/* Quitamos la línea divisoria del header para que se vea más limpio */
+.modal-body-container.delete-mode .modal-header-content {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 1em;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Centramos el título y aumentamos un poco el peso visual */
+.modal-body-container.delete-mode .modal-title-wrapper {
+    max-width: 100%;
+    text-align: center;
+}
+
+.modal-body-container.delete-mode .modal-title-wrapper h2 {
+    font-size: 2.2em; /* Un poco más grande para llamar la atención */
+    color: #191919;
+}
+
+/* Ajuste de la botonera para centrarla */
+.modal-body-container.delete-mode .modal-actions {
+    border-top: none; /* Quitamos la línea superior */
+    justify-content: center; /* Centramos los botones */
+    width: 100%;
+    padding-top: 10px;
+    gap: 2em; /* Más separación entre botones */
+}
+
+/* ESTILO PELIGRO (ROJO) para el botón de confirmar eliminación */
+/* Hereda la forma de .btn-confirm pero cambia los colores */
+.btn-confirm.btn-danger {
+    background-color: #E53E3E; /* Rojo de tu paleta (#E53E3E) */
+    color: #FFFFE9; /* Texto claro */
+    border-color: #191919;
+}
+
+.btn-confirm.btn-danger:hover {
+    background-color: #C53030; /* Rojo más oscuro al hover */
+    border-color: #191919;
+}
+
+/* Opcional: Hacer el botón cancelar un poco más sutil en este contexto */
+.modal-body-container.delete-mode .btn-cancel {
+    background-color: transparent;
+    border-color: #505050;
+}
+
+.modal-body-container.delete-mode .btn-cancel:hover {
+    background-color: #e2e2e2;
+    border-color: #191919;
+}
+
+
+/* 16. ESTILOS PARA TARJETA DE CANDIDATO (V2 - Con Iconos SVG y Caja Comentarios) */
+
+/* Wrapper Principal */
+.candidate-wrapper {
+    background-color: transparent; 
+    border: none; 
+    margin-bottom: 2em;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Grid Layout de la Tarjeta */
+.candidate-card {
+    background-color: #FEFDF8;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    
+    display: grid;
+    /* Estructura: 38% Imagen | Resto Info */
+    grid-template-columns: 38% 1fr 1fr; 
+    grid-template-rows: auto auto 1fr auto;
+    gap: 1.5em; 
+    padding: 1.5em; 
+    overflow: hidden; 
+}
+
+/* 1. Imagen Visual */
+.candidate-visual {
+    grid-row: span 4; 
+    background-color: #191919; 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Márgenes negativos para ocupar todo el lateral */
+    margin: -1.5em 0 -1.5em -1.5em; 
+    height: calc(100% + 3em); 
+}
+
+.candidate-visual img.profile-image {
+    width: 80%; 
+    height: 80%;
+    object-fit: contain; 
+    z-index: 2;
+}
+
+.candidate-visual .bg-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, #333 10%, #191919 90%);
+    z-index: 1;
+}
+
+/* 2. Nombre */
+.candidate-name { 
+    grid-column-start: 2; 
+    grid-row-start: 1; 
+    align-self: end; 
+}
+
+.candidate-name h3 { 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.8em; 
+    color: #191919; 
+    margin: 0; 
+}
+
+/* 3. Detalles y Caja de Comentarios */
+.candidate-details {
+    grid-row: span 2;
+    grid-column-start: 2;
+    grid-row-start: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em; 
+    min-width: 0;
+}
+
+.candidate-details .dni-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25em; /* AUMENTADO */
+    font-weight: 600;
+    color: #191919;
+    margin: 0;
+}
+
+/* --- ESTILOS DE LA NUEVA CAJA DE COMENTARIOS --- */
+.candidate-comment-block {
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.comment-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95em; /* AUMENTADO LIGERAMENTE */
+    font-weight: 700;
+    color: #16443D; /* Verde oscuro */
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.comment-box {
+    background-color: #FFFFE9;
+    border: 1px solid #50505030;
+    border-left: 4px solid #EBD3FD; /* Borde morado a la izquierda */
+    border-radius: 0.4em;
+    padding: 0.8em;
+}
+
+.candidate-details .comment-text {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em; /* AUMENTADO */
+    color: #505050;
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
+
+/* 4. Ubicación */
+.candidate-location { 
+    grid-column-start: 2; 
+    grid-row-start: 4; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.2em; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.2em; /* AUMENTADO */
+}
+
+/* 5. Etiquetas (Estudios) */
+.candidate-tags { 
+    grid-row: span 2; 
+    grid-column-start: 3; 
+    grid-row-start: 1; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.6em; 
+    align-items: flex-end; 
+}
+
+.candidate-tags .study-tag-candidate {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.0em; /* Se mantiene */
+    color: #191919;      
+    font-weight: 500;
+    text-align: right;   
+    margin-top: 0.2em; 
+}
+
+.candidate-tags .study-tag-candidate::before {
+    content: '• ';
+    color: #505050; 
+    font-weight: bold;
+}
+
+/* 6. Meta (Fecha y CV) */
+.candidate-meta { 
+    grid-row: span 2; 
+    grid-column-start: 3; 
+    grid-row-start: 3; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end; 
+    align-items: flex-end; 
+    gap: 1em; 
+}
+
+.candidate-meta .date-text { 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.15em; /* AUMENTADO */
+    color: #505050; 
+    margin: 0; 
+    display: flex;
+    align-items: center;
+}
+
+.candidate-meta .btn-view-cv { 
+    text-decoration: none; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.1em; /* AUMENTADO */
+    font-weight: 600; 
+    color: #191919; 
+    background: #FEFDF8; 
+    border: 2px solid #191919; 
+    padding: 0.6em 1.3em; /* Ajuste el padding con el nuevo tamaño de fuente */
+    border-radius: 0.5em; 
+    transition: all 0.2s; 
+    display: flex;
+    align-items: center;
+}
+.candidate-meta .btn-view-cv:hover { 
+    background: #EBD3FD; 
+    transform: translateY(-2px); 
+}
+
+/* --- ICONOS SVG --- */
+.icon-mini {
+    width: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
+    height: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 0.4em;
+    opacity: 0.8;
+}
+
+.icon-mini-btn {
+    width: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
+    height: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
+    margin-left: 0.4em;
+    vertical-align: middle;
+}
+
+.icon-action {
+    width: 1.5em;
+    height: 1.5em;
+    object-fit: contain;
+}
+
+/* --- BOTONES DE ACCIÓN --- */
+.candidate-actions-group {
+    display: flex;
+    gap: 20px; 
+}
+
+.btn-decision {
+    flex: 1;
+    padding: 0.8em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em; 
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8em;
+    border: 3px solid #191919;
+    border-radius: 0.6875em;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1); 
+}
+
+.btn-decision:active { 
+    transform: translateY(2px); 
+    box-shadow: none; 
+}
+
+/* Botón Rechazar */
+.btn-decision.reject { 
+    background-color: #FEFDF8; 
+    color: #E53E3E; 
+    border-color: #E53E3E; 
+}
+.btn-decision.reject:hover { 
+    background-color: #E53E3E; 
+    color: #FFFFE9; 
+    border-color: #191919; 
+}
+/* Invertir color del icono en hover para que se vea blanco */
+.btn-decision.reject:hover .icon-action { 
+    filter: brightness(0) invert(1); 
+}
+
+/* Botón Aprobar */
+.btn-decision.approve { 
+    background-color: #FEFDF8; 
+    color: #16443D; 
+    border-color: #16443D; 
+}
+.btn-decision.approve:hover { 
+    background-color: #16443D; 
+    color: #FFFFE9; 
+    border-color: #191919;
+    box-shadow: 0 4px 8px rgba(22, 68, 61, 0.3);
+}
+/* Filtro para invertir color del icono a blanco en hover */
+.btn-decision.approve:hover .icon-action { 
+    filter: brightness(0) invert(1); 
+}
+
+/* 17. ESTILOS DASHBOARD EMPRESA */
+
+/* Contenedor principal: Reutiliza estilos de .list-container pero para el dashboard */
+.list-container.dashboard-container {
+    padding: 3.5em 5em; /* Más padding para los gráficos */
+    max-width: 1200px; /* Un poco más ancho que el formulario/lista */
+}
+
+.dashboard-container .header-section {
+    text-align: center;
+    margin-bottom: 3.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dashboard-container .header-section h1 {
+    font-size: 3em;
+    margin-top: 0.1em;
+}
+
+.dashboard-container .dashboard-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.3em;
+    color: #505050;
+    margin-top: 0.5em;
+}
+
+.dashboard-container .icon-dashboard-title {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 0 5px #EBD3FD); /* Añade un pequeño brillo al icono */
+}
+
+
+/* --- KPIs --- */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2em;
+    margin-bottom: 3.5em;
+}
+
+.kpi-card {
+    background-color: #FEFDF8;
+    border: 2px solid #191919;
+    border-radius: 0.6875em;
+    padding: 2em;
+    text-align: center;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75em 1.5em rgba(0, 0, 0, 0.15);
+}
+
+.kpi-icon {
+    width: 3.5em;
+    height: 3.5em;
+    object-fit: contain; 
+    display: block;
+    margin: 0 auto 0.3em auto;
+}
+
+.kpi-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #505050;
+    margin: 0.2em 0;
+}
+
+.kpi-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em;
+    font-weight: 700;
+    color: #191919;
+    margin: 0;
+}
+
+/* Colores de acento para KPIs */
+.kpi-offers {
+    border-left: 8px solid #EBD3FD; /* Morado de acento */
+}
+
+.kpi-solicitudes {
+    border-left: 8px solid #16443D; /* Verde Oscuro */
+}
+
+
+/* --- Gráficos --- */
+
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.chart-card {
+    background-color: #FEFDF8;
+    border: 2px solid #191919;
+    border-radius: 0.6875em;
+    padding: 1.5em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chart-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #191919;
+    text-align: center;
+    margin: 0 0 1em 0;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #50505030;
+}
+
+.chart-canvas-container {
+    position: relative;
+    /* Ajustes de altura específicos para mantener la relación de aspecto en las columnas */
+    height: 400px; 
+}
+
+/* Ajuste específico para el gráfico Top Offers (Barras Horizontales) */
+.chart-bar-h .chart-canvas-container {
+    height: 450px; /* Más alto para que quepan las etiquetas largas */
+}
+
+/* 18. ESTILOS FICHA EMPRESA */
+
+/* Contenedor principal de la ficha: VUELVE A SER CLARO (#FFFFE9) */
+.list-container.ficha-empresa {
+    padding: 0; 
+    max-width: 950px; 
+    overflow: hidden; 
+    background-color: #FFFFE9; /* FONDO CLARO */
+    border: 1.5px solid #191919; 
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    border-bottom: 1.5px solid #191919; 
+}
+
+/* --- SECCIÓN CABECERA (LOGO 40% OSCURO Y NOMBRE 60% CLARO) --- */
+
+.ficha-empresa .header-section {
+    display: flex;
+    flex-direction: row; 
+    align-items: stretch;
+    text-align: left;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none; 
+}
+
+/* Contenedor del Logo (40% de ancho) */
+.ficha-empresa .logo-container {
+    flex: 0 0 40%; 
+    background-color: #191919; /* FONDO OSCURO (GRIS/NEGRO) para el 40% del logo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2em 0; 
+}
+
+/* Imagen del logo: Color CLARO para destacar en el fondo oscuro */
+.ficha-empresa .logo-container .companyPfp {
+    width: 90%; 
+    max-width: 120px; 
+    height: 120px;
+    object-fit: contain;
+    margin: 0; 
+}
+
+/* Contenedor del Nombre (60% de ancho) */
+.ficha-empresa .name-container {
+    flex: 1; /* Ocupa el 60% restante */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    padding: 2em 1em;
+    background-color: #191919; /* Mantenemos el MORADO de acento para el 60% del nombre */
+    
+    /* Borde divisor debajo del nombre y a la izquierda */
+    border-bottom: 2px solid #191919; 
+    border-left: 2px solid #191919; 
+}
+
+/* Color del nombre: Color CLARO/AMARILLENTO de la tarjeta para destacar */
+.ficha-empresa .name-container .companyName {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em; 
+    font-weight: 700;
+    color: #FFFFE9; /* COLOR CLARO solicitado */
+    margin: 0;
+    line-height: 1.1;
+    text-align: center;
+}
+
+/* --- CONTENEDOR DE INFORMACIÓN GENERAL (CONTACTO/UBICACIÓN) --- */
+
+.ficha-empresa .main-content-wrapper {
+    padding: 3.5em; /* Aplicamos el padding aquí donde está el contenido principal */
+}
+
+/* Contenedor para Contacto y Ubicación (en Grid de 2 columnas/Row) */
+.ficha-empresa .content-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 2em; 
+    margin-bottom: 3em;
+}
+
+/* Estilo de las tarjetas individuales: FONDO CLARO */
+.ficha-empresa .content-section > div {
+    background-color: #FEFDF8; 
+    border: 2px solid #191919; 
+    border-radius: 0.6875em;
+    padding: 1.5em;
+    width: auto; 
+    max-width: none; 
+}
+
+/* Títulos de sección (Contacto/Ubicación) */
+.ficha-empresa .content-section h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #16443D;
+    margin-top: 0;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid #191919; 
+    text-align: left;
+}
+
+/* Estilo para los párrafos, separando el label del valor */
+.ficha-empresa .content-section p.companyName {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    margin: 0.8em 0; 
+    display: flex;
+    align-items: baseline;
+    gap: 0.7em; 
+}
+
+.ficha-empresa .content-section p.companyName strong {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; 
+    color: #191919;
+    flex-shrink: 0; 
+    white-space: nowrap; 
+}
+
+.ficha-empresa .content-section p.companyName span {
+    font-weight: 400; 
+    color: #505050; 
+    line-height: 1.4; 
+}
+
+/* Ajuste de la sección de dirección (ya no es especial, es otra tarjeta) */
+.ficha-empresa .address-section {
+    margin-top: 0; 
+}
+
+/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO (SIN CAMBIOS) --- */
+
+.list-container.ofertas-filtro {
+    background-color: #FFFFE9;
+    border: 1.5px solid #191919;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2em 3em;
+    margin: 2em auto 4em auto;
+    max-width: 900px;
+}
+
+.ofertas-filtro .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2.5em;
+    padding-bottom: 1.5em;
+    border-bottom: 2px solid #191919;
+}
+
+.ofertas-filtro button {
+    background-color: #FEFDF8;
+    color: #191919;
+    padding: 0.6em 2em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: 3px solid #505050;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ofertas-filtro button:hover {
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+.ofertas-filtro button.active {
+    background-color: #EBD3FD;
+    color: #191919;
+    border-color: #191919;
+    font-weight: 700;
+}
+
+/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO --- */
+
+.list-container.ofertas-filtro {
+    /* Mantiene los estilos del contenedor principal */
+    background-color: #FFFFE9;
+    border: 1.5px solid #191919;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2em 3em;
+    margin: 2em auto 4em auto;
+    max-width: 900px;
+}
+
+.ofertas-filtro .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2.5em;
+    padding-bottom: 0; /* Quitamos el padding inferior */
+    border-bottom: none; /* Quitamos la línea de separación estática */
+}
+
+.ofertas-filtro button {
+    /* Reset de estilos */
+    background-color: transparent; 
+    color: #191919;
+    padding: 0.6em 1.5em; /* Ajuste de padding */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: none; /* ELIMINADO: Bordes y radius */
+    border-radius: 0; /* ELIMINADO: Bordes y radius */
+    cursor: pointer;
+    transition: border-bottom 0.3s ease, font-weight 0.2s; /* Transición para la raya */
+    
+    /* Estado por defecto: raya invisible */
+    border-bottom: 3px solid transparent; 
+}
+
+.ofertas-filtro button:hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* Estilo para el botón activo: raya visible */
+.ofertas-filtro button.active {
+    background-color: transparent;
+    color: #16443D;
+    font-weight: 700; /* Negrita al activo */
+    border-bottom: 3px solid #191919; /* Rayita morada de acento */
+}
+
+
+/* 19. ESTILOS DASHBOARD ALUMNO */
+
+/* Ajuste del contenedor principal: Más espacio para el contenido */
+.list-container.dashboard-alumno-container {
+    padding: 3.5em; 
+    max-width: 1200px;
+}
+
+/* Ajuste del Título principal (reutilizando estilos de dashboard-empresa) */
+.student-panel-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3em;
+    color: #191919;
+    margin: 0;
+    margin-bottom: 0.1em;
+}
+
+.dashboard-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2em;
+    color: #505050;
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+/* Títulos de las secciones (Empresas/Ofertas) */
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #191919;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+/* Separador horizontal entre secciones */
+.list-container hr {
+    border: none;
+    border-top: 3px solid #505050;
+    margin: 4em 0;
+    opacity: 0.2;
+}
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL) --- */
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL SCROLLEABLE HORIZONTAL) --- */
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (GRID CENTRADO Y FLUIDO) --- */
+
+.section-empresas {
+    /* Mantenemos el fondo oscuro y el margen negativo para la estética del dashboard */
+    background-color: #191919;
+    padding: 2.5em 3.5em; /* Añadimos padding vertical y lateral fijo */
+    margin: 0 -3.5em; /* Margen negativo para expandir al borde del contenedor */
+    border-radius: 0.6875em;
+    text-align: center; /* Centramos el título */
+}
+
+.section-empresas .section-title {
+    color: #FFFFE9; /* Título claro en fondo oscuro */
+    margin-bottom: 1em; /* Ajustamos el margen inferior */
+    padding: 0;
+}
+
+/* Contenedor principal de los logos: Actúa como el 'slider' */
+.companies-container {
+    width: 100%;
+    overflow: visible; /* Aseguramos que no haya scrollbar forzado */
+    padding: 0; /* Eliminamos el padding que forzaba el scroll */
+    
+    /* Reemplazamos el contenedor de logos y el slider por un layout centrado */
+    display: flex;
+    flex-wrap: wrap; /* CLAVE: Permite que los elementos pasen a la siguiente línea */
+    justify-content: center; /* CLAVE: Centra los elementos horizontalmente */
+    gap: 2.5em; /* Espacio uniforme entre los elementos (filas y columnas) */
+}
+
+.logo-slider {
+    /* Este div ahora es redundante y solo actúa como wrapper del flexbox,
+       pero para mantener la estructura HTML, le damos display: contents para
+       que sus hijos fluyan directamente en .companies-container.
+       Alternativamente, si el HTML no se puede cambiar, forzamos un ancho y flex. */
+    display: contents; /* Hace que los hijos fluyan en el padre .companies-container */
+    padding: 0;
+    margin: 0;
+    animation: none; /* Aseguramos que la animación esté deshabilitada */
+}
+
+/* Estilo para cada tarjeta de logo */
+.logo-slider .card-CompanyInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    /* Definimos un tamaño base fijo para que el flex-wrap funcione correctamente */
+    width: 180px; 
+    margin: 0; /* Eliminamos márgenes no deseados */
+}
+
+/* Estilo para cada logo */
+.logo-slider .card-CompanyInfo img {
+    height: 140px; /* Reducimos ligeramente el tamaño de la imagen */
+    width: 140px;
+    object-fit: contain;
+    background-color: #FEFDF8; /* Damos un fondo claro para que el logo se vea mejor */
+    padding: 10px;
+}
+
+/* Efecto hover para los logos */
+.logo-slider .card-CompanyInfo:hover img {
+    border-color: #EBD3FD;
+    box-shadow: 0 4px 12px rgba(235, 211, 253, 0.4);
+}
+
+/* Nombre de la empresa debajo del logo */
+.logo-slider .card-CompanyInfo p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #FFFFE9; /* Color claro para contrastar con fondo oscuro */
+    margin: 0;
+    text-align: center;
+    max-width: 180px;
+    word-wrap: break-word;
+}
+
+/* Reutilizamos .companies-container y .logo-slider del Bloque 3 para el carrusel animado */
+/* Nota: Si el carrusel no funciona, es porque el JS no ha duplicado los logos */
+
+
+/* --- ESTILOS ÚLTIMAS OFERTAS (LISTA CON SCROLL) --- */
+
+.ofertas-scroll-container {
+    /* Dimensiones para habilitar el scroll */
+    background-color: #191919;
+    max-height: 800px; /* Altura máxima antes de que aparezca el scroll */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    padding-right: 15px; /* Espacio para que la barra de scroll no toque las tarjetas */
+    margin: 0 auto; /* Centrado si hay un max-width */
+    border-radius: 0.6875em;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+}
+
+/* Estilo para la barra de scroll (opcional pero recomendado) */
+.ofertas-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #EBD3FD; /* Morado de acento */
+    border-radius: 10px;
+    border: 2px solid #FFFFE9; /* Borde del color de la tarjeta */
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-track {
+    background-color: #FEFDF8; /* Fondo claro de la tarjeta */
+    border-radius: 10px;
+}
+
+/* Aseguramos que la tarjeta de oferta ocupe el 100% (menos el espacio del scroll) */
+.ofertas-scroll-container .oferta-card {
+    max-width: none; /* Asegura que la tarjeta no se vea limitada por estilos anteriores */
+    margin-right: 25px; 
+    margin-left: 25px;/* Compensa el padding-right del contenedor para centrar la tarjeta */
+    margin-top: 25px;
+}
+
+/* Texto de placeholder si las ofertas o empresas aún no han cargado */
+.placeholder-text {
+    text-align: center;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2em;
+    color: #505050;
+    padding: 2em;
+    font-style: italic;
+}

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'talent-connect/app',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '015942b976204b5b9059d828a82cfe2d5e8457ed',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -55,6 +55,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v7.0.0',
+            'version' => '7.0.0.0',
+            'reference' => 'c7111310c6116ba508a6a170a89eaaed2129bd42',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'sabberworm/php-css-parser' => array(
             'pretty_version' => 'v8.9.0',
             'version' => '8.9.0.0',
@@ -65,9 +74,9 @@
             'dev_requirement' => false,
         ),
         'talent-connect/app' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '015942b976204b5b9059d828a82cfe2d5e8457ed',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

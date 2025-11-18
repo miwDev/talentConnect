@@ -6,6 +6,7 @@ use App\core\data\AlumnoRepo;
 use App\core\data\CicloRepo;
 use App\core\data\EmpresaRepo;
 use App\core\data\OfertaRepo;
+use App\core\data\SolicitudRepo;
 use App\core\DTO\AlumnoDTO;
 use App\core\DTO\EmpresaDTO;
 use App\core\DTO\CicloDTO;
@@ -25,21 +26,28 @@ use App\core\helper\Security;
         /// Alumno.                      /////
         /////////////////////////////////////
 
-        public static function DTOtoAlumno($data)
-        {
+        public static function DTOtoAlumno($authHeaderValue){
+
+        $token = self::tokenRetrieve($authHeaderValue); 
+        
+        if(is_null($token)){
+            $alumno = false;
+        }
+
+        
             $alumno = new Alumno(
                 null, //id
-                $data['username'], //email
+                $_POST['email'], //email
                 Security::passEncrypter("tempPass"), //pass
-                $data['nombre'], //nombre
-                $data['apellido'], //apellido
-                null, //dni
-                $data['telefono'], //telefone
-                $data['direccion'], //dir
+                $_POST['nombre'], //nombre
+                $_POST['apellido'], //apellido
+                $_POST['dni'], //dni
+                $_POST['telefono'], //telefone
+                $_POST['direccion'], //dir
                 '/assets/images/genericAvatar.svg', //foto
                 null, //cv
-                $data['provincia'], // provincia
-                $data['localidad'], //localidad
+                $_POST['provincia'], // provincia
+                $_POST['localidad'], //localidad
                 0 //confirmed = 0/false
             );
 
@@ -48,133 +56,133 @@ use App\core\helper\Security;
 
         public static function formDataToAlumno(){
 
-    // Lógica de guardado de la foto de perfil
-    $fotoData = $_POST['fotoPerfil'] ?? null;
-    $ruta_base = __DIR__ . '/../../public';
-    $carpeta_destino = $ruta_base . '/assets/images/userPfp/';
-    $ruta_para_base_de_datos = '/assets/images/genericAvatar.svg';
+        // Lógica de guardado de la foto de perfil
+        $fotoData = $_POST['fotoPerfil'] ?? null;
+        $ruta_base = __DIR__ . '/../../public';
+        $carpeta_destino = $ruta_base . '/assets/images/userPfp/';
+        $ruta_para_base_de_datos = '/assets/images/genericAvatar.svg';
 
-    if($fotoData && $fotoData !== 'default'){
-        if (preg_match('/^data:image\/(\w+);base64,(.+)$/', $fotoData, $matches)) {
-            $extension = $matches[1];
-            $datos_base64 = $matches[2];
+        if($fotoData && $fotoData !== 'default'){
+            if (preg_match('/^data:image\/(\w+);base64,(.+)$/', $fotoData, $matches)) {
+                $extension = $matches[1];
+                $datos_base64 = $matches[2];
 
-            $datos_binarios = base64_decode($datos_base64);
-            $nombre_archivo = 'foto_' . uniqid() . '.' . $extension;
-            $ruta_fisica_archivo = $carpeta_destino . $nombre_archivo;
+                $datos_binarios = base64_decode($datos_base64);
+                $nombre_archivo = 'foto_' . uniqid() . '.' . $extension;
+                $ruta_fisica_archivo = $carpeta_destino . $nombre_archivo;
 
-            if (!is_dir($carpeta_destino)) {
-                mkdir($carpeta_destino, 0755, true);
+                if (!is_dir($carpeta_destino)) {
+                    mkdir($carpeta_destino, 0755, true);
+                }
+
+                if (file_put_contents($ruta_fisica_archivo, $datos_binarios)) {
+                    $ruta_para_base_de_datos = '/assets/images/userPfp/' . $nombre_archivo; 
+                } else {
+                    error_log("No se pudo guardar la imagen: " . $ruta_fisica_archivo);
+                }
             }
-
-            if (file_put_contents($ruta_fisica_archivo, $datos_binarios)) {
-                $ruta_para_base_de_datos = '/assets/images/userPfp/' . $nombre_archivo; 
-            } else {
-                error_log("No se pudo guardar la imagen: " . $ruta_fisica_archivo);
-            }
         }
-    }
 
-    // Lógica de guardado del CV
-    $carpeta_destino_cv = $ruta_base . '/assets/uploads/cvs/';
-    $ruta_cv_db = null;
+        // Lógica de guardado del CV
+        $carpeta_destino_cv = $ruta_base . '/assets/uploads/cvs/';
+        $ruta_cv_db = null;
 
-    if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
-        $archivo_temporal = $_FILES['cv']['tmp_name'];
-        $nombre_original = $_FILES['cv']['name'];
-        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
-        
-        $dni_alumno = $_POST['dni'] ?? 'sin_dni'; 
-        $nombre_seguro = preg_replace('/[^a-zA-Z0-9]/', '_', $dni_alumno) . '.' . $extension;
-        
-        if (!is_dir($carpeta_destino_cv)) {
-            mkdir($carpeta_destino_cv, 0755, true);
-        }
-        
-        $ruta_destino_final = $carpeta_destino_cv . $nombre_seguro;
-        
-        if (move_uploaded_file($archivo_temporal, $ruta_destino_final)) {
-            $ruta_cv_db = '/assets/uploads/cvs/' . $nombre_seguro;
-        } else {
-            error_log("Error al mover el archivo CV a: " . $ruta_destino_final);
-        }
-    } else {
-        error_log("No se recibió el archivo CV o hubo un error de subida: " . ($_FILES['cv']['error'] ?? 'No set'));
-    }
-
-    $alumnoFull = new Alumno(
-        null,
-        $_POST['email'] ?? '',
-        Security::passEncrypter($_POST['password'] ?? 'securityPass'),
-        $_POST['nombre'] ?? '',
-        $_POST['apellido'] ?? '',
-        $_POST['dni'] ?? '',
-        $_POST['telefono'] ?? '',
-        $_POST['direccion'] ?? '',
-        $ruta_para_base_de_datos,
-        $ruta_cv_db,
-        $_POST['provincia'] ?? '',
-        $_POST['localidad'] ?? '',
-        1
-    );
-
-    // ✅ PROCESAMIENTO DE ESTUDIOS MEJORADO CON LOGS
-    $listaDeEstudios = [];
-
-    error_log("=== INICIO PROCESAMIENTO ESTUDIOS ===");
-    error_log("POST familia: " . print_r($_POST['familia'] ?? 'NO EXISTE', true));
-    error_log("POST ciclo: " . print_r($_POST['ciclo'] ?? 'NO EXISTE', true));
-    error_log("POST fecha_inicio: " . print_r($_POST['fecha_inicio'] ?? 'NO EXISTE', true));
-    error_log("POST fecha_fin: " . print_r($_POST['fecha_fin'] ?? 'NO EXISTE', true));
-
-    if (isset($_POST['familia']) && is_array($_POST['familia'])) {
-
-        foreach ($_POST['familia'] as $key => $idFamilia) {
-
-            $idCiclo = $_POST['ciclo'][$key] ?? null;
-            $fechaInicio = $_POST['fecha_inicio'][$key] ?? null;
-            $fechaFin = $_POST['fecha_fin'][$key] ?? null;
-
-            error_log("--- Iteración $key ---");
-            error_log("idFamilia: $idFamilia");
-            error_log("idCiclo: $idCiclo");
-            error_log("fechaInicio: $fechaInicio");
-            error_log("fechaFin: " . ($fechaFin ?: 'NULL'));
-
-            // ✅ CONDICIÓN SIMPLIFICADA Y CLARA
-            $cicloValido = !empty($idCiclo) && $idCiclo !== "-1";
-            $fechaInicioValida = !empty($fechaInicio);
+        if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+            $archivo_temporal = $_FILES['cv']['tmp_name'];
+            $nombre_original = $_FILES['cv']['name'];
+            $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
             
-            if ($cicloValido && $fechaInicioValida) {
-                
-                $fechaFinFinal = (!empty($fechaFin)) ? $fechaFin : null;
-                
-                $nuevoEstudio = new Estudios(null, $idCiclo, $fechaInicio, $fechaFinFinal);
-                $listaDeEstudios[] = $nuevoEstudio;
-                
-                error_log("✅ Estudio agregado: Ciclo $idCiclo, Inicio: $fechaInicio, Fin: " . ($fechaFinFinal ?: 'NULL'));
-            } else {
-                error_log("❌ Estudio NO agregado - Ciclo válido: " . ($cicloValido ? 'SI' : 'NO') . ", Fecha válida: " . ($fechaInicioValida ? 'SI' : 'NO'));
+            $dni_alumno = $_POST['dni'] ?? 'sin_dni'; 
+            $nombre_seguro = preg_replace('/[^a-zA-Z0-9]/', '_', $dni_alumno) . '.' . $extension;
+            
+            if (!is_dir($carpeta_destino_cv)) {
+                mkdir($carpeta_destino_cv, 0755, true);
             }
+            
+            $ruta_destino_final = $carpeta_destino_cv . $nombre_seguro;
+            
+            if (move_uploaded_file($archivo_temporal, $ruta_destino_final)) {
+                $ruta_cv_db = '/assets/uploads/cvs/' . $nombre_seguro;
+            } else {
+                error_log("Error al mover el archivo CV a: " . $ruta_destino_final);
+            }
+        } else {
+            error_log("No se recibió el archivo CV o hubo un error de subida: " . ($_FILES['cv']['error'] ?? 'No set'));
         }
-    } else {
-        error_log("❌ No se encontró el array de familias en POST");
+
+        $alumnoFull = new Alumno(
+            null,
+            $_POST['email'] ?? '',
+            Security::passEncrypter($_POST['password'] ?? 'securityPass'),
+            $_POST['nombre'] ?? '',
+            $_POST['apellido'] ?? '',
+            $_POST['dni'] ?? '',
+            $_POST['telefono'] ?? '',
+            $_POST['direccion'] ?? '',
+            $ruta_para_base_de_datos,
+            $ruta_cv_db,
+            $_POST['provincia'] ?? '',
+            $_POST['localidad'] ?? '',
+            1
+        );
+
+        // ✅ PROCESAMIENTO DE ESTUDIOS MEJORADO CON LOGS
+        $listaDeEstudios = [];
+
+        error_log("=== INICIO PROCESAMIENTO ESTUDIOS ===");
+        error_log("POST familia: " . print_r($_POST['familia'] ?? 'NO EXISTE', true));
+        error_log("POST ciclo: " . print_r($_POST['ciclo'] ?? 'NO EXISTE', true));
+        error_log("POST fecha_inicio: " . print_r($_POST['fecha_inicio'] ?? 'NO EXISTE', true));
+        error_log("POST fecha_fin: " . print_r($_POST['fecha_fin'] ?? 'NO EXISTE', true));
+
+        if (isset($_POST['familia']) && is_array($_POST['familia'])) {
+
+            foreach ($_POST['familia'] as $key => $idFamilia) {
+
+                $idCiclo = $_POST['ciclo'][$key] ?? null;
+                $fechaInicio = $_POST['fecha_inicio'][$key] ?? null;
+                $fechaFin = $_POST['fecha_fin'][$key] ?? null;
+
+                error_log("--- Iteración $key ---");
+                error_log("idFamilia: $idFamilia");
+                error_log("idCiclo: $idCiclo");
+                error_log("fechaInicio: $fechaInicio");
+                error_log("fechaFin: " . ($fechaFin ?: 'NULL'));
+
+                // ✅ CONDICIÓN SIMPLIFICADA Y CLARA
+                $cicloValido = !empty($idCiclo) && $idCiclo !== "-1";
+                $fechaInicioValida = !empty($fechaInicio);
+                
+                if ($cicloValido && $fechaInicioValida) {
+                    
+                    $fechaFinFinal = (!empty($fechaFin)) ? $fechaFin : null;
+                    
+                    $nuevoEstudio = new Estudios(null, $idCiclo, $fechaInicio, $fechaFinFinal);
+                    $listaDeEstudios[] = $nuevoEstudio;
+                    
+                    error_log("✅ Estudio agregado: Ciclo $idCiclo, Inicio: $fechaInicio, Fin: " . ($fechaFinFinal ?: 'NULL'));
+                } else {
+                    error_log("❌ Estudio NO agregado - Ciclo válido: " . ($cicloValido ? 'SI' : 'NO') . ", Fecha válida: " . ($fechaInicioValida ? 'SI' : 'NO'));
+                }
+            }
+        } else {
+            error_log("❌ No se encontró el array de familias en POST");
+        }
+
+        error_log("Total de estudios procesados: " . count($listaDeEstudios));
+        error_log("=== FIN PROCESAMIENTO ESTUDIOS ===");
+
+        $alumnoFull->estudios = $listaDeEstudios;
+
+        return $alumnoFull;
     }
-
-    error_log("Total de estudios procesados: " . count($listaDeEstudios));
-    error_log("=== FIN PROCESAMIENTO ESTUDIOS ===");
-
-    $alumnoFull->estudios = $listaDeEstudios;
-
-    return $alumnoFull;
-}
 
     public static function AllAlumnoToDTO($alumnos)
     {
         $alumnosDTO = [];
 
         if (empty($alumnos)) {
-            return $alumnosDTO;
+            $alumnosDTO = false;
         }
 
         foreach ($alumnos as $alumno) {
@@ -400,31 +408,29 @@ use App\core\helper\Security;
     }
 
     public static function getEmpresaDTObyToken($authHeaderValue){
+    $token = self::tokenRetrieve($authHeaderValue); 
 
-        $token = self::tokenRetrieve($authHeaderValue); 
+    if (is_null($token) || empty($token)) {
+        return false;
+    }
 
-        if (is_null($token)) {
-            $EmpresaDTO = false;
-        }
+    $empresa = EmpresaRepo::findByToken($token);
 
-        $empresa = EmpresaRepo::findByToken($token);
-
-        if($empresa){
-            
-            $empresaDTO = new EmpresaDTO(
-                $empresa->id,
-                $empresa->cif,
-                $empresa->nombre,
-                $empresa->username,
-                $empresa->telefono,
-                $empresa->logo,
-                $empresa->validacion
-            );
-        }else{
-            $empresaDTO = false;
-        }
+    if($empresa){
+        $empresaDTO = new EmpresaDTO(
+            $empresa->id,
+            $empresa->cif,
+            $empresa->nombre,
+            $empresa->username,
+            $empresa->telefono,
+            $empresa->logo,
+            $empresa->validacion
+        );
         return $empresaDTO;
     }
+    
+    return false;
+}
 
     public static function getEmpresaDTObyId($id){
 
@@ -571,6 +577,32 @@ use App\core\helper\Security;
             }
         }
         
+        return $solicitud;
+    }
+
+    public static function editedDatatoSolicitud($data, $header){
+        $token = self::tokenRetrieve($header); 
+        $solicitud = false;
+
+        if (!is_null($token)){
+            $solicitud = SolicitudRepo::findById($data['solicitudId']);
+            
+            if ($solicitud) {
+                $solicitud->comentarios = $data['comentario'];
+                $solicitud->finalizado = $data['finalizado'] ? 1 : 0;
+            }
+        }
+
+        return $solicitud;
+    }
+
+    public static function SolicitudForDeletion($data, $header){
+        $token = self::tokenRetrieve($header); 
+        $solicitud = false;
+        
+        if(!is_null($token) && $data['solicitudId'] != null){
+            $solicitud = SolicitudRepo::findById($data['solicitudId']);
+        }
         return $solicitud;
     }
 
