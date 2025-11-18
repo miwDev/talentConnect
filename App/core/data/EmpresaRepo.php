@@ -325,6 +325,67 @@ class EmpresaRepo implements RepoInterface
         return $empresa;
     }
 
+    public static function findCompaniesWithMatchingOffers($alumnoId)
+    {
+        $conn = DBC::getConnection();
+        $empresas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT DISTINCT
+                    e.id AS empresa_id,
+                    u.user_name AS username,
+                    u.passwrd AS pass,
+                    e.nombre AS nombre,
+                    e.telefono AS telefono,
+                    e.direccion AS direccion,
+                    e.nombre_persona AS nombrePersona,
+                    e.telefono_persona AS telPersona,
+                    e.logo AS logo,
+                    e.validacion AS validacion,
+                    e.provincia AS provincia,
+                    e.localidad AS localidad,
+                    e.cif AS cif
+                 FROM EMPRESA e
+                 JOIN USER u ON e.user_id = u.id
+                 JOIN OFERTA o ON e.id = o.empresa_id
+                 JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                 JOIN ALUMNO_CICLO ac ON oc.ciclo_id = ac.ciclo_id
+                 WHERE ac.alumno_id = :alumno_id'
+            );
+
+            $query->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($resultados as $res) {
+                $empresas[] = new Empresa(
+                    $res['empresa_id'],
+                    $res['username'],
+                    $res['pass'],
+                    $res['cif'],
+                    $res['nombre'],
+                    $res['telefono'],
+                    $res['direccion'],
+                    $res['provincia'],
+                    $res['localidad'],
+                    $res['nombrePersona'],
+                    $res['telPersona'],
+                    $res['logo'],
+                    $res['validacion']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar empresas con ofertas coincidentes para el alumno ID $alumnoId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+             error_log("Error general al buscar empresas con ofertas coincidentes: " . $e->getMessage());
+             return [];
+        }
+
+        return $empresas;
+    }
+
     // UPDATE
     public static function update($empresa)
     {

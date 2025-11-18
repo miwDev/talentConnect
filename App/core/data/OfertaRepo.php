@@ -542,6 +542,72 @@ class OfertaRepo implements RepoInterface
     }
 
 
+
+    public static function getLast5OffersByCiclo($alumnoId)
+    {
+        $conn = DBC::getConnection();
+        $ofertas = [];
+
+        try {
+            $query = $conn->prepare(
+                'SELECT DISTINCT
+                    o.id AS oferta_id,
+                    o.fecha_oferta AS fecha_creacion,
+                    o.fecha_fin_oferta AS fecha_fin,
+                    o.salario AS salario,
+                    o.descripcion AS descripcion,
+                    o.titulo AS titulo,
+                    o.empresa_id AS empresa_id
+                 FROM OFERTA o
+                 JOIN OFERTA_CICLO oc ON o.id = oc.oferta_id
+                 JOIN ALUMNO_CICLO ac ON oc.ciclo_id = ac.ciclo_id
+                 WHERE ac.alumno_id = :alumno_id
+                 AND o.fecha_fin_oferta >= CURDATE()
+                 ORDER BY o.fecha_oferta DESC, o.id DESC
+                 LIMIT 5'
+            );
+
+            $query->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+            $query->execute();
+            $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $queryCiclos = $conn->prepare(
+                'SELECT c.nombre
+                 FROM OFERTA_CICLO oc
+                 JOIN CICLO c ON oc.ciclo_id = c.id
+                 WHERE oc.oferta_id = :oferta_id'
+            );
+
+            foreach ($resultados as $res) {
+
+                $queryCiclos->bindValue(':oferta_id', $res['oferta_id']);
+                $queryCiclos->execute();
+
+                $ciclosNombres = $queryCiclos->fetchAll(PDO::FETCH_COLUMN);
+
+                $ofertas[] = new Oferta(
+                    $res['oferta_id'],
+                    $res['empresa_id'],
+                    $ciclosNombres,
+                    $res['fecha_creacion'],
+                    $res['fecha_fin'],
+                    $res['salario'],
+                    $res['descripcion'],
+                    $res['titulo']
+                );
+            }
+        } catch (PDOException $e) {
+            error_log("Error al buscar las últimas 5 ofertas por ciclo para el alumno ID $alumnoId: " . $e->getMessage());
+            return [];
+        } catch (Exception $e) {
+             error_log("Error general al buscar las últimas 5 ofertas: " . $e->getMessage());
+             return [];
+        }
+
+        return $ofertas;
+    }
+
+
     public static function findById(int $id)
     {
         $conn = DBC::getConnection();

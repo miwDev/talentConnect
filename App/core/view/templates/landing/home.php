@@ -66,24 +66,22 @@ $this->layout('layout/layout', [
             </div>
             
             <div class="companies-container">
-                <div class="logo-slider">
-                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
-                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
-                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
-                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
-                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
-
-                    <img src="/public/assets/images/companyBackup/apple.jpg" alt="Logo Empresa 1">
-                    <img src="/public/assets/images/companyBackup/deloite.jpg" alt="Logo Empresa 2">
-                    <img src="/public/assets/images/companyBackup/meta.jpg" alt="Logo Empresa 3">
-                    <img src="/public/assets/images/companyBackup/nter.png" alt="Logo Empresa 4">
-                    <img src="/public/assets/images/companyBackup/nttdata.jpg" alt="Logo Empresa 5">
-                </div>
+                <div class="logo-slider" id="logoSlider">
+                    <?php
+                    $image_path = '/public/assets/images/companyPfp';
+                    $logos = [
+                        'logo1.png', 'logo2.jpg', 'logo3.svg', 'logo4.png', 'logo5.jpg',
+                        'logo6.png', 'logo7.jpg', 'logo8.svg', 'logo9.png', 'logo10.jpg'
+                    ];
+                    $all_logos = array_merge($logos, $logos);
+                    
+                    foreach ($all_logos as $logo_file): ?>
+                        <img src="<?php echo $image_path . '/' . $logo_file; ?>" alt="Logo Empresa" class="company-logo">
+                    <?php endforeach; ?>
+                    
+                    </div>
             </div>
-            </div>
-    </section>
-
-    </div>
+        </div>
     </section>
 
     <section id="section3">

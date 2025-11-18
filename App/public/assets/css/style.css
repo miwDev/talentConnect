@@ -438,7 +438,6 @@ header {
     width: auto;
     margin: 0 45px;
     border-radius: 12px;
-    border: 3px solid #505050;
     transition: filter 0.3s ease;
 }
 
@@ -2358,4 +2357,188 @@ background: #d7b4f2;
     color: #16443D;
     font-weight: 700; /* Negrita al activo */
     border-bottom: 3px solid #191919; /* Rayita morada de acento */
+}
+
+
+/* 19. ESTILOS DASHBOARD ALUMNO */
+
+/* Ajuste del contenedor principal: Más espacio para el contenido */
+.list-container.dashboard-alumno-container {
+    padding: 3.5em; 
+    max-width: 1200px;
+}
+
+/* Ajuste del Título principal (reutilizando estilos de dashboard-empresa) */
+.student-panel-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3em;
+    color: #191919;
+    margin: 0;
+    margin-bottom: 0.1em;
+}
+
+.dashboard-subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2em;
+    color: #505050;
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+/* Títulos de las secciones (Empresas/Ofertas) */
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #191919;
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+/* Separador horizontal entre secciones */
+.list-container hr {
+    border: none;
+    border-top: 3px solid #505050;
+    margin: 4em 0;
+    opacity: 0.2;
+}
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL) --- */
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL SCROLLEABLE HORIZONTAL) --- */
+
+/* --- ESTILOS EMPRESAS RELACIONADAS (GRID CENTRADO Y FLUIDO) --- */
+
+.section-empresas {
+    /* Mantenemos el fondo oscuro y el margen negativo para la estética del dashboard */
+    background-color: #191919;
+    padding: 2.5em 3.5em; /* Añadimos padding vertical y lateral fijo */
+    margin: 0 -3.5em; /* Margen negativo para expandir al borde del contenedor */
+    border-radius: 0.6875em;
+    text-align: center; /* Centramos el título */
+}
+
+.section-empresas .section-title {
+    color: #FFFFE9; /* Título claro en fondo oscuro */
+    margin-bottom: 1em; /* Ajustamos el margen inferior */
+    padding: 0;
+}
+
+/* Contenedor principal de los logos: Actúa como el 'slider' */
+.companies-container {
+    width: 100%;
+    overflow: visible; /* Aseguramos que no haya scrollbar forzado */
+    padding: 0; /* Eliminamos el padding que forzaba el scroll */
+    
+    /* Reemplazamos el contenedor de logos y el slider por un layout centrado */
+    display: flex;
+    flex-wrap: wrap; /* CLAVE: Permite que los elementos pasen a la siguiente línea */
+    justify-content: center; /* CLAVE: Centra los elementos horizontalmente */
+    gap: 2.5em; /* Espacio uniforme entre los elementos (filas y columnas) */
+}
+
+.logo-slider {
+    /* Este div ahora es redundante y solo actúa como wrapper del flexbox,
+       pero para mantener la estructura HTML, le damos display: contents para
+       que sus hijos fluyan directamente en .companies-container.
+       Alternativamente, si el HTML no se puede cambiar, forzamos un ancho y flex. */
+    display: contents; /* Hace que los hijos fluyan en el padre .companies-container */
+    padding: 0;
+    margin: 0;
+    animation: none; /* Aseguramos que la animación esté deshabilitada */
+}
+
+/* Estilo para cada tarjeta de logo */
+.logo-slider .card-CompanyInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    /* Definimos un tamaño base fijo para que el flex-wrap funcione correctamente */
+    width: 180px; 
+    margin: 0; /* Eliminamos márgenes no deseados */
+}
+
+/* Estilo para cada logo */
+.logo-slider .card-CompanyInfo img {
+    height: 140px; /* Reducimos ligeramente el tamaño de la imagen */
+    width: 140px;
+    object-fit: contain;
+    background-color: #FEFDF8; /* Damos un fondo claro para que el logo se vea mejor */
+    padding: 10px;
+}
+
+/* Efecto hover para los logos */
+.logo-slider .card-CompanyInfo:hover img {
+    border-color: #EBD3FD;
+    box-shadow: 0 4px 12px rgba(235, 211, 253, 0.4);
+}
+
+/* Nombre de la empresa debajo del logo */
+.logo-slider .card-CompanyInfo p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1em;
+    font-weight: 600;
+    color: #FFFFE9; /* Color claro para contrastar con fondo oscuro */
+    margin: 0;
+    text-align: center;
+    max-width: 180px;
+    word-wrap: break-word;
+}
+
+/* Reutilizamos .companies-container y .logo-slider del Bloque 3 para el carrusel animado */
+/* Nota: Si el carrusel no funciona, es porque el JS no ha duplicado los logos */
+
+
+/* --- ESTILOS ÚLTIMAS OFERTAS (LISTA CON SCROLL) --- */
+
+.ofertas-scroll-container {
+    /* Dimensiones para habilitar el scroll */
+    background-color: #191919;
+    max-height: 800px; /* Altura máxima antes de que aparezca el scroll */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    padding-right: 15px; /* Espacio para que la barra de scroll no toque las tarjetas */
+    margin: 0 auto; /* Centrado si hay un max-width */
+    border-radius: 0.6875em;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+}
+
+/* Estilo para la barra de scroll (opcional pero recomendado) */
+.ofertas-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-thumb {
+    background-color: #EBD3FD; /* Morado de acento */
+    border-radius: 10px;
+    border: 2px solid #FFFFE9; /* Borde del color de la tarjeta */
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-track {
+    background-color: #FEFDF8; /* Fondo claro de la tarjeta */
+    border-radius: 10px;
+}
+
+/* Aseguramos que la tarjeta de oferta ocupe el 100% (menos el espacio del scroll) */
+.ofertas-scroll-container .oferta-card {
+    max-width: none; /* Asegura que la tarjeta no se vea limitada por estilos anteriores */
+    margin-right: 25px; 
+    margin-left: 25px;/* Compensa el padding-right del contenedor para centrar la tarjeta */
+    margin-top: 25px;
+}
+
+/* Texto de placeholder si las ofertas o empresas aún no han cargado */
+.placeholder-text {
+    text-align: center;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2em;
+    color: #505050;
+    padding: 2em;
+    font-style: italic;
 }
