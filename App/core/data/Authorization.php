@@ -112,6 +112,37 @@ class Authorization
         return $verified;
     }
 
+    public static function getRoleByToken($token)
+    {
+        $db = DBC::getConnection(); 
+        $role = null;
+        
+        try {
+            $sql = "SELECT r.role_name as role_name
+                    FROM USER_TOKEN ut
+                    INNER JOIN USER u ON ut.user_id = u.id
+                    INNER JOIN ROLE r ON u.role_id = r.id
+                    WHERE ut.token = :token
+                    LIMIT 1";
+
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':token', $token);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $role = $result['role_name'];
+            }
+
+        } catch (\Exception $e) {
+            error_log("Error en getRoleByToken: " . $e->getMessage());
+            $role = null;
+        }
+
+        return $role;
+    }
+
     public static function updateToken($user_id)
     {
         $conn = DBC::getConnection();

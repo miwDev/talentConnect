@@ -1,4 +1,4 @@
-window.addEventListener("load", function(){
+window.addEventListener("DOMContentLoaded", function(){
 
     const userToken = sessionStorage.getItem("token");
     
@@ -100,7 +100,7 @@ window.addEventListener("load", function(){
                 
                 fetch('/API/ApiAlumno.php', {
                     method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + userToken},
                     body: JSON.stringify({ id: c1Content })
                 })
                 .then(response => response.json())
@@ -204,7 +204,8 @@ window.addEventListener("load", function(){
                     fetch('/API/ApiAlumno.php?process=edit', {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + userToken
                         },
                         body: JSON.stringify(data)
                     })
@@ -256,7 +257,7 @@ window.addEventListener("load", function(){
 
     fetch('/API/ApiAlumno.php',{
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + userToken },
     })
         .then((x)=>x.json())
         .then((json)=>pintarTabla(json))
@@ -739,10 +740,13 @@ window.addEventListener("load", function(){
                                     errorValidacion.textContent = "Debe seleccionar al menos un alumno para cargar.";
                                     return;
                                 }
-
+                                console.log(alumnosCargar);
+                                
                                 fetch('/API/ApiAlumno.php?process=saveAll', {
                                     method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
+                                    headers: { 'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + userToken
+                                     },
                                     body: JSON.stringify(alumnosCargar)
                                 })
                                 .then(response => response.json())
@@ -753,7 +757,6 @@ window.addEventListener("load", function(){
                                         emailsGuardados.push(data.guardados[i].email);
                                     }
                                     const emailsErrores = data.errores;
-
                                     data.guardados.forEach(alumno => {
                                         let fila = crearFilaTabla(
                                             alumno.id,
@@ -863,7 +866,6 @@ window.addEventListener("load", function(){
                 e.preventDefault();
 
                 const formData = new FormData(this);
-
                 fetch('/API/ApiAlumno.php', {
                     method: 'POST',
                     headers: {'Authorization': 'Bearer ' + userToken},

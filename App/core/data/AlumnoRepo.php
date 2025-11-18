@@ -92,7 +92,7 @@ class AlumnoRepo implements RepoInterface
 
                 try {
                     $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
-                          VALUES (:username, :pass, :role_id)';
+                        VALUES (:username, :pass, :role_id)';
                     $stmtUser = $conn->prepare($queryUser);
                     $stmtUser->bindValue(':username', $alumno->username);
                     $stmtUser->bindValue(':pass', $alumno->password);
@@ -126,6 +126,8 @@ class AlumnoRepo implements RepoInterface
                     $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
                     $stmtToken->execute();
 
+                    
+                    EstudiosRepo::saveEstudiosForAlumno($alumnoId, $alumno->estudios);
 
                     $guardados[] = $alumno;
                 } catch (Exception $e) {
