@@ -476,7 +476,7 @@ border-radius: 0.6875em;
 width: 100%;
 height: auto; /* Permite que el padding y contenido definan la altura */
 align-self: start; /* Alinea el botón con la parte superior de su celda (por defecto) */
-margin-top: 0; /* Anula el margin-top: auto; del estilo genérico */
+margin-top: 20px; /* Anula el margin-top: auto; del estilo genérico */
 padding: 0.6em 1.5em; /* Padding para que coincida con otros botones grandes */
 box-sizing: border-box; /* Asegura que el padding no exceda el 100% de width */
 }

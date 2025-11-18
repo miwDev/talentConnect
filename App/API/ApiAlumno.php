@@ -45,17 +45,18 @@ switch ($method) {
     case 'POST':
         $process = $_GET['process'] ?? '';
         if ($process == '') {
-            saveAlumno($body_content);
-        } else if ($process == "newStudent") {
-            saveFullAlumno();
+            saveAlumno($authHeaderValue);
+        }else if ($process == "newStudent") {
+            saveFullAlumno($authHeaderValue);
+        }else if ($process == "saveAll") {
+            saveGroupDTO($body_content, $authHeaderValue);
         }
+        break;
         break;
     case 'PUT':
         $process = $_GET['process'] ?? '';
         if ($process == "edit") {
             editAlumno($body_content);
-        } else if ($process == "saveAll") {
-            saveGroupDTO($body_content);
         }
         break;
     case 'DELETE':
@@ -94,15 +95,14 @@ function getProfilePic($authHeaderValue){
     }
 }
 
-function saveAlumno($body)
+function saveAlumno() // el form data va por $_POST
 {
-    $decodedBody = json_decode($body, true);
-    $alumno = Adapter::DTOtoAlumno($decodedBody);
+    $alumno = Adapter::DTOtoAlumno($auth);
     $dbResponse = AlumnoRepo::save($alumno);
 
     if ($dbResponse !== false) {
         header('Content-Type: application/json');
-        http_response_code(200);
+        http_response_code(201);
         $alumnoDTO = Adapter::alumnoToDTO($dbResponse);
         echo json_encode([
             'success' => true,
@@ -119,8 +119,8 @@ function saveFullAlumno(){
     header('Content-Type: application/json');
     
     try {
-        $alumno = Adapter::formDataToAlumno();
-        $alumnoId = AlumnoRepo::save($alumno);
+        //$alumno = Adapter::formDataToAlumno();
+        //$alumnoId = AlumnoRepo::save($alumno);
 
         if($alumnoId !== false){
 

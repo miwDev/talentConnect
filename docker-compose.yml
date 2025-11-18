@@ -1,52 +1,63 @@
 version: "3.8"
 
 services:
-  # Servicio de Base de Datos (DB)
+  # --- BASE DE DATOS ---
   db:
-    # Usamos la imagen oficial de MariaDB directamente para mayor estabilidad
     build:
       context: ./App/database
     image: mariadb_projecto1
     container_name: db
-    # Almacenamiento persistente para los datos de la base de datos
+    restart: always
     volumes:
       - db-data:/var/lib/mysql
     environment:
-      # Variables de entorno para MariaDB
       MYSQL_DATABASE: talent_connect_db
       MYSQL_USER: user
       MYSQL_PASSWORD: 1234
       MYSQL_ROOT_PASSWORD: root
     ports:
-      # Mapeo de puerto para que el host acceda a la DB, si es necesario
       - "3307:3306"
-    restart: always
+    networks:
+      - talent_network
 
-  # Servicio de Aplicación (Core)
+  # --- CORREO (MAILHOG) ---
+  mailhog:
+    build:
+      context: ./App/mail
+    container_name: mailhog
+    ports:
+      - "8025:8025" # Web UI
+      - "1025:1025" # SMTP Port
+    networks:
+      - talent_network
+
+  # --- APP (CORE) ---
   app:
-    # 1. El contexto de construcción debe ser la carpeta App/
     build:
       context: ./App
       dockerfile: core/dockerfile
     image: talentconnect_app
     container_name: app
-    # Mapeo de volumen para sincronizar el código PHP en tiempo real
     volumes:
-      # Mapeo del directorio App (código fuente) al Document Root de Apache
       - ./App:/var/www/html/
     ports:
       - "80:80"
-    # Variables de entorno para el código PHP
     environment:
-      DB_HOST: db # Usa el nombre del servicio de la DB como hostname
+      DB_HOST: db
       DB_NAME: talent_connect_db
       DB_USER: user
       DB_PASS: 1234
-    links:
-      - db
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
     depends_on:
       - db
+      - mailhog
+    networks:
+      - talent_network
 
-# Volúmenes para persistencia de datos
 volumes:
   db-data:
+
+networks:
+  talent_network:
+    driver: bridge

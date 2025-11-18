@@ -380,34 +380,36 @@ header {
     margin: 0;
 }
 
-/* SECTION 2 - Placeholder con fondo oscuro */
-
-/* SECTION 2 - Carrusel de empresas */
+/* SECTION 2 - Carrusel de empresas (SOLUCIÓN FINAL DE ANIMACIÓN) */
 
 #section2 {
     background-color: #191919;
     border-radius: 2em;
     position: relative;
     z-index: 2;
-    padding-bottom: 4em; /* Añadimos espacio inferior */
-    overflow: hidden; /* Ocultamos lo que se salga */
+    padding-bottom: 8em;
+    overflow: hidden; /* Oculta los logos fuera de la vista para la animación */
 }
 
-/* Hacemos este H2 más específico */
+/* Título de la sección */
 #section2 h2 {
     text-align: center;
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
     padding: 1.5em;
-    padding-bottom: 1em; /* Menos padding para acercar el carrusel */
+    padding-bottom: 1em;
     color: #FFFFE9;
     margin: 0;
 }
 
-/* Contenedor principal del carrusel */
-.companies-container {
+/* Contenedor principal de la ventana de visualización */
+/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
+#section2 .companies-container {
     width: 100%;
     overflow: hidden;
+    /* Revertimos cualquier flex-wrap no deseado que pudiera venir del dashboard */
+    display: block; 
+    
     /* Efecto de máscara para que los logos desaparezcan suavemente en los bordes */
     mask-image: linear-gradient(
         to right,
@@ -425,26 +427,33 @@ header {
     );
 }
 
-.logo-slider {
-    display: flex;
-    width: fit-content;
-    animation: scroll 40s linear infinite;
-    padding: 75px;
+/* Contenedor de logos: FUERZA la línea y aplica la animación. */
+/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
+#section2 .logo-slider {
+    display: flex; 
+    flex-wrap: nowrap !important; /* <--- CLAVE: Ignora cualquier "flex-wrap: wrap" anterior */
+    justify-content: flex-start !important; /* Asegura que no se centre, lo que podría ocultar el inicio/fin del carrusel */
+    width: fit-content; /* Permite que el ancho sea la suma total de los logos duplicados */
+    animation: scroll 40s linear infinite !important; /* <--- CLAVE: Vuelve a activar la animación sobre cualquier anulación */
+    padding: 75px 0;
 }
 
 /* Estilo para cada logo */
-.logo-slider img {
-    height: 230px;
+#section2 .logo-slider img { /* Usamos #section2 para los logos también */
+    height: 240px;
     width: auto;
-    margin: 0 45px;
+    margin: 0 40px;
     border-radius: 12px;
-    transition: filter 0.3s ease;
+    object-fit: contain;
+    background-color: #FEFDF8;
+    padding: 15px;
+    border: 1px solid #505050;
+    flex-shrink: 0; /* Impide que las imágenes se compriman */
 }
 
-/* Definición de la animación */
+/* Definición de la animación de scroll */
 @keyframes scroll {
     0% {
-        /* Posición inicial */
         transform: translateX(0);
     }
     100% {
