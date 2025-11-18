@@ -893,4 +893,30 @@ window.addEventListener("DOMContentLoaded", function(){
         });
 
     });
+
+    barraBusqueda.addEventListener("input", function(e) {
+        const busqueda = e.target.value.toLowerCase().trim();
+        const filas = tbody.getElementsByTagName("tr");
+
+        if (busqueda.length === 0) {
+            for (let i = 0; i < filas.length; i++) {
+                filas[i].style.display = "";
+            }
+        } 
+        else if (busqueda.length >= 2) {
+            for (let i = 0; i < filas.length; i++) {
+                const fila = filas[i];
+                
+                const textoNombre = fila.cells[1].textContent.toLowerCase();
+                const textoApellido = fila.cells[2].textContent.toLowerCase();
+                const textoEmail = fila.cells[3].textContent.toLowerCase();
+
+                const coincide = textoNombre.includes(busqueda) || 
+                                 textoApellido.includes(busqueda) || 
+                                 textoEmail.includes(busqueda);
+
+                fila.style.display = coincide ? "" : "none";
+            }
+        }
+    });
 });

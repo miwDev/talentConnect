@@ -116,10 +116,10 @@ class EmpresaRepo implements RepoInterface
 
     public static function filteredFindAll($string)
     {
-
         $conn = DBC::getConnection();
         $empresas = [];
 
+        // Convertimos el string a minúsculas para la búsqueda
         $searchString = '%' . strtolower($string) . '%';
 
         $query = $conn->prepare(
@@ -136,18 +136,21 @@ class EmpresaRepo implements RepoInterface
                     e.provincia AS provincia,
                     e.localidad AS localidad,
                     e.cif AS cif
-             FROM EMPRESA e
-             JOIN USER u ON e.user_id = u.id
-             WHERE LOWER(e.nombre) LIKE :searchString'
+            FROM EMPRESA e
+            JOIN USER u ON e.user_id = u.id
+            WHERE LOWER(e.nombre) LIKE :searchString
+                OR LOWER(u.user_name) LIKE :searchString
+                OR LOWER(e.cif) LIKE :searchString
+                OR LOWER(e.telefono) LIKE :searchString'
         );
 
+        // Solo necesitamos vincular el parámetro una vez, PDO lo usará en todos los lugares donde aparece :searchString
         $query->bindParam(':searchString', $searchString);
         $query->execute();
 
         $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($resultados as $res) {
-
             $empresas[] = new Empresa(
                 $res['empresa_id'],
                 $res['username'],

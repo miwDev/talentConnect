@@ -16,18 +16,20 @@ $this->layout('layout/adminLayout', [
 
 <?php $this->start('pageContent') ?>
 <div class="list-container">
+    
     <div class="header-section">
-        <h1>Tabla de alumnos</h1>
-        <div class="search-section">
-            <input type="text" name="buscar" id="buscar" placeholder="Buscar alumno...">
-            <button type="button" id="buscar-btn" class="search-btn">Buscar</button>
+        <h1>Gestión de Alumnos</h1>
+        
+        <div class="admin-toolbar">
+            <div class="toolbar-group-left">
+                <input type="text" name="buscar" id="buscar" class="toolbar-input" placeholder="Buscar por nombre, email...">
+            </div>
+
+            <div class="toolbar-group-right">
+                <input type="button" id="cargaMasiva" class="toolbar-btn btn-secondary" value="CARGA MASIVA">
+                <input type="button" id="add" class="toolbar-btn btn-primary" value="+ AÑADIR ALUMNO">
+            </div>
         </div>
-    </div>
-    <div class="add-button-container">
-        <input type="button" id="add" value="AÑADIR ALUMNO">
-    </div>
-    <div class="add-button-container">
-        <input type="button" id="cargaMasiva" value="CARGA MASIVA">
     </div>
     <div class="table-container">
         <table>
