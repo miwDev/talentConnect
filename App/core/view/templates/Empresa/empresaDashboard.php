@@ -15,7 +15,6 @@ $this->layout('layout/layout', [
 <div class="list-container dashboard-container">
     
     <div class="header-section">
-        <img class="icon-dashboard-title" src="/public/assets/images/chart.svg" alt="icono-dashboard">
         <h1>Dashboard de <span class="highlight">Estadísticas</span></h1>
         <p class="dashboard-subtitle">Visualiza el rendimiento de tus ofertas y la actividad de las solicitudes.</p>
     </div>

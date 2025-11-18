@@ -24,16 +24,19 @@ class Router
 
     private function getDashboardRoute(string $role): string
     {
+        $dashboard = '';
         switch ($role) {
             case 'ROLE_ALUMNO':
-                return 'alumno-dashboard';
+                $dashboard = 'alumno-dashboard';
             case 'ROLE_EMPRESA':
-                return 'empresa-dashboard';
+                $dashboard = 'empresa-dashboard';
             case 'ROLE_ADMIN':
-                return 'admin-dashboard';
+                $dashboard = 'admin-dashboard';
             default:
-                return 'home';
+                $dashboard = 'home';
         }
+
+        return $dashboard;
     }
 
     public function router()
@@ -124,18 +127,21 @@ class Router
     }
 
     private function handleAlumnoRoutes($menu) {
+        $alumnoManage = new AlumnoController();
+        $solicitudManage = new SolicitudController();
+        $empresaManage = new EmpresaController();
         switch ($menu) {
             case 'alumno-dashboard':
-                $alumnoManage = new AlumnoController();
                 $alumnoManage->renderDashboard($this->engine);
                 exit;
             case 'ofertas-alumno':
-                $solicitudManage = new SolicitudController();
                 $solicitudManage->renderOffers($this->engine);
                 exit;
             case 'misSolicitudes-alumno':
-                $solicitudManage = new SolicitudController();
                 $solicitudManage->renderApplied($this->engine);
+                exit;
+            case 'ver-empresa':
+                $empresaManage->renderFicha($this->engine);
                 exit;
             default:
                 header('Location: ?menu=alumno-dashboard'); 
@@ -144,17 +150,16 @@ class Router
     }
 
     private function handleEmpresaRoutes($menu) {
+        $ofertaManage = new OfertaController();
+        $empresaManage = new EmpresaController();
         switch ($menu) {
             case 'empresa-dashboard':
-                $empresaManage = new EmpresaController();
                 $empresaManage->renderDashboard($this->engine);
                 exit;
             case 'create-oferta':
-                $ofertaManage = new OfertaController();
                 $ofertaManage->renderAddOferta($this->engine);
                 exit;
             case 'mis-ofertas':
-                $ofertaManage = new OfertaController();
                 $ofertaManage->renderMyOffers($this->engine);
                 exit;
             default:

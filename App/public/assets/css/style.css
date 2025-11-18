@@ -952,6 +952,16 @@ body:has(.list-container) {
     border-bottom: 1px solid #50505030; /* Línea separadora suave */
 }
 
+/* AÑADIDO: Estilo para el enlace <a> dentro de .card-CompanyInfo para que parezca un div */
+.list-container .card-CompanyInfo a {
+    display: flex; /* Replica el display: flex del contenedor padre para el contenido interno */
+    align-items: center;
+    gap: 0.75em;
+    text-decoration: none; /* Elimina el subrayado por defecto del enlace */
+    color: inherit; /* Hereda el color del texto del padre */
+    width: 100%; /* Ocupa todo el ancho del contenedor padre */
+}
+
 /* Estilo para el logo */
 .list-container .card-CompanyInfo img {
     width: 35px; /* Tamaño del logo */
@@ -2112,4 +2122,240 @@ background: #d7b4f2;
 /* Ajuste específico para el gráfico Top Offers (Barras Horizontales) */
 .chart-bar-h .chart-canvas-container {
     height: 450px; /* Más alto para que quepan las etiquetas largas */
+}
+
+/* 18. ESTILOS FICHA EMPRESA */
+
+/* Contenedor principal de la ficha: VUELVE A SER CLARO (#FFFFE9) */
+.list-container.ficha-empresa {
+    padding: 0; 
+    max-width: 950px; 
+    overflow: hidden; 
+    background-color: #FFFFE9; /* FONDO CLARO */
+    border: 1.5px solid #191919; 
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    border-bottom: 1.5px solid #191919; 
+}
+
+/* --- SECCIÓN CABECERA (LOGO 40% OSCURO Y NOMBRE 60% CLARO) --- */
+
+.ficha-empresa .header-section {
+    display: flex;
+    flex-direction: row; 
+    align-items: stretch;
+    text-align: left;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none; 
+}
+
+/* Contenedor del Logo (40% de ancho) */
+.ficha-empresa .logo-container {
+    flex: 0 0 40%; 
+    background-color: #191919; /* FONDO OSCURO (GRIS/NEGRO) para el 40% del logo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2em 0; 
+}
+
+/* Imagen del logo: Color CLARO para destacar en el fondo oscuro */
+.ficha-empresa .logo-container .companyPfp {
+    width: 90%; 
+    max-width: 120px; 
+    height: 120px;
+    object-fit: contain;
+    margin: 0; 
+}
+
+/* Contenedor del Nombre (60% de ancho) */
+.ficha-empresa .name-container {
+    flex: 1; /* Ocupa el 60% restante */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    padding: 2em 1em;
+    background-color: #191919; /* Mantenemos el MORADO de acento para el 60% del nombre */
+    
+    /* Borde divisor debajo del nombre y a la izquierda */
+    border-bottom: 2px solid #191919; 
+    border-left: 2px solid #191919; 
+}
+
+/* Color del nombre: Color CLARO/AMARILLENTO de la tarjeta para destacar */
+.ficha-empresa .name-container .companyName {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5em; 
+    font-weight: 700;
+    color: #FFFFE9; /* COLOR CLARO solicitado */
+    margin: 0;
+    line-height: 1.1;
+    text-align: center;
+}
+
+/* --- CONTENEDOR DE INFORMACIÓN GENERAL (CONTACTO/UBICACIÓN) --- */
+
+.ficha-empresa .main-content-wrapper {
+    padding: 3.5em; /* Aplicamos el padding aquí donde está el contenido principal */
+}
+
+/* Contenedor para Contacto y Ubicación (en Grid de 2 columnas/Row) */
+.ficha-empresa .content-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 2em; 
+    margin-bottom: 3em;
+}
+
+/* Estilo de las tarjetas individuales: FONDO CLARO */
+.ficha-empresa .content-section > div {
+    background-color: #FEFDF8; 
+    border: 2px solid #191919; 
+    border-radius: 0.6875em;
+    padding: 1.5em;
+    width: auto; 
+    max-width: none; 
+}
+
+/* Títulos de sección (Contacto/Ubicación) */
+.ficha-empresa .content-section h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #16443D;
+    margin-top: 0;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid #191919; 
+    text-align: left;
+}
+
+/* Estilo para los párrafos, separando el label del valor */
+.ficha-empresa .content-section p.companyName {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1em;
+    color: #191919;
+    margin: 0.8em 0; 
+    display: flex;
+    align-items: baseline;
+    gap: 0.7em; 
+}
+
+.ficha-empresa .content-section p.companyName strong {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; 
+    color: #191919;
+    flex-shrink: 0; 
+    white-space: nowrap; 
+}
+
+.ficha-empresa .content-section p.companyName span {
+    font-weight: 400; 
+    color: #505050; 
+    line-height: 1.4; 
+}
+
+/* Ajuste de la sección de dirección (ya no es especial, es otra tarjeta) */
+.ficha-empresa .address-section {
+    margin-top: 0; 
+}
+
+/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO (SIN CAMBIOS) --- */
+
+.list-container.ofertas-filtro {
+    background-color: #FFFFE9;
+    border: 1.5px solid #191919;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2em 3em;
+    margin: 2em auto 4em auto;
+    max-width: 900px;
+}
+
+.ofertas-filtro .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2.5em;
+    padding-bottom: 1.5em;
+    border-bottom: 2px solid #191919;
+}
+
+.ofertas-filtro button {
+    background-color: #FEFDF8;
+    color: #191919;
+    padding: 0.6em 2em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: 3px solid #505050;
+    border-radius: 0.6875em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ofertas-filtro button:hover {
+    background-color: #FFFFE9;
+    border-color: #191919;
+}
+
+.ofertas-filtro button.active {
+    background-color: #EBD3FD;
+    color: #191919;
+    border-color: #191919;
+    font-weight: 700;
+}
+
+/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO --- */
+
+.list-container.ofertas-filtro {
+    /* Mantiene los estilos del contenedor principal */
+    background-color: #FFFFE9;
+    border: 1.5px solid #191919;
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2em 3em;
+    margin: 2em auto 4em auto;
+    max-width: 900px;
+}
+
+.ofertas-filtro .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2.5em;
+    padding-bottom: 0; /* Quitamos el padding inferior */
+    border-bottom: none; /* Quitamos la línea de separación estática */
+}
+
+.ofertas-filtro button {
+    /* Reset de estilos */
+    background-color: transparent; 
+    color: #191919;
+    padding: 0.6em 1.5em; /* Ajuste de padding */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 500;
+    border: none; /* ELIMINADO: Bordes y radius */
+    border-radius: 0; /* ELIMINADO: Bordes y radius */
+    cursor: pointer;
+    transition: border-bottom 0.3s ease, font-weight 0.2s; /* Transición para la raya */
+    
+    /* Estado por defecto: raya invisible */
+    border-bottom: 3px solid transparent; 
+}
+
+.ofertas-filtro button:hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* Estilo para el botón activo: raya visible */
+.ofertas-filtro button.active {
+    background-color: transparent;
+    color: #16443D;
+    font-weight: 700; /* Negrita al activo */
+    border-bottom: 3px solid #191919; /* Rayita morada de acento */
 }

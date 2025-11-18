@@ -22,7 +22,7 @@ $this->layout('layout/adminLayout', [
         <div class="form-grid">
             <div class="form-field">
                 <div>
-                    <img src="/public/assets/images/placeholder.png" alt="logo_image" />
+                    <img src="/public<?= $empresaVer->logo ?>" alt="logo_image" />
                 </div>
                 <div>
                     <label for="cif">CIF</label>

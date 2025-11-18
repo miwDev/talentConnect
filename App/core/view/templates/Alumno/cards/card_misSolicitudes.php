@@ -10,9 +10,11 @@ $solicitud = $this->data['solicitud'] ?? null;
         <div class="card-content">
             
             <div class="card-CompanyInfo">
-                <span id="idEmpresa"><?= $this->e($oferta->empresaId) ?></span>
-                <img src="" alt="Logo Empresa" class="companyPfp">
-                <p class="companyName"></p> 
+                <a href="?menu=ver-empresa&empresa=<?php echo $oferta->empresaId; ?>">
+                    <span id="idEmpresa"><?= $this->e($oferta->empresaId) ?></span>
+                    <img src="" alt="picInProg" class="companyPfp">
+                    <p class="companyName"></p>
+                </a>
             </div>
             
             <div class="card-header">

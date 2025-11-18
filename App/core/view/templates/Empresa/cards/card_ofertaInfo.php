@@ -34,16 +34,5 @@ $oferta = $this->data['oferta'] ?? null;
             </div>
         </div>
     </div>
-
-    <div class="card-actions">
-        <div class="actions-left">
-            <button name="btnApply" value="<?= $oferta->id ?>" class="card-btn btn-apply btnApply">
-                Apply
-            </button>
-        </div>
-        <div class="actions-right">
-            <button name="btnFav" value="<?= $oferta->id ?>" class="card-btn btn-fav btnFav">
-            </button>
-        </div>
+    
     </div>
-</div>
