@@ -48,7 +48,6 @@ function loadUserProfile(userToken, role) {
             .catch(error => {
                 console.error("Fallo durante el proceso de logout:", error.message);
                 sessionStorage.removeItem('token');
-                sessionStorage.removeItem('role');
                 window.location.href = '?menu=home';
             });
         });

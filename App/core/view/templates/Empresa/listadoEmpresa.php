@@ -14,19 +14,35 @@ $this->layout('layout/adminLayout', [
 
 <?php $this->start('pageContent') ?>
 <div class="list-container">
+    
     <div class="header-section">
-        <form action="" method="post">
-            <h1>Listado de Empresas</h1>
-            <div class="search-section">
-                <input type="text" name="buscar" id="buscar" placeholder="Buscar empresa...">
-                <button type="submit" id="buscar-btn" class="search-btn">Buscar</button>
+        <h1>Listado de Empresas</h1>
+        
+        <div class="admin-toolbar">
+            
+            <form action="" method="post" class="toolbar-group-left" style="width: auto; flex: 1;">
+    
+                <button type="submit" id="buscar-btn" name="btnBuscar" class="toolbar-btn btn-secondary">Buscar</button>
+
+                <input type="text" name="buscar" id="buscar" class="toolbar-input" placeholder="Buscar empresa..." style="min-width: 200px;">
+                
+                <button type="submit" name="btnOrdenar" class="toolbar-btn btn-secondary">Ordenar</button>
+
+                <select name="ordenEmpresa" id="ordenEmpresa" class="toolbar-select">
+                    <option value="nombre">Nombre (Defecto)</option> <option value="cif">Cif</option>
+                    <option value="email">Email</option>
+                    <option value="telefono">Telefono</option>
+                </select>
+
+            </form>
+
+            <div class="toolbar-group-right">
+                <form action="" method="post">
+                    <input type="submit" id="add" name="btnAdd" class="toolbar-btn btn-primary" value="+ AÑADIR EMPRESA">
+                </form>
             </div>
-        </form>
-    </div>
-    <div class="add-button-container">
-        <form action="" method="post">
-            <input type="submit" id="add" name="btnAdd" value="AÑADIR EMPRESA">
-        </form>
+
+        </div>
     </div>
     <div class="table-container">
         <table>
@@ -64,7 +80,7 @@ $this->layout('layout/adminLayout', [
 
 <div class="list-container">
     <div class="header-section">
-        <h1 class="titulo-confirmed">Pendiente de confirmación</h1>
+        <h1 class="titulo-confirmed" style="font-size: 2em; margin-bottom: 20px;">Pendiente de confirmación</h1>
     </div>
     <div class="table-container">
         <table>

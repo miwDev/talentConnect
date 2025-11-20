@@ -16,7 +16,6 @@ $currentFilter = $_POST['ofertasFilter'] ?? 'active';
 <script src="/public/assets/js/verOfertasEmp.js"></script>
 <script src="/public/assets/js/verEmpresa.js"></script>
 <script src="/public/assets/js/elements.js" defer></script>
-<script src="/public/assets/js/addons.js" defer></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>

@@ -92,7 +92,7 @@ class AlumnoRepo implements RepoInterface
 
                 try {
                     $queryUser = 'INSERT INTO USER (user_name, passwrd, role_id)
-                          VALUES (:username, :pass, :role_id)';
+                        VALUES (:username, :pass, :role_id)';
                     $stmtUser = $conn->prepare($queryUser);
                     $stmtUser->bindValue(':username', $alumno->username);
                     $stmtUser->bindValue(':pass', $alumno->password);
@@ -126,6 +126,8 @@ class AlumnoRepo implements RepoInterface
                     $stmtToken->bindValue(':user_id', $userId, PDO::PARAM_INT);
                     $stmtToken->execute();
 
+                    
+                    EstudiosRepo::saveEstudiosForAlumno($alumnoId, $alumno->estudios);
 
                     $guardados[] = $alumno;
                 } catch (Exception $e) {
@@ -591,4 +593,41 @@ class AlumnoRepo implements RepoInterface
 
         return $salida;
     }
+
+    public static function isEmailTaken(string $email): bool
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT COUNT(id) FROM USER WHERE user_name = :email';
+        
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error de DB al verificar email de Alumno: " . $e->getMessage());
+            return true; 
+        }
+    }
+
+    public static function isDniTaken(string $dni): bool
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT COUNT(id) FROM ALUMNO WHERE dni = :dni';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':dni', $dni, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error de DB al verificar DNI de Alumno: " . $e->getMessage());
+            return true; 
+        }
+    }
+    
 }

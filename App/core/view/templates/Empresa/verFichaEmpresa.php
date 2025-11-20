@@ -15,56 +15,68 @@ $this->layout('layout/adminLayout', [
 <?php $this->start('pageContent') ?>
 <div class="list-container">
     <div class="header-section">
-        <h1>Ficha de empresa</h1>
+        <h1>Ficha de Empresa</h1>
     </div>
+
     <form action="" method="post" id="verForm">
         <input type="hidden" name="id" value="<?= $empresaVer->id ?>">
-        <div class="form-grid">
-            <div class="form-field">
-                <div>
-                    <img src="/public<?= $empresaVer->logo ?>" alt="logo_image" />
+
+        <div class="company-profile-layout">
+            
+            <div class="profile-left-col">
+                <div class="profile-logo-container">
+                    <img src="/public<?= $empresaVer->logo ?>" alt="Logo de <?= $empresaVer->nombre ?>" />
                 </div>
-                <div>
-                    <label for="cif">CIF</label>
-                    <input type="text" name="cif" value="<?= $empresaVer->cif ?>" readonly>
-                </div>
-                <div>
-                    <label for="nombre">NOMBRE</label>
-                    <input type="text" name="nombre" value="<?= $empresaVer->nombre ?>" readonly>
-                </div>
-                <div class="form-field">
-                    <label for="telefono">EMAIL</label>
-                    <input type="text" name="telefono" value="<?= $empresaVer->username ?>" readonly>
+                
+                <div style="margin-top: 20px;">
+                    <label class="form-label-styled">CIF</label>
+                    <input type="text" name="cif" value="<?= $empresaVer->cif ?>" class="form-styled-input readonly-input" readonly>
                 </div>
             </div>
-            <div class="form-field">
-                <label for="nombre">TELEFONO</label>
-                <input type="text" name="nombre" value="<?= $empresaVer->telefono ?>" readonly>
+
+            <div class="profile-right-col">
+                <div class="form-grid-styled">
+                    
+                    <div class="form-field">
+                        <label class="form-label-styled">Nombre</label>
+                        <input type="text" name="nombre" value="<?= $empresaVer->nombre ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label-styled">Email (Usuario)</label>
+                        <input type="text" name="username" value="<?= $empresaVer->username ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label-styled">Teléfono Empresa</label>
+                        <input type="text" name="telefono" value="<?= $empresaVer->telefono ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label-styled">Persona Contacto</label>
+                        <input type="text" name="nombrePersona" value="<?= $empresaVer->nombrePersona ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label-styled">Teléfono Contacto</label>
+                        <input type="text" name="telPersona" value="<?= $empresaVer->telPersona ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="form-label-styled">Provincia</label>
+                        <input type="text" name="provincia" value="<?= $empresaVer->provincia ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+                    
+                    <div class="form-field" style="grid-column: span 2;">
+                        <label class="form-label-styled">Dirección / Localidad</label>
+                        <input type="text" name="direccion_completa" value="<?= $empresaVer->direccion . ', ' . $empresaVer->localidad ?>" class="form-styled-input readonly-input" readonly>
+                    </div>
+                </div>
             </div>
-            <div class="form-field">
-                <label for="email">PERSONA C</label>
-                <input type="text" name="email" value="<?= $empresaVer->nombrePersona ?>" readonly>
-            </div>
-            <div class="form-field">
-                <label for="telefono">TELÉFONO P</label>
-                <input type="text" name="telefono" value="<?= $empresaVer->telPersona ?>" readonly>
-            </div>
-            <div class="form-field">
-                <label for="telefono">PROVINCIA</label>
-                <input type="text" name="telefono" value="<?= $empresaVer->provincia ?>" readonly>
-            </div>
-            <div class="form-field">
-                <label for="telefono">LOCALIDAD</label>
-                <input type="text" name="telefono" value="<?= $empresaVer->localidad ?>" readonly>
-            </div>
-            <div class="form-field">
-                <label for="telefono">DIRECCION</label>
-                <input type="text" name="telefono" value="<?= $empresaVer->direccion ?>" readonly>
-            </div>
-            <div class="form-field"></div>
         </div>
-        <div class="button-container">
-            <input type="submit" name="btnCancel" value="Volver" id="btnVolver">
+
+        <div class="form-actions-bar">
+            <input type="submit" name="btnCancel" value="Volver al listado" id="btnVolver" class="toolbar-btn btn-secondary">
         </div>
     </form>
 </div>

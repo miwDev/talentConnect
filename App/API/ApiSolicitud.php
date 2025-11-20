@@ -96,7 +96,7 @@ function deleteSolicitud($body, $auth){
     $solicitud = Adapter::SolicitudForDeletion($data, $auth);
 
     if($solicitud){
-        $dbResponse = SolicitudRepo::deleteById($solicitud->id);
+        $dbResponse = SolicitudRepo::deleteById($solicitud);
         if($dbResponse){
             header('Content-Type: application/json');
             http_response_code(200);

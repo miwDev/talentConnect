@@ -1,4 +1,8 @@
 <?php
+// Obtener datos de la plantilla: errores y datos de la petición
+$errors = $this->data['errors'] ?? [];
+$postData = $this->data['postData'] ?? [];
+
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Registro Empresa',
     'role' => $this->data['role'] ?? 'ROLE_GUEST'
@@ -27,25 +31,25 @@ $this->layout('layout/layout', [
                         <div class="form-group half-width">
                             <label for="email">Email Corporativo</label>
                             <input type="email" id="email" name="email" required>
-                            <span id="error-email" class="input-error-message"></span>
+                            <span id="error-email" class="input-error-message"><?= $errors['email'] ?? '' ?></span>
                         </div>
                         <div class="form-group half-width">
                             <label for="CIF">CIF</label>
                             <input type="text" id="cif" name="cif" required>
-                            <span id="error-cif" class="input-error-message"></span>
+                            <span id="error-cif" class="input-error-message"><?= $errors['cif'] ?? '' ?></span>
                         </div>
                         <div class="form-group half-width">
                             <label for="telefono">Telefono Empresa</label>
                             <input type="tel" id="telefono" name="telefono" required>
-                            <span id="error-telEmp" class="input-error-message"></span>
+                            <span id="error-telEmp" class="input-error-message"><?= $errors['telEmp'] ?? '' ?></span>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="nombre_empresa">Nombre</label>
-                            <input type="text" id="nombre_empresa" name="nombre_empresa" required>
-                            <span id="error-nombre_empresa" class="input-error-message"></span>
+                            <input type="text" id="nombre_empresa" name="nombre_empresa"  required>
+                            <span id="error-nombre_empresa" class="input-error-message"><?= $errors['nombre_empresa'] ?? '' ?></span>
                         </div>
                         <div class="form-group half-width">
                             <label for="password">Contraseña</label>
@@ -61,39 +65,39 @@ $this->layout('layout/layout', [
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="contacto_persona">Persona de Contacto</label>
-                            <input type="text" id="contacto_persona" name="contacto_persona" required>
-                            <span id="error-contacto_persona" class="input-error-message"></span>
+                            <input type="text" id="contacto_persona" name="contacto_persona"  required>
+                            <span id="error-contacto_persona" class="input-error-message"><?= $errors['contacto_persona'] ?? '' ?></span>
                         </div>
                         <div class="form-group half-width">
                             <label for="contacto_telefono">Teléfono de Contacto</label>
-                            <input type="tel" id="contacto_telefono" name="contacto_telefono" required>
-                            <span id="error-contacto_telefono" class="input-error-message"></span>
+                            <input type="tel" id="contacto_telefono" name="contacto_telefono"  required>
+                            <span id="error-contacto_telefono" class="input-error-message"><?= $errors['contacto_telefono'] ?? '' ?></span>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group half-width">
                             <label for="provincia">Provincia</label>
-                            <input type="text" id="provincia" name="provincia" required>
-                            <span id="error-provincia" class="input-error-message"></span>
+                            <input type="text" id="provincia" name="provincia"  required>
+                            <span id="error-provincia" class="input-error-message"><?= $errors['provincia'] ?? '' ?></span>
                         </div>
                         <div class="form-group half-width">
                             <label for="localidad">Localidad</label>
                             <input type="text" id="localidad" name="localidad" required>
-                            <span id="error-localidad" class="input-error-message"></span>
+                            <span id="error-localidad" class="input-error-message"><?= $errors['localidad'] ?? '' ?></span>
                         </div>
                     </div>
                     <div>
                         <div class="form-group">
                             <label for="direccion">Dirección</label>
                             <input type="text" id="direccion" name="direccion" required>
-                            <span id="error-direccion" class="input-error-message"></span>
+                            <span id="error-direccion" class="input-error-message"><?= $errors['direccion'] ?? '' ?></span>
                         </div>
                         <input type="hidden" id="hiddenInput" name="fotoData">
                     </div>
 
                     <div class="form-actions">
-                        <div id="login-error-display" class="error-message"></div>
+                        <div id="login-error-display" class="error-message"><?= $errors['general_error'] ?? '' ?></div>
                         <button name="btnRegistro" type="submit" class="login-btn">Registrar Empresa</button>
                     </div>
                 </form>

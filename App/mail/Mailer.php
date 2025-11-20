@@ -67,12 +67,12 @@ class Mailer
 
     // --- 2. PLANTILLAS DE CORREO ---
     
-    public function accountConfirmAlumno($email) {
-        return $this->sendWithTemplate($email, 'Completa tu Perfil de Alumno', '¡Gracias por registrarte! Para empezar a aplicar, necesitamos que completes tus datos académicos.', $this->baseUrl . '?menu=datosAlumno', 'Rellenar Datos');
+    public function accountConfirmAlumno($email, $id) {
+        return $this->sendWithTemplate($email, 'Completa tu Perfil de Alumno', '¡Gracias por registrarte! Para empezar a aplicar, necesitamos que completes tus datos académicos.', $this->baseUrl . '?menu=datosAlumno&id=' . $id, 'Rellenar Datos');
     }
 
-    public function accountConfirmEmpresa($email) {
-        return $this->sendWithTemplate($email, 'Bienvenida Empresa', 'Por favor, rellena tu ficha de empresa para validar tu cuenta. Esto es necesario antes de publicar ofertas.', $this->baseUrl . '?menu=datosEmpresa', 'Rellenar Ficha');
+    public function accountConfirmEmpresa($email, $id) {
+        return $this->sendWithTemplate($email, 'Bienvenida Empresa', 'Por favor, rellena tu ficha de empresa para validar tu cuenta. Esto es necesario antes de publicar ofertas.', $this->baseUrl . '?menu=datosEmpresa&id=' . $id, 'Rellenar Ficha');
     }
 
     public function sendApplicationAccepted($email, $offerTitle, $companyName) {

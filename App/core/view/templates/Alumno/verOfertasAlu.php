@@ -8,7 +8,6 @@ $this->layout('layout/layout', [
 <?php $this->start('js') ?>
 <script src="/public/assets/js/verOfertasLogic.js"></script>
 <script src="/public/assets/js/elements.js" defer></script>
-<script src="/public/assets/js/addons.js" defer></script>
 <?php $this->stop() ?>
 
 <?php $this->start('pageContent') ?>

@@ -1,0 +1,35 @@
+"filename", "language", "PHP", "PostCSS", "JavaScript JSX", "XML", "comment", "blank", "total"
+"/Users/msierradiego/Proyecto1/App/API/ApiAlumno.php", "PHP", 28, 0, 0, 0, 0, 9, 37
+"/Users/msierradiego/Proyecto1/App/API/ApiStatsEmpresa.php", "PHP", 0, 0, 0, 0, -6, -2, -8
+"/Users/msierradiego/Proyecto1/App/core/controller/AuthController.php", "PHP", 19, 0, 0, 0, -2, 11, 28
+"/Users/msierradiego/Proyecto1/App/core/controller/EmpresaController.php", "PHP", 17, 0, 0, 0, 4, 5, 26
+"/Users/msierradiego/Proyecto1/App/core/controller/OfertaController.php", "PHP", 18, 0, 0, 0, 0, 3, 21
+"/Users/msierradiego/Proyecto1/App/core/data/AlumnoRepo.php", "PHP", 28, 0, 0, 0, 0, 8, 36
+"/Users/msierradiego/Proyecto1/App/core/data/EmpresaRepo.php", "PHP", 80, 0, 0, 0, 3, 14, 97
+"/Users/msierradiego/Proyecto1/App/core/helper/Adapter.php", "PHP", 0, 0, 0, 0, 0, 1, 1
+"/Users/msierradiego/Proyecto1/App/core/helper/Converter.php", "PHP", 0, 0, 0, 0, 0, -1, -1
+"/Users/msierradiego/Proyecto1/App/core/helper/Validator.php", "PHP", 142, 0, 0, 0, 1, 49, 192
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Alumno/alumnoDashboard.php", "PHP", -2, 0, 0, 0, 0, 0, -2
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Alumno/listadoAlumnos.php", "PHP", -1, 0, 0, 0, 0, 3, 2
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Alumno/verOfertasAlu.php", "PHP", -1, 0, 0, 0, 0, 0, -1
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Auth/login.php", "PHP", 17, 0, 0, 0, 2, 1, 20
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Auth/registerA.php", "PHP", -1, 0, 0, 0, 0, 0, -1
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Auth/registerE.php", "PHP", 2, 0, 0, 0, 1, 1, 4
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/addEmpresa.php", "PHP", 13, 0, 0, 0, 2, 8, 23
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/crearOferta.php", "PHP", 40, 0, 0, 0, 3, 4, 47
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/editEmpresa.php", "PHP", 1, 0, 0, 0, 0, -5, -4
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/listadoEmpresa.php", "PHP", 6, 0, 0, 0, 0, 10, 16
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/verEmpresaInfo.php", "PHP", -1, 0, 0, 0, 0, 0, -1
+"/Users/msierradiego/Proyecto1/App/core/view/templates/Empresa/verFichaEmpresa.php", "PHP", -1, 0, 0, 0, 0, 13, 12
+"/Users/msierradiego/Proyecto1/App/core/view/templates/layout/adminLayout.php", "PHP", 1, 0, 0, 0, 0, 0, 1
+"/Users/msierradiego/Proyecto1/App/core/view/templates/layout/layout.php", "PHP", 1, 0, 0, 0, 0, 0, 1
+"/Users/msierradiego/Proyecto1/App/public/assets/css/authorization.css", "PostCSS", 0, 1, 0, 0, 0, 0, 1
+"/Users/msierradiego/Proyecto1/App/public/assets/css/listadosAdmin.css", "PostCSS", 0, 122, 0, 0, -22, -85, 15
+"/Users/msierradiego/Proyecto1/App/public/assets/css/style.css", "PostCSS", 0, 19, 0, 0, 3, 3, 25
+"/Users/msierradiego/Proyecto1/App/public/assets/images/ArrowUP.svg", "XML", 0, 0, 0, -1, 0, 0, -1
+"/Users/msierradiego/Proyecto1/App/public/assets/js/addons.js", "JavaScript JSX", 0, 0, 8, 0, 3, -1, 10
+"/Users/msierradiego/Proyecto1/App/public/assets/js/listaAlumnoLogic.js", "JavaScript JSX", 0, 0, 78, 0, 8, 13, 99
+"/Users/msierradiego/Proyecto1/App/public/assets/js/profileLogic.js", "JavaScript JSX", 0, 0, -1, 0, 0, 0, -1
+"/Users/msierradiego/Proyecto1/App/public/assets/js/related.js", "JavaScript JSX", 0, 0, -2, 0, 0, -2, -4
+"/Users/msierradiego/Proyecto1/App/public/assets/js/validators.js", "JavaScript JSX", 0, 0, 52, 0, 1, 17, 70
+"Total", "-", 406, 142, 135, -1, 1, 77, 760

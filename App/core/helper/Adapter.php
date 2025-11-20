@@ -26,32 +26,24 @@ use App\core\helper\Security;
         /// Alumno.                      /////
         /////////////////////////////////////
 
-        public static function DTOtoAlumno($authHeaderValue){
+        public static function DTOtoAlumno(){        
+        $alumno = new Alumno(
+            null, //id
+            $_POST['email'], //email
+            Security::passEncrypter("tempPass"), //pass
+            $_POST['nombre'], //nombre
+            $_POST['apellido'], //apellido
+            $_POST['dni'], //dni
+            $_POST['telefono'], //telefone
+            $_POST['direccion'], //dir
+            '/assets/images/genericAvatar.svg', //foto
+            null, //cv
+            $_POST['provincia'], // provincia
+            $_POST['localidad'], //localidad
+            0 //confirmed = 0/false
+        );
 
-        $token = self::tokenRetrieve($authHeaderValue); 
-        
-        if(is_null($token)){
-            $alumno = false;
-        }
-
-        
-            $alumno = new Alumno(
-                null, //id
-                $_POST['email'], //email
-                Security::passEncrypter("tempPass"), //pass
-                $_POST['nombre'], //nombre
-                $_POST['apellido'], //apellido
-                $_POST['dni'], //dni
-                $_POST['telefono'], //telefone
-                $_POST['direccion'], //dir
-                '/assets/images/genericAvatar.svg', //foto
-                null, //cv
-                $_POST['provincia'], // provincia
-                $_POST['localidad'], //localidad
-                0 //confirmed = 0/false
-            );
-
-            return $alumno;
+        return $alumno;
         }
 
         public static function formDataToAlumno(){
@@ -126,14 +118,7 @@ use App\core\helper\Security;
             1
         );
 
-        // ✅ PROCESAMIENTO DE ESTUDIOS MEJORADO CON LOGS
         $listaDeEstudios = [];
-
-        error_log("=== INICIO PROCESAMIENTO ESTUDIOS ===");
-        error_log("POST familia: " . print_r($_POST['familia'] ?? 'NO EXISTE', true));
-        error_log("POST ciclo: " . print_r($_POST['ciclo'] ?? 'NO EXISTE', true));
-        error_log("POST fecha_inicio: " . print_r($_POST['fecha_inicio'] ?? 'NO EXISTE', true));
-        error_log("POST fecha_fin: " . print_r($_POST['fecha_fin'] ?? 'NO EXISTE', true));
 
         if (isset($_POST['familia']) && is_array($_POST['familia'])) {
 
@@ -143,13 +128,6 @@ use App\core\helper\Security;
                 $fechaInicio = $_POST['fecha_inicio'][$key] ?? null;
                 $fechaFin = $_POST['fecha_fin'][$key] ?? null;
 
-                error_log("--- Iteración $key ---");
-                error_log("idFamilia: $idFamilia");
-                error_log("idCiclo: $idCiclo");
-                error_log("fechaInicio: $fechaInicio");
-                error_log("fechaFin: " . ($fechaFin ?: 'NULL'));
-
-                // ✅ CONDICIÓN SIMPLIFICADA Y CLARA
                 $cicloValido = !empty($idCiclo) && $idCiclo !== "-1";
                 $fechaInicioValida = !empty($fechaInicio);
                 
@@ -168,9 +146,6 @@ use App\core\helper\Security;
         } else {
             error_log("❌ No se encontró el array de familias en POST");
         }
-
-        error_log("Total de estudios procesados: " . count($listaDeEstudios));
-        error_log("=== FIN PROCESAMIENTO ESTUDIOS ===");
 
         $alumnoFull->estudios = $listaDeEstudios;
 
@@ -233,13 +208,16 @@ use App\core\helper\Security;
     {
         $fullAlumnos = [];
 
-        foreach ($alumnosDTO as $aluDTO) {
+        foreach ($alumnosDTO as $index => $aluDTO) {
+            // LOG PARA DEPURAR: Ver qué llega exactamente en cada fila
+            error_log("Procesando alumno #$index: " . print_r($aluDTO, true));
+
             $alumno = new Alumno(
                 null,
-                $aluDTO['email'],
+                $aluDTO['email'] ?? '', // Añadido ?? '' por seguridad
                 Security::passEncrypter("tempPass"),
-                $aluDTO['nombre'],
-                $aluDTO['apellido'],
+                $aluDTO['nombre'] ?? '',
+                $aluDTO['apellido'] ?? '',
                 null, // dni
                 900000000, // tel
                 null, // direccion
@@ -250,9 +228,31 @@ use App\core\helper\Security;
                 0 //confirmed
             );
 
-            $ciclo = CicloRepo::findById($aluDTO["cicloId"]);
-            if ($ciclo) {
-                $alumno->estudios[] = $ciclo;
+            // 1. Intentamos obtener el ID del ciclo probando varias claves comunes
+            $cicloId = $aluDTO['cicloId'] ?? $aluDTO['ciclo_id'] ?? $aluDTO['ciclo'] ?? null;
+            
+            // 2. Intentamos obtener fecha inicio probando claves comunes
+            $posiblesFechasIni = $aluDTO['fecha_Inicio'] ?? $aluDTO['fechaInicio'] ?? $aluDTO['fecha_inicio'] ?? date('Y-m-d');
+            $fechaInicio = $posiblesFechasIni;
+
+            // 3. Intentamos obtener fecha fin
+            $fechaFin = $aluDTO['fecha_Fin'] ?? $aluDTO['fechaFin'] ?? $aluDTO['fecha_fin'] ?? null;
+
+            // Verificamos si tenemos un ID válido (que no sea null, ni vacío, ni "-1")
+            if (!empty($cicloId) && $cicloId !== '-1') {
+                
+                $estudio = new Estudios(
+                    null,
+                    $cicloId,
+                    $fechaInicio,
+                    $fechaFin
+                );
+
+                $listaDeEstudios[] = $estudio;
+                $alumno->estudios = $listaDeEstudios;
+                error_log(" -> Estudio añadido correctamente al alumno (Ciclo ID: $cicloId)");
+            } else {
+                error_log(" -> NO se añadió estudio. CicloId detectado: " . var_export($cicloId, true));
             }
 
             $fullAlumnos[] = $alumno;
@@ -581,8 +581,9 @@ use App\core\helper\Security;
     }
 
     public static function editedDatatoSolicitud($data, $header){
-        $token = self::tokenRetrieve($header); 
         $solicitud = false;
+        $token = self::tokenRetrieve($header); 
+
 
         if (!is_null($token)){
             $solicitud = SolicitudRepo::findById($data['solicitudId']);

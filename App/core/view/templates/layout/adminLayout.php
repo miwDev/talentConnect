@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" type="text/css" href="/public/assets/css/style.css" />
     <script src="/public/assets/js/profileLogic.js" defer></script>
+    <script src="/public/assets/js/validators.js" defer></script>
 
     <?= $this->section('css') ?>
     <?= $this->section('js') ?>

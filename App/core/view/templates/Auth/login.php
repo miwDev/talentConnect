@@ -1,6 +1,11 @@
 <?php
 use App\core\data\Authorization;
 
+// 1. Obtener datos de la plantilla
+// El AuthController ahora nos pasa 'errors' y el valor de 'username'
+$errors = $this->data['errors'] ?? [];
+$username_value = $this->data['username'] ?? '';
+
 $this->layout('layout/layout', [
     'title' => 'Talent Connect - Iniciar Sesión',
     'role' => $this->data['role'] ?? 'ROLE_GUEST'
@@ -26,7 +31,19 @@ $this->layout('layout/layout', [
                 <form action="" method="POST">
                     <div class="form-group">
                         <label for="username">Email</label>
-                        <input type="text" id="username" name="username" required>
+                        <!-- 2. Mantener el valor y asegurar la seguridad -->
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            value="<?= htmlspecialchars($username_value) ?>" 
+                            required
+                        >
+                        <!-- 3. Pintar error de campo username -->
+                        <span id="error-username" class="input-error-message">
+                            <!-- Si existe $errors['username'], lo pintamos, sino queda vacío. -->
+                            <?= $errors['username'] ?? '' ?>
+                        </span>
                     </div>
 
                     <div class="form-group">
@@ -36,10 +53,13 @@ $this->layout('layout/layout', [
                             <span id="toggle-password">
                             </span>
                         </div>
-                        <span id="error-password" class="input-error-message"></span>
+                        <span id="error-password" class="input-error-message">
+                            <?= $errors['password'] ?? '' ?>
+                        </span>
                     </div>
 
                     <div id="login-error-display" class="error-message">
+                         <?= $errors['db_auth'] ?? '' ?>
                     </div>
 
                     <div class="form-actions">

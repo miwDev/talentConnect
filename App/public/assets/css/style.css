@@ -854,6 +854,31 @@ body:has(.list-container) {
     width: 50%;
 }
 
+.list-container .form-grid > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Asegura que el contenedor ocupe el espacio completo de la columna */
+}
+
+/* 2. Estilo base de los mensajes de error para que ocupen todo el ancho y se vean de color */
+.input-error-message {
+    color: #E53E3E; /* Rojo de tu paleta */
+    font-size: 0.95em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    margin-top: 0.3em;
+    margin-bottom: 0.5em; /* Espacio para separar del siguiente campo */
+    display: block; /* Asegura que ocupe todo el ancho disponible */
+}
+
+/* 3. Ajuste para que el input/textarea dentro de este div ocupe todo el ancho */
+.list-container .form-grid input[type="text"],
+.list-container .form-grid textarea,
+.list-container .form-grid select {
+    /* Los estilos generales ya hacen que ocupe 100%, pero los mantenemos. */
+    width: 100%;
+}
+
 /* Contenedor de botones */
 .list-container .button-container {
     display: flex;

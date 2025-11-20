@@ -374,6 +374,7 @@ body{
     overflow: hidden;
     border: 5px solid #EBD3FD;
     margin-bottom: 20px;
+    margin-left: 20px;
     
     display: block; 
     height: 200px;

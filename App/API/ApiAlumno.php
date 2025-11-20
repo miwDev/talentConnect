@@ -7,6 +7,7 @@ use App\core\data\AlumnoRepo;
 use App\core\data\Authorization;
 use App\core\helper\Adapter;
 use App\core\helper\Session;
+use App\mail\Mailer;
 use Exception;
 
 // Función para obtener headers de forma robusta (compatible con getallheaders() y $_SERVER)
@@ -37,9 +38,13 @@ switch ($method) {
     case 'GET':
         $process = $_GET['process'] ?? '';
         if (($body_content == "" || empty($body_content)) && $process === '' ) {
-            getFullList();
+            getFullList($authHeaderValue);
         } else if($process === 'pfp'){
             getProfilePic($authHeaderValue); 
+        } else if($process === 'checkEmail'){
+            checkEmailExists();
+        } else if($process === 'checkDni'){
+            checkDniExists();
         }
         break;
     case 'POST':
@@ -52,15 +57,14 @@ switch ($method) {
             saveGroupDTO($body_content, $authHeaderValue);
         }
         break;
-        break;
     case 'PUT':
         $process = $_GET['process'] ?? '';
         if ($process == "edit") {
-            editAlumno($body_content);
+            editAlumno($body_content, $authHeaderValue);
         }
         break;
     case 'DELETE':
-        deleteAlumno($body_content);
+        deleteAlumno($body_content, $authHeaderValue);
         break;
     default:
         http_response_code(405);
@@ -68,13 +72,22 @@ switch ($method) {
         break;
 }
 
-function getFullList()
+function getFullList($authHeaderValue)
 {
-    header('Content-Type: application/json');
-    http_response_code(200);
-    $alumnos = AlumnoRepo::findAll();
-    $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
-    echo json_encode($alumnosDTO);
+    $token = Adapter::tokenRetrieve($authHeaderValue); 
+    $role = Authorization::getRoleByToken($token);
+
+    if ($role === 'ROLE_ADMIN') {
+        header('Content-Type: application/json');
+        http_response_code(200);
+        $alumnos = AlumnoRepo::findAll();
+        $alumnosDTO = Adapter::AllAlumnoToDTO($alumnos);
+        echo json_encode($alumnosDTO);
+    }else{
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
+    }
 }
 
 function getProfilePic($authHeaderValue){
@@ -95,23 +108,33 @@ function getProfilePic($authHeaderValue){
     }
 }
 
-function saveAlumno() // el form data va por $_POST
+function saveAlumno($authHeaderValue) // el form data va por $_POST
 {
-    $alumno = Adapter::DTOtoAlumno($auth);
-    $dbResponse = AlumnoRepo::save($alumno);
+    $token = Adapter::tokenRetrieve($authHeaderValue); 
+    $role = Authorization::getRoleByToken($token);
 
-    if ($dbResponse !== false) {
+    if ($role === 'ROLE_ADMIN') {
+        $alumno = Adapter::DTOtoAlumno();
+        $dbResponse = AlumnoRepo::save($alumno);
+
+        if ($dbResponse !== false) {
+            header('Content-Type: application/json');
+            http_response_code(201);
+            $alumnoDTO = Adapter::alumnoToDTO($dbResponse);
+            echo json_encode([
+                'success' => true,
+                'alumno' => $alumnoDTO
+            ]);
+        }else{
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Error saving Alumno']);
+        }
+    }
+    else{
         header('Content-Type: application/json');
-        http_response_code(201);
-        $alumnoDTO = Adapter::alumnoToDTO($dbResponse);
-        echo json_encode([
-            'success' => true,
-            'alumno' => $alumnoDTO
-        ]);
-    } else {
-        header('Content-Type: application/json');
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Error saving student']);
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
     }
 }
 
@@ -119,8 +142,8 @@ function saveFullAlumno(){
     header('Content-Type: application/json');
     
     try {
-        //$alumno = Adapter::formDataToAlumno();
-        //$alumnoId = AlumnoRepo::save($alumno);
+        $alumno = Adapter::formDataToAlumno();
+        $alumnoId = AlumnoRepo::save($alumno);
 
         if($alumnoId !== false){
 
@@ -144,87 +167,157 @@ function saveFullAlumno(){
     }
 }
 
-function saveGroupDTO($body)
+function saveGroupDTO($body, $authHeaderValue)
 {
-    $data = json_decode($body, true);
-    $resultado = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
 
-    if (!empty($resultado['guardados']) || !empty($resultado['errores'])) {
+    $token = Adapter::tokenRetrieve($authHeaderValue); 
+    $role = Authorization::getRoleByToken($token);
+
+    if ($role === 'ROLE_ADMIN') {
+        $data = json_decode($body, true);
+        $resultado = AlumnoRepo::saveAll(Adapter::groupDTOtoAlumno($data));
+
+        if (!empty($resultado['guardados']) || !empty($resultado['errores'])) {
+            $mailer = new Mailer();
+            foreach ($resultado['guardados'] as $alumno) {
+                $emailAlu = $alumno->username; 
+                try {
+                    $mailer->accountConfirmAlumno($emailAlu, $alumno->id);
+                } catch (Exception $e) {
+                    error_log("Error enviando mail a $emailAlu: " . $e->getMessage());
+                }
+            }
+
+            header('Content-Type: application/json');
+            http_response_code(200);
+
+            $alumnosDTO = Adapter::AllAlumnoToDTO($resultado['guardados']);
+
+            $response = [
+                'success' => true,
+                'guardados' => $alumnosDTO,
+                'errores' => $resultado['errores']
+            ];
+
+            echo json_encode($response);
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => 'No data saved or found']);
+        }
+    }else{
         header('Content-Type: application/json');
-        http_response_code(200);
-
-        $alumnosDTO = Adapter::AllAlumnoToDTO($resultado['guardados']);
-
-        $response = [
-            'success' => true,
-            'guardados' => $alumnosDTO,
-            'errores' => $resultado['errores']
-        ];
-
-        echo json_encode($response);
-    } else {
-        header('Content-Type: application/json');
-        http_response_code(404);
-        echo json_encode(['success' => false, 'error' => 'No data saved or found']);
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
     }
 }
 
-function deleteAlumno($body)
+function deleteAlumno($body, $authHeaderValue)
 {
-    $data = json_decode($body, true);
-    $id = $data['id'];
+    $token = Adapter::tokenRetrieve($authHeaderValue); 
+    $role = Authorization::getRoleByToken($token);
 
-    $usuario = AlumnoRepo::findById($id);
+    if ($role === 'ROLE_ADMIN') { // role ALU para que un alumno pueda borrar su cuenta
+        $data = json_decode($body, true);
+        $id = $data['id'];
 
-    if (!$usuario) {
+        $usuario = AlumnoRepo::findById($id);
+
+        if (!$usuario) {
+            header('Content-Type: application/json');
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => 'Student not found']);
+            return;
+        }
+
+        $rutaFoto = $usuario->foto;
+        $rutaCv = $usuario->cv;
+        $basePath = __DIR__ . '/../public';
+
+        if ($rutaFoto && $rutaFoto !== '/assets/images/genericAvatar.svg') {
+            $fullFotoPath = $basePath . $rutaFoto;
+            
+            if (file_exists($fullFotoPath)) {
+                unlink($fullFotoPath);
+            }
+        }
+
+        if ($rutaCv) {
+            $fullCvPath = $basePath . $rutaCv;
+            
+            if (file_exists($fullCvPath)) {
+                unlink($fullCvPath);
+            }
+        }
+        
+        if (AlumnoRepo::deleteById($id)) {
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['success' => true]);
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Error deleting student from database']);
+        }
+    }else{
         header('Content-Type: application/json');
-        http_response_code(404);
-        echo json_encode(['success' => false, 'error' => 'Student not found']);
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
+    }
+}
+
+function editAlumno($body, $authHeaderValue)
+{
+    $token = Adapter::tokenRetrieve($authHeaderValue); 
+    $role = Authorization::getRoleByToken($token);
+
+    if ($role === 'ROLE_ADMIN') {
+        $data = json_decode($body, true);
+        if (AlumnoRepo::updateDTO(Adapter::editedDatatoDTO($data))) {
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['success' => true]);
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Could not update student data']);
+        }
+    }else{
+        header('Content-Type: application/json');
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
+    }
+}
+
+
+function checkEmailExists() {
+    header('Content-Type: application/json');
+    $email = $_GET['email'] ?? '';
+    
+    if (empty($email)) {
+        http_response_code(400);
+        echo json_encode(['exists' => false, 'error' => 'Email parameter is missing']);
         return;
     }
-
-    $rutaFoto = $usuario->foto;
-    $rutaCv = $usuario->cv;
-    $basePath = __DIR__ . '/../public';
-
-    if ($rutaFoto && $rutaFoto !== '/assets/images/genericAvatar.svg') {
-        $fullFotoPath = $basePath . $rutaFoto;
-        
-        if (file_exists($fullFotoPath)) {
-            unlink($fullFotoPath);
-        }
-    }
-
-    if ($rutaCv) {
-        $fullCvPath = $basePath . $rutaCv;
-        
-        if (file_exists($fullCvPath)) {
-            unlink($fullCvPath);
-        }
-    }
     
-    if (AlumnoRepo::deleteById($id)) {
-        header('Content-Type: application/json');
-        http_response_code(200);
-        echo json_encode(['success' => true]);
-    } else {
-        header('Content-Type: application/json');
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Error deleting student from database']);
-    }
+    $exists = AlumnoRepo::isEmailTaken($email); 
     
+    http_response_code(200);
+    echo json_encode(['exists' => $exists]);
 }
 
-function editAlumno($body)
-{
-    $data = json_decode($body, true);
-    if (AlumnoRepo::updateDTO(Adapter::editedDatatoDTO($data))) {
-        header('Content-Type: application/json');
-        http_response_code(200);
-        echo json_encode(['success' => true]);
-    } else {
-        header('Content-Type: application/json');
+function checkDniExists() {
+    header('Content-Type: application/json');
+    $dni = $_GET['dni'] ?? '';
+    
+    if (empty($dni)) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Could not update student data']);
+        echo json_encode(['exists' => false, 'error' => 'DNI parameter is missing']);
+        return;
     }
+    
+    $exists = AlumnoRepo::isDniTaken($dni);
+    
+    http_response_code(200);
+    echo json_encode(['exists' => $exists]);
 }
