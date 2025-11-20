@@ -8,11 +8,6 @@ $currentMenu = $_GET['menu'] ?? 'home';
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li class="nav-item <?= ($currentMenu === 'admin-dashboard') ? 'active' : '' ?>">
-                <a href="?menu=admin-dashboard">
-                    Estadisticas
-                </a>
-            </li>
             <li class="nav-item <?= ($currentMenu === 'admin-alumnos') ? 'active' : '' ?>">
                 <a href="?menu=admin-alumnos">
                     Gestión de Alumnos
