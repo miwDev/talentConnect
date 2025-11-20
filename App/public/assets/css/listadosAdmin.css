@@ -605,7 +605,7 @@ tbody tr:nth-child(even):hover {
     background: var(--color-acento);
     color: var(--color-negro);
     border: 3px solid var(--color-negro);
-    padding: 14px 24px;
+    padding: 8px 24px;
     cursor: pointer;
     font-family: var(--fuente-titulos);
     font-weight: 500;
