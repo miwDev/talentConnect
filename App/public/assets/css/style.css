@@ -1,51 +1,92 @@
-/* INDICE DE CSS
+/* ================================================= */
+/* :ROOT - TOKENS DE DISEÑO (COLORES Y TIPOGRAFÍA)   */
+/* ================================================= */
 
-    1. GLOBAL STYLES
-    2. HEADER CONTENT
-    3. MAIN CONTENT - INDEX
-    4. FOOTER CONTENT
-    5. LOGIN CONTENT
-    6. REGISTER CONTENT
-    7. REGISTER EMPRESA CONTENT
-    8. ERROR STYLES
-    9. ADMIN STYLES
-    10. ESTILOS PARA FORMULARIO DE CREACIÓN DE OFERTA
-    11. ESTILOS PARA TARJETA DE OFERTA <--- AQUÍ ESTÁ EL CAMBIO
-    12. ESTILOS DE BARRA DE BÚSQUEDA (MIS OFERTAS)
-    13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column)
-    14. ESTILOS PARA TARJETA DE SOLICITUD <--- ¡NUEVO BLOQUE!
+:root {
 
+    --color-fondo-body: #FFFFE9;       /* Crema principal */
+    --color-fondo-tarjeta: #FEFDF8;    /* Blanco roto/Hueso */
+    --color-fondo-verde-oscuro: #16443D; /* Verde corporativo fondo */
+    --color-fondo-gris-claro: #F8F6F0; /* Fondo acciones tarjeta */
+
+    --color-negro: #191919;            /* Negro principal (texto y bordes) */
+    --color-gris-texto: #505050;       /* Gris para textos secundarios */
+    --color-borde-suave: rgba(80, 80, 80, 0.3); /* #505050 con opacidad */
+
+    --color-acento: #EBD3FD;           /* Lila principal */
+    --color-acento-hover: #d7b4f2;     /* Lila más oscuro al pasar ratón */
+    --color-verde-brand: #16443D;      /* Verde corporativo elementos */
+    
+    /* Estados (Éxito/Error) */
+    --color-estado-error: #E53E3E;     /* Rojo error/borrar */
+    --color-estado-error-bg: #fef8f8;  /* Fondo rojo muy claro */
+    --color-estado-error-hover: #C53030; 
+    --color-estado-exito: #4CAF50;     /* Verde éxito mensaje */
+    --color-estado-exito-bg: #e8f5e9;
+    --color-solicitud-fecha-texto: #16443D;
+    --color-solicitud-fecha-bg: #e6f2f0;
+
+    --fuente-titulos: 'Poppins', sans-serif;
+    --fuente-cuerpo: 'Libre Baskerville', serif;
+}
+
+/* ÍNDICE DE CONTENIDOS
+
+   1. ESTILOS GLOBALES
+   2. CABECERA Y NAVEGACIÓN
+   3. SECCIONES DE LA LANDING PAGE
+   4. CONTENIDO DEL PIE DE PÁGINA (FOOTER)
+   5. DISEÑO DEL PANEL DE ADMINISTRACIÓN
+   6. FORMULARIOS GENERALES Y CONTENEDORES
+   7. TARJETAS DE OFERTA Y LISTADOS
+   8. BARRA DE BÚSQUEDA Y FILTROS
+   9. VENTANAS MODALES
+   10. TARJETAS DE SOLICITUD Y APLICACIÓN
+   11. TARJETAS DE CANDIDATO
+   12. PANELES DE CONTROL (EMPRESA Y ALUMNO)
+   13. PERFIL PÚBLICO DE EMPRESA
 */
 
-/* 1. GLOBAL STYLES */
+/* RESPONSIVE */
+
+/*
+  1.Landing Page
+*/
+
+/* ================================================= */
+/* 1. ESTILOS GLOBALES                               */
+/* ================================================= */
+
 body {
-    background-color: #FFFFE9;
+    background-color: var(--color-fondo-body);
     margin: 0;
     padding: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
 }
 
 main {
     flex: 1;
 }
 
-.container{
-    background-color: #FFFFE9;
+.container {
+    background-color: var(--color-fondo-body);
     border-radius: 0.6875em;
     margin: 0em;
     padding: 1em;
 }
 
-/* 2. HEADER CONTENT */
+/* ================================================= */
+/* 2. CABECERA Y NAVEGACIÓN                          */
+/* ================================================= */
 
 .banner-container { 
     position: relative; 
     width: 100%;
     overflow: hidden;
-     border-radius: 0 0 2em 2em; 
+    border-radius: 0 0 2em 2em; 
 }
 
 .banner-video {
@@ -54,21 +95,20 @@ main {
     filter: blur(30px);
 }
 
-
 .banner-text {
     position: absolute; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); 
     text-align: center; 
-    color: #191919; 
+    color: var(--color-negro); 
 }
 
 .banner-text h1 {
     font-size: 6.5em;
     margin-bottom: 0.1em;
-    text-shadow: 0.125em 0.125em 0.25em #FFFFE9;
-    font-family: 'Poppins', sans-serif;
+    text-shadow: 0.125em 0.125em 0.25em var(--color-fondo-body);
+    font-family: var(--fuente-titulos);
 }
 
 .banner-text h2 {
@@ -76,7 +116,7 @@ main {
     font-weight: 300;
     margin-top: 0em;
     text-shadow: 0.125em 0.125em 0.25em black;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
 }
 
 header {
@@ -85,19 +125,19 @@ header {
     z-index: 1000;
 }
 
-.header-banner{
-    background-color: #FFFFE9;
+.header-banner {
+    background-color: var(--color-fondo-body);
     display: flex;
     flex-direction: row;
-    box-shadow: 0 0.25em 0.5em #19191976;
+    box-shadow: 0 0.25em 0.5em rgba(25, 25, 25, 0.46); /* #19191976 aprox */
     justify-content: space-between;
     align-items: center;
     padding: 0.3em 2.5em;
-    border-bottom: 3px #505050;
+    border-bottom: 3px solid var(--color-gris-texto);
     min-height: 80px; 
 }
 
-#logo{
+#logo {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -106,10 +146,10 @@ header {
 }
 
 #logo p {
-    color: #191919;
+    color: var(--color-negro);
     line-height: 1.2;
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.5em;
     font-weight: 650;
 }
@@ -132,7 +172,7 @@ header {
     justify-content: flex-end; 
 }
 
-#nav{
+#nav {
     display: block; 
     margin-right: 1em;
 }
@@ -143,7 +183,7 @@ header {
 
 #nav li {
     margin-right: 3em; 
-    border: 3px solid #FFFFE9;
+    border: 3px solid var(--color-fondo-body);
     padding: 0.7em 1em; 
     border-radius: 0.68em;
     background-color: transparent;
@@ -151,19 +191,19 @@ header {
 }
 
 #nav li:has(#registro, #dashboardAdmin) {
-    background-color: #EBD3FD;
-    border-color: #191919;
+    background-color: var(--color-acento);
+    border-color: var(--color-negro);
 }
 
 #nav li:not(:has(#registro, #dashboardAdmin)):hover {
-    background-color: #FEFDF8;
-    border-color: #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border-color: var(--color-negro);
     cursor: pointer;
 }
 
 #nav li:has(#registro, #dashboardAdmin):hover {
-    background-color: #d7b4f2;
-    border-color: #191919;
+    background-color: var(--color-acento-hover);
+    border-color: var(--color-negro);
 }
 
 .menu-lista {
@@ -176,75 +216,61 @@ header {
 
 .menu-enlace {
     text-decoration: none;
-    color: #191919;
+    color: var(--color-negro);
     font-weight: bold;
 }
 
 #navParent a {
-    color: #191919;
+    color: var(--color-negro);
     line-height: 1.2;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: 400;
 }
 
 #navParent a:hover {
-    color: #505050;
+    color: var(--color-gris-texto);
     line-height: 1.2;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: 400;
 }
 
-/* MODIFICACIÓN: Área de usuario con dropdown (Base) */
 .user-area {
     display: flex;
     flex-direction: column;
     padding: 0.8em 1.5em; 
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.68em;
     z-index: 2020;
     position: relative;
     flex-shrink: 0;
-    
     background-color: transparent; 
     cursor: pointer;
-    
-    height: 70px; /* Mantiene la altura fija para el contenido superior */
-    overflow: visible; /* Asegura que el dropdown pueda desbordarse */
-    
-    /* Solo transicionamos el color de fondo para el div superior */
+    height: 70px;
+    overflow: visible;
     transition: background-color 0.3s ease-in-out; 
 }
 
-/* AJUSTE: El div superior NO cambia bordes ni padding al hacer hover */
 .user-area:hover {
-    background-color: #FEFDF8; /* Solo cambia el color de fondo */
-    /* No se modifican ni height, ni border, ni border-radius, ni padding para evitar movimiento */
+    background-color: var(--color-fondo-tarjeta);
 }
 
-/* AJUSTE: Mantiene imagen y texto a la misma altura y separados */
-.pfp-username{
+.pfp-username {
     display: flex;
     margin-top: 0.585em;
     align-items: center;
     gap: 15px; 
 }
 
-/* El contenido del dropdown ahora es ABSOLUTO y se dibuja un poco por debajo */
 .dropdown-content {
     position: absolute; 
-    /* AJUSTE CLAVE: top: calc(100% + 10px); para dibujar 10px por debajo del .user-area */
     top: calc(100% + 10px); 
-    /* Alineamos con el borde izquierdo del user-area */
     left: -3px; 
-    /* Ancho del padre + 2*3px de borde */
     width: calc(100% + 6px); 
-    
-    background-color: #FEFDF8; 
-    border: 3px solid #191919; /* Ahora tiene todos sus bordes */
-    border-radius: 0.68em; /* Y sus propios radios */
-    
+    background-color: var(--color-fondo-tarjeta); 
+    border: 3px solid var(--color-negro);
+    border-radius: 0.68em;
     visibility: hidden;
     opacity: 0;
     transform: translateY(-10px);
@@ -263,16 +289,16 @@ header {
 .dropdown-content a {
     display: block; 
     text-decoration: none;
-    color: #191919;
+    color: var(--color-negro);
     padding: 8px 15px; 
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.1em;
     font-weight: 500;
     text-align: center;
 }
 
 .dropdown-content a:hover {
-    color: #EBD3FD; 
+    color: var(--color-acento); 
 }
 
 .pfp-container {
@@ -292,11 +318,10 @@ header {
     object-fit: cover;
 }
 
-
-.username-display{
-    color: #191919;
+.username-display {
+    color: var(--color-negro);
     line-height: 1.2;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: bold;
     white-space: nowrap;
@@ -314,21 +339,21 @@ header {
     cursor: pointer;
 }
 
-/* 3. MAIN CONTENT - INDEX */
-
-/* SECTION 1 - Rediseño */
+/* ================================================= */
+/* 3. SECCIONES DE LA LANDING PAGE                   */
+/* ================================================= */
 
 .section1-title {
     text-align: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 3.5em;
-    color: #191919;
+    color: var(--color-negro);
     margin-bottom: 1.5em;
     padding: 0 2em;
 }
 
 .section1-title .highlight {
-    color: #EBD3FD;
+    color: var(--color-acento);
 }
 
 .feature-card {
@@ -345,7 +370,7 @@ header {
 
 .feature-image-container {
     flex: 0 0 30%;
-    background-color: #191919;
+    background-color: var(--color-negro);
     border-radius: 2em;
     padding: 2em;
     box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.15);
@@ -365,107 +390,76 @@ header {
 }
 
 .feature-text h3 {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 2.2em;
-    color: #191919;
+    color: var(--color-negro);
     margin-bottom: 0.8em;
     font-weight: 700;
 }
 
 .feature-text p {
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.3em;
-    color: #191919;
+    color: var(--color-negro);
     line-height: 1.6;
     margin: 0;
 }
 
-/* SECTION 2 - Carrusel de empresas (SOLUCIÓN FINAL DE ANIMACIÓN) */
-
 #section2 {
-    background-color: #191919;
+    background-color: var(--color-negro);
     border-radius: 2em;
     position: relative;
     z-index: 2;
     padding-bottom: 8em;
-    overflow: hidden; /* Oculta los logos fuera de la vista para la animación */
+    overflow: hidden;
 }
 
-/* Título de la sección */
 #section2 h2 {
     text-align: center;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 5em;
     padding: 1.5em;
     padding-bottom: 1em;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
     margin: 0;
 }
 
-/* Contenedor principal de la ventana de visualización */
-/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
 #section2 .companies-container {
     width: 100%;
     overflow: hidden;
-    /* Revertimos cualquier flex-wrap no deseado que pudiera venir del dashboard */
     display: block; 
-    
-    /* Efecto de máscara para que los logos desaparezcan suavemente en los bordes */
-    mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-    );
-    -webkit-mask-image: linear-gradient(
-        to right,
-        transparent 0%,
-        black 10%,
-        black 90%,
-        transparent 100%
-    );
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
-/* Contenedor de logos: FUERZA la línea y aplica la animación. */
-/* AJUSTE CLAVE: Usamos el ID #section2 para asegurar la precedencia */
 #section2 .logo-slider {
     display: flex; 
-    flex-wrap: nowrap !important; /* <--- CLAVE: Ignora cualquier "flex-wrap: wrap" anterior */
-    justify-content: flex-start !important; /* Asegura que no se centre, lo que podría ocultar el inicio/fin del carrusel */
-    width: fit-content; /* Permite que el ancho sea la suma total de los logos duplicados */
-    animation: scroll 40s linear infinite !important; /* <--- CLAVE: Vuelve a activar la animación sobre cualquier anulación */
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    width: fit-content;
+    animation: scroll 40s linear infinite !important;
     padding: 75px 0;
 }
 
-/* Estilo para cada logo */
-#section2 .logo-slider img { /* Usamos #section2 para los logos también */
+#section2 .logo-slider img {
     height: 240px;
     width: auto;
     margin: 0 40px;
     border-radius: 12px;
     object-fit: contain;
-    background-color: #FEFDF8;
+    background-color: var(--color-fondo-tarjeta);
     padding: 15px;
-    border: 1px solid #505050;
-    flex-shrink: 0; /* Impide que las imágenes se compriman */
+    border: 1px solid var(--color-gris-texto);
+    flex-shrink: 0;
 }
 
-/* Definición de la animación de scroll */
 @keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
-/* SECTION 3 - Call to Action (CTA) */
-
-
-#section3{
-    background-color: #16443D;
+#section3 {
+    background-color: var(--color-fondo-verde-oscuro);
     padding: 8em 0;
     position: relative;
     z-index: 1;
@@ -473,9 +467,9 @@ header {
     margin-bottom: -4em;
 }
 
-.s3-container{
-    background-color: #FFFFE9;
-    border: 1.5px solid #191919;
+.s3-container {
+    background-color: var(--color-fondo-body);
+    border: 1.5px solid var(--color-negro);
     margin: 0 30em;
     display: flex;
     flex-direction: column;
@@ -485,29 +479,29 @@ header {
     border-radius: 2em;
 }
 
-.s3-header{
+.s3-header {
     margin-top: 2.5em;
 }
 
-h3{
-    font-family: 'Poppins', sans-serif;
+h3 {
+    font-family: var(--fuente-titulos);
     font-size: 2.3em;
-    color: #191919;
+    color: var(--color-negro);
 }
 
-.s3-subtitle{
+.s3-subtitle {
     text-align: center;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
     font-weight: 700;
-    color: #191919;
+    color: var(--color-negro);
 }
 
-.s3-subtitle-alter{
+.s3-subtitle-alter {
     font-weight: 900;
 }
 
-.s3-btn-container{
+.s3-btn-container {
     display: flex;
     flex-direction: row;
 }
@@ -518,53 +512,55 @@ h3{
 }
 
 .a-section3 {
-    background-color: #EBD3FD; 
-    color: #191919;
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
     padding: 0.7em 3em;
     display: inline-flex;     
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: 500;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     cursor: pointer;
 }
 
 .a-section3:hover {
-    background-color: #d7b4f2;
-    color: #191919; 
+    background-color: var(--color-acento-hover);
+    color: var(--color-negro); 
 }
 
-.s3-register-link{
-    font-family: 'Libre Baskerville', serif;
+.s3-register-link {
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
     padding: 1.2em;
 }
 
-.s3-register-alter{
+.s3-register-alter {
     font-weight: 700;
 }
 
-.register-link{
+.register-link {
     text-decoration: none;
-    color: #191919;
+    color: var(--color-negro);
 }
 
-.register-link:hover{
+.register-link:hover {
     text-decoration: none;
-    color: #EBD3FD;
+    color: var(--color-acento);
 }
 
-/* 4. FOOTER CONTENT */
+/* ================================================= */
+/* 4. CONTENIDO DEL PIE DE PÁGINA (FOOTER)           */
+/* ================================================= */
 
 footer {
-    background-color: #191919;
-    color: #FFFFE9;
+    background-color: var(--color-negro);
+    color: var(--color-fondo-body);
     padding: 0.1em 0;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.4em;
     width: 100%;
     margin: 0;
@@ -575,10 +571,10 @@ footer {
 }
 
 footer.admin-page {
-    background-color: #191919;
-    color: #FFFFE9;
+    background-color: var(--color-negro);
+    color: var(--color-fondo-body);
     padding: 0.1em 0;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.4em;
     width: 100%;
     margin: 0;
@@ -587,8 +583,6 @@ footer.admin-page {
     position: relative;
     z-index: 2;
 }
-
-
 
 .footer-container {
     display: flex;
@@ -613,7 +607,7 @@ footer.admin-page {
     font-weight: 700;
     font-size: 1.6em;
     margin-bottom: 10px;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
 }
 
 .social-links,
@@ -625,24 +619,25 @@ footer.admin-page {
 
 .social-link,
 .about-link {
-    color: #FFFFE99d;
+    color: rgba(255, 255, 233, 0.6);
     text-decoration: none;
     line-height: 1.6;
 }
 
 .social-link:hover,
 .about-link:hover {
-    color: #EBD3FD;
+    color: var(--color-acento);
 }
 
 footer > div:last-child {
     text-align: center;
     font-size: 0.7em;
-    color: #FFFFE976;
+    color: rgba(255, 255, 233, 0.46);
 }
 
-
-/* 9. ADMIN STYLES */
+/* ================================================= */
+/* 5. DISEÑO DEL PANEL DE ADMINISTRACIÓN             */
+/* ================================================= */
 
 #admin-layout-container {
     display: flex;
@@ -652,11 +647,11 @@ footer > div:last-child {
 
 #admin-sidebar {
     width: 280px;
-    background-color: #191919;
-    color: #FFFFE9;
+    background-color: var(--color-negro);
+    color: var(--color-fondo-body);
     padding: 20px 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     display: flex;
     flex-direction: column;
 }
@@ -670,11 +665,11 @@ footer > div:last-child {
     text-align: center;
     padding: 20px 0;
     margin-bottom: 20px;
-    border-bottom: 1px solid #505050;
+    border-bottom: 1px solid var(--color-gris-texto);
 }
 
 .sidebar-header h3 {
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
     font-size: 1.5em;
     margin: 10px 0 0 0;
     font-weight: 600;
@@ -700,7 +695,7 @@ footer > div:last-child {
     align-items: center;
     gap: 15px;
     padding: 15px 30px;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
     text-decoration: none;
     font-size: 1.1em;
     font-weight: 400;
@@ -709,8 +704,8 @@ footer > div:last-child {
 .sidebar-nav .nav-item a:hover,
 .sidebar-nav .nav-item.active a {
     background-color: #333333;
-    color: #EBD3FD;
-    border-left: 5px solid #EBD3FD;
+    color: var(--color-acento);
+    border-left: 5px solid var(--color-acento);
     padding-left: 25px;
 }
 
@@ -721,7 +716,7 @@ footer > div:last-child {
 .sidebar-footer {
     margin-top: auto;
     padding: 20px 0;
-    border-top: 1px solid #505050;
+    border-top: 1px solid var(--color-gris-texto);
     text-align: center;
 }
 
@@ -730,7 +725,7 @@ footer > div:last-child {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: #FFFFE99d;
+    color: rgba(255, 255, 233, 0.6); /* #FFFFE99d */
     text-decoration: none;
     font-size: 1em;
     font-weight: 500;
@@ -738,110 +733,99 @@ footer > div:last-child {
 }
 
 .sidebar-footer a:hover {
-    color: #EBD3FD;
+    color: var(--color-acento);
 }
 
-
-
-/* 10. ESTILOS PARA FORMULARIO DE CREACIÓN DE OFERTA */
+/* ================================================= */
+/* 6. FORMULARIOS GENERALES Y CONTENEDORES           */
+/* ================================================= */
 
 body:has(.list-container) {
-    background-color: #16443D;
+    background-color: var(--color-fondo-verde-oscuro);
 }
 
-/* Contenedor principal del formulario, basado en .s3-container */
 .list-container {
-    background-color: #FFFFE9;
-    border: 1.5px solid #191919;
+    background-color: var(--color-fondo-body);
+    border: 1.5px solid var(--color-negro);
     box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
-    border-radius: 2em; /* Radio de .s3-container */
+    border-radius: 2em;
     padding: 2.5em 3em;
-    margin: 3em auto; /* Centrado */
+    margin: 3em auto;
     max-width: 900px;
-    font-family: 'Libre Baskerville', serif; /* Fuente global */
-    color: #191919;
+    font-family: var(--fuente-cuerpo);
+    color: var(--color-negro);
 }
 
-/* Sección de la cabecera (título y var_dump) */
 .list-container .header-section {
     text-align: center;
     margin-bottom: 2.5em;
     padding-bottom: 1.5em;
 }
 
-/* Título H1, basado en .feature-text h3 y .section1-title */
 .list-container .header-section h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.5em; /* Tamaño intermedio */
-    color: #191919;
+    font-family: var(--fuente-titulos);
+    font-size: 2.5em;
+    color: var(--color-negro);
     margin: 0;
 }
 
-/* Estilo para el var_dump (si está activo) */
 .list-container .header-section pre {
     background-color: #fefdf8;
-    border: 1px solid #191919;
+    border: 1px solid var(--color-negro);
     padding: 10px;
     border-radius: 0.68em;
     font-family: monospace;
     text-align: left;
     margin-top: 1.5em;
-    overflow-x: auto; /* Para volcados de datos grandes */
+    overflow-x: auto;
 }
 
-/* Grid del formulario */
 .list-container .form-grid {
     display: grid;
-    /* Columnas: Etiqueta (tamaño auto) | Campo (ocupa el resto) */
     grid-template-columns: auto 1fr;
-    gap: 1.5em 1.2em; /* 1.5em entre filas, 1.2em entre columnas */
-    align-items: center; /* Centra verticalmente etiqueta y campo */
+    gap: 1.5em 1.2em;
+    align-items: center;
 }
 
-/* Etiquetas del formulario */
 .list-container .form-grid label {
-    font-family: 'Poppins', sans-serif; /* Fuente de UI */
+    font-family: var(--fuente-titulos);
     font-size: 1.1em;
-    font-weight: 600; /* Basado en #logo p */
-    color: #191919;
-    text-align: right; /* Alinea a la derecha para un look limpio */
+    font-weight: 600;
+    color: var(--color-negro);
+    text-align: right;
 }
 
-/* Campos de texto, textarea y select */
 .list-container .form-grid input[type="text"],
 .list-container .form-grid textarea,
 .list-container .form-grid select {
     width: 100%;
-    padding: 0.7em 1em; /* Basado en #nav li padding */
-    border: 3px solid #191919; /* Basado en .user-area */
-    border-radius: 0.6875em; /* Basado en .a-section3 */
-    background-color: #FEFDF8; /* Basado en .user-area:hover */
-    font-family: 'Libre Baskerville', serif; /* Fuente de contenido */
+    padding: 0.7em 1em;
+    border: 3px solid var(--color-negro);
+    border-radius: 0.6875em;
+    background-color: var(--color-fondo-tarjeta);
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
-    color: #191919;
-    box-sizing: border-box; /* Clave para que padding no rompa el 100% */
+    color: var(--color-negro);
+    box-sizing: border-box;
     transition: border-color 0.2s, background-color 0.2s;
 }
 
-/* Estilo específico para textarea */
 .list-container .form-grid textarea {
     min-height: 150px;
     resize: vertical;
 }
 
-/* Estilo para los placeholders */
 .list-container .form-grid input::placeholder,
 .list-container .form-grid textarea::placeholder {
-    color: #505050;
+    color: var(--color-gris-texto);
     opacity: 0.8;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-style: italic;
 }
 
-/* Ajustes para el grupo de 'selects' (CICLOS) */
 .list-container .form-grid .select-group-label {
-    align-self: start; /* Alinea la etiqueta arriba */
-    padding-top: 0.7em; /* Coincide con el padding del select */
+    align-self: start;
+    padding-top: 0.7em;
 }
 
 .list-container .form-grid .select-group {
@@ -857,81 +841,65 @@ body:has(.list-container) {
 .list-container .form-grid > div {
     display: flex;
     flex-direction: column;
-    width: 100%; /* Asegura que el contenedor ocupe el espacio completo de la columna */
-}
-
-/* 2. Estilo base de los mensajes de error para que ocupen todo el ancho y se vean de color */
-.input-error-message {
-    color: #E53E3E; /* Rojo de tu paleta */
-    font-size: 0.95em;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    margin-top: 0.3em;
-    margin-bottom: 0.5em; /* Espacio para separar del siguiente campo */
-    display: block; /* Asegura que ocupe todo el ancho disponible */
-}
-
-/* 3. Ajuste para que el input/textarea dentro de este div ocupe todo el ancho */
-.list-container .form-grid input[type="text"],
-.list-container .form-grid textarea,
-.list-container .form-grid select {
-    /* Los estilos generales ya hacen que ocupe 100%, pero los mantenemos. */
     width: 100%;
 }
 
-/* Contenedor de botones */
+.input-error-message {
+    color: var(--color-estado-error);
+    font-size: 0.95em;
+    font-family: var(--fuente-titulos);
+    font-weight: 500;
+    margin-top: 0.3em;
+    margin-bottom: 0.5em;
+    display: block;
+}
+
 .list-container .button-container {
     display: flex;
     justify-content: center;
     gap: 1.5em;
     margin-top: 2.5em;
     padding-top: 2em;
-    border-top: 2px solid #505050;
+    border-top: 2px solid var(--color-gris-texto);
 }
 
-/* Estilo de botones, basado en .a-section3 */
 .list-container .button-container input[type="submit"] {
-    background-color: #EBD3FD; 
-    color: #191919;
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
     padding: 0.7em 3em;
     text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: 500;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
-/* Hover para el botón principal */
 .list-container .button-container input[type="submit"]:hover {
-    background-color: #d7b4f2; /* Color de .a-section3:hover */
+    background-color: var(--color-acento-hover);
 }
 
-/* Estilo específico para el botón Cancelar */
 .list-container .button-container input#btnCancelar {
-    background-color: #fef8f8; /* Color neutro de la paleta */
-    border-color: #505050;
+    background-color: var(--color-estado-error-bg);
+    border-color: var(--color-gris-texto);
 }
 
 .list-container .button-container input#btnCancelar:hover {
-    border-color: #191919;
+    border-color: var(--color-negro);
 }
-
-
-/*ESTILO PARA BOTON VOLVER EN CANDIDATE*/
 
 .btn-volver {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     padding: 0.7em 1.5em;
-    background-color: #FFFFE9;
-    border: 3px solid #191919;
+    background-color: var(--color-fondo-body);
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
-    color: #191919;
-    font-family: 'Poppins', sans-serif;
+    color: var(--color-negro);
+    font-family: var(--fuente-titulos);
     font-size: 1.1em;
     font-weight: 500;
     cursor: pointer;
@@ -939,9 +907,9 @@ body:has(.list-container) {
 }
 
 .btn-volver:hover {
-    background-color: #FEFDF8;
-    border-color: #191919;
-    color: #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border-color: var(--color-negro);
+    color: var(--color-negro);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -955,112 +923,147 @@ body:has(.list-container) {
     height: 22px;
 }
 
-/* 11. ESTILOS PARA TARJETA DE OFERTA */
+/* FORMULARIOS HÍBRIDOS FILA/COLUMNA */
 
-/* Contenedor principal de la tarjeta.
-   Usa colores de la paleta (#FEFDF8, #191919) 
-*/
-.list-container .oferta-card {
-    background-color: #FEFDF8;
-    border: 2px solid #191919;
-    border-radius: 0.6875em; /* Radio estándar de la paleta */
-    margin-bottom: 2em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    overflow: hidden; /* Para contener los bordes redondeados */
-    font-family: 'Libre Baskerville', serif;
+.list-container .form-grid .form-row-full {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1.2em;
 }
 
-/* Div para el contenido (padding) */
+.list-container .form-grid .form-group-half {
+    flex: 1; 
+    min-width: 0; 
+}
+
+.list-container .form-grid .form-group-half label {
+    text-align: left; 
+    font-family: var(--fuente-titulos);
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-negro);
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.list-container .form-grid .form-group-half input {
+    width: 100%; 
+    padding: 0.7em 1em;
+    border: 3px solid var(--color-negro);
+    border-radius: 0.6875em;
+    background-color: var(--color-fondo-tarjeta);
+    font-family: var(--fuente-cuerpo);
+    font-size: 1.1em;
+    color: var(--color-negro);
+    box-sizing: border-box; 
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.list-container .form-grid .form-span-label {
+    grid-column: 1 / -1;
+    text-align: left;
+    margin-bottom: -1em; 
+}
+
+.list-container .form-grid .form-span-input {
+     grid-column: 1 / -1;
+}
+
+/* ================================================= */
+/* 7. TARJETAS DE OFERTA Y LISTADOS                  */
+/* ================================================= */
+
+.list-container .oferta-card {
+    background-color: var(--color-fondo-tarjeta);
+    border: 2px solid var(--color-negro);
+    border-radius: 0.6875em;
+    margin-bottom: 2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    font-family: var(--fuente-cuerpo);
+}
+
 .list-container .card-content {
     padding: 1.5em;
 }
 
-/* === MODIFICACIÓN: Contenedor de la información de la compañía (Logo + Texto) === */
 .list-container .card-CompanyInfo {
-    display: flex; /* Habilitamos Flexbox */
-    align-items: center; /* Alineamos verticalmente al centro */
-    gap: 0.75em; /* Espacio entre el logo y el texto */
-    margin-bottom: 1em; /* Espacio debajo de este bloque */
-    padding-bottom: 0.5em;
-    border-bottom: 1px solid #50505030; /* Línea separadora suave */
-}
-
-/* AÑADIDO: Estilo para el enlace <a> dentro de .card-CompanyInfo para que parezca un div */
-.list-container .card-CompanyInfo a {
-    display: flex; /* Replica el display: flex del contenedor padre para el contenido interno */
+    display: flex;
     align-items: center;
     gap: 0.75em;
-    text-decoration: none; /* Elimina el subrayado por defecto del enlace */
-    color: inherit; /* Hereda el color del texto del padre */
-    width: 100%; /* Ocupa todo el ancho del contenedor padre */
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--color-borde-suave);
 }
 
-/* Estilo para el logo */
+.list-container .card-CompanyInfo a {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
 .list-container .card-CompanyInfo img {
-    width: 35px; /* Tamaño del logo */
+    width: 35px;
     height: 35px;
     object-fit: contain;
-    flex-shrink: 0; /* Evita que la imagen se encoja */
+    flex-shrink: 0;
 }
 
-/* Estilo para el nombre de la empresa */
 .list-container .card-CompanyInfo p {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1em;
     font-weight: 500;
-    color: #505050; /* Color más sutil para el nombre genérico */
-    margin: 0; /* Quitamos márgenes por defecto del párrafo */
+    color: var(--color-gris-texto);
+    margin: 0;
     line-height: 1.2;
 }
-/* ============================================================================== */
 
-
-/* Cabecera: Título y Fecha (flex) */
 .list-container .card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 1em;
-    border-bottom: 1px solid #505050; /* Color de borde sutil */
+    border-bottom: 1px solid var(--color-gris-texto);
     padding-bottom: 1em;
     margin-bottom: 1em;
 }
 
 .list-container .card-titulo {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.5em;
     font-weight: 600;
-    color: #191919;
+    color: var(--color-negro);
     margin: 0;
     line-height: 1.2;
 }
 
 .list-container .card-fecha-fin {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 0.9em;
     font-weight: 700;
-    color: #E53E3E; /* Rojo para la fecha, como pediste */
-    background-color: #fef8f8;
-    border: 1px solid #E53E3E;
+    color: var(--color-estado-error);
+    background-color: var(--color-estado-error-bg);
+    border: 1px solid var(--color-estado-error);
     padding: 0.25em 0.5em;
     border-radius: 0.68em;
-    white-space: nowrap; /* Evita que se parta la fecha */
+    white-space: nowrap;
     flex-shrink: 0;
 }
 
-/* Cuerpo: Descripción */
 .list-container .card-body {
     margin-bottom: 1.5em;
 }
 
 .list-container .card-descripcion {
-    color: #191919;
+    color: var(--color-negro);
     font-size: 1em;
     line-height: 1.6;
     margin: 0;
 }
 
-/* Pie: Salario y Ciclos (flex) */
 .list-container .card-footer {
     display: flex;
     justify-content: space-between;
@@ -1069,17 +1072,16 @@ body:has(.list-container) {
 }
 
 .list-container .card-salario {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.2em;
     font-weight: 700;
-    color: #FFFFE9; /* Color de letra claro */
-    background-color: #16443D; /* Verde oscuro de la paleta */
-    padding: 0.25em 0.75em; /* Padding para crear el recuadro */
-    border-radius: 0.6875em; /* Radio estándar */
-    white-space: nowrap; /* Evitar que se parta */
+    color: var(--color-fondo-body);
+    background-color: var(--color-verde-brand);
+    padding: 0.25em 0.75em;
+    border-radius: 0.6875em;
+    white-space: nowrap;
 }
 
-/* Ciclos a la derecha */
 .list-container .card-ciclos {
     display: flex;
     flex-direction: column;
@@ -1088,26 +1090,22 @@ body:has(.list-container) {
 }
 
 .list-container .ciclo-tag {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 0.9em;
     font-weight: 500;
-    background-color: #EBD3FD; /* Morado de la paleta */
-    color: #191919;
+    background-color: var(--color-acento);
+    color: var(--color-negro);
     padding: 0.25em 0.75em;
     border-radius: 0.68em;
 }
 
-/* --- ESTILOS DE BOTONES --- */
-
-/* Contenedor de acciones (flex) */
 .list-container .card-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Usamos un color de fondo ligeramente distinto */
-    background-color: #F8F6F0; 
+    background-color: var(--color-fondo-gris-claro); 
     padding: 1em 1.5em;
-    border-top: 2px solid #191919;
+    border-top: 2px solid var(--color-negro);
 }
 
 .list-container .actions-left {
@@ -1115,16 +1113,15 @@ body:has(.list-container) {
     gap: 0.5em;
 }
 
-/* Estilo base del botón (copiado de tus botones de formulario) */
 .list-container .card-btn {
-    background-color: #EBD3FD; 
-    color: #191919;
-    padding: 0.5em 1em; /* Un poco más pequeños para la tarjeta */
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
+    padding: 0.5em 1em;
     text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1em;
     font-weight: 500;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     cursor: pointer;
     transition: background-color 0.2s, border-color 0.2s;
@@ -1132,227 +1129,186 @@ body:has(.list-container) {
 }
 
 .list-container .card-btn:hover {
-    background-color: #d7b4f2;
+    background-color: var(--color-acento-hover);
 }
 
-/* Botón Editar (estilo secundario) */
 .list-container .btn-edit {
-    background-color: #FEFDF8; /* Blanco de la paleta */
-    border-color: #505050;
-}
-.list-container .btn-edit:hover {
-    background-color: #FFFFE9;
-    border-color: #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border-color: var(--color-gris-texto);
 }
 
-/* Botón Aplicar (estilo secundario) */
-.list-container .btn-apply {
-    background-color: #FEFDF8; /* Blanco de la paleta */
-    border-color: #505050;
+.list-container .btn-edit:hover {
+    background-color: var(--color-fondo-body);
+    border-color: var(--color-negro);
 }
+
+.list-container .btn-apply {
+    background-color: var(--color-fondo-tarjeta);
+    border-color: var(--color-gris-texto);
+}
+
 .list-container .btn-apply:hover {
-    background-color: #FFFFE9;
-    border-color: #191919;
+    background-color: var(--color-fondo-body);
+    border-color: var(--color-negro);
 }
 
 .applied-success-message {
-    color: #4CAF50; 
+    color: var(--color-estado-exito); 
     font-weight: bold; 
     font-size: 1.1em; 
     padding: 10px 15px; 
     text-align: center; 
     border: 1px solid #c8e6c9; 
-    background-color: #e8f5e9; 
+    background-color: var(--color-estado-exito-bg); 
     border-radius: 5px; 
     display: block; 
     margin-top: 5px; 
 }
 
-/* Botón Eliminar (estilo de peligro) */
 .list-container .btn-delete {
-    background-color: #FEFDF8; /* Color #FEFDF8 (Blanco/Crema) */
-    color: #191919; /* Texto oscuro */
-    border-color: #191919; /* Borde oscuro */
-    
+    background-color: var(--color-estado-error);
+    color: var(--color-fondo-body);
+    border-color: var(--color-estado-error);
     display: flex;
     align-items: center;
     gap: 0.5em;
     padding: 0.5em 1em; 
 }
 
- .list-container .btn-delete {
-    background-color: #E53E3E; /* Rojo */
-    color: #FFFFE9;
-    border-color: #E53E3E;
-}
-
 .list-container .btn-delete:hover {
-    background-color: #C53030;
-    border-color: #C53030;
-    color: #FFFFE9;
+    background-color: var(--color-estado-error-hover);
+    border-color: var(--color-estado-error-hover);
+    color: var(--color-fondo-body);
 } 
 
-/* Icono por defecto (fav.svg) */
 .list-container .btn-fav::before {
-    content: ''; /* El content ahora está vacío, usaremos background-image */
-    width: 1.6em; /* Ancho deseado para el icono (ej. 1.2 veces el tamaño de la fuente del botón) */
-    height: 1.6em; /* Alto deseado para el icono */
+    content: '';
+    width: 1.6em;
+    height: 1.6em;
     display: inline-block;
-    
-    /* Cargar la imagen SVG como fondo */
     background-image: url('/public/assets/images/fav.svg');
-    background-size: contain; /* Ajusta la imagen dentro de las dimensiones del pseudo-elemento */
+    background-size: contain;
     background-repeat: no-repeat;
-    background-position: center; /* Centra el icono por si las moscas */
-    
-    /* Eliminar el borde y padding por si acaso (del botón) */
+    background-position: center;
     border: none; 
     padding: 0;
     margin-top: 5px;
-    line-height: 1; /* Para ayudar a la alineación vertical si el texto es variable */
+    line-height: 1;
 }
 
-#idEmpresa{
+#idEmpresa {
     display: none;
 }
 
 .list-container .btn-fav:hover {
-    background-color: #EBD3FD; /* Cambia a color Morado (#EBD3FD) */
-    border-color: #191919;
-    color: #191919;
+    background-color: var(--color-acento);
+    border-color: var(--color-negro);
+    color: var(--color-negro);
 }
 
-/* Icono al pasar el ratón (faved.svg) */
 .list-container .btn-fav:hover::before {
-    background-image: url('/public/assets/images/faved.svg'); /* Cambia la imagen de fondo */
+    background-image: url('/public/assets/images/faved.svg');
 }
 
-/* 12. ESTILOS DE BARRA DE BÚSQUEDA (MIS OFERTAS) */
+/* ================================================= */
+/* 8. BARRA DE BÚSQUEDA Y FILTROS                    */
+/* ================================================= */
 
 .list-container .search-bar-container {
-    position: relative; /* Clave para posicionar el icono */
-    width: 350px; /* Ancho "normal" para la barra de búsqueda */
-    max-width: 100%; /* Para que sea responsive en pantallas pequeñas */
-    margin-bottom: 2em; /* <-- Espacio movido aquí */
+    position: relative;
+    width: 350px;
+    max-width: 100%;
+    margin-bottom: 2em;
 }
 
-/* Estilo basado en tus inputs de formulario */
 .list-container .search-input {
     width: 100%;
-    /* Padding: 1em izq, 2.5em dcha (para icono) */
     padding: 0.7em 2.5em 0.7em 1em; 
-    /* margin-bottom: 25px; <-- ELIMINADO DE AQUÍ */
-    border: 3px solid #191919; 
+    border: 3px solid var(--color-negro); 
     border-radius: 0.6875em; 
-    background-color: #FEFDF8; 
-    font-family: 'Libre Baskerville', serif; 
+    background-color: var(--color-fondo-tarjeta); 
+    font-family: var(--fuente-cuerpo); 
     font-size: 1.1em;
-    color: #191919;
-    box-sizing: border-box; /* Importante */
+    color: var(--color-negro);
+    box-sizing: border-box;
     transition: border-color 0.2s, background-color 0.2s;
 }
 
 .list-container .search-input:focus {
     outline: none;
-    border-color: #EBD3FD; /* Color de acento de la paleta */
+    border-color: var(--color-acento);
 }
 
-/* Placeholder con tu estilo */
 .list-container .search-input::placeholder {
-    color: #505050;
+    color: var(--color-gris-texto);
     opacity: 0.8;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-style: italic;
 }
 
-/* Icono de la lupa */
 .list-container .search-icon {
     position: absolute;
-    right: 1em; /* Posición del icono */
-    top: 50%;   /* <-- Ahora esto funcionará bien */
+    right: 1em;
+    top: 50%;
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
     opacity: 0.7;
-    pointer-events: none; /* Permite hacer clic en el input "a través" del icono */
+    pointer-events: none;
 }
 
-#hiddenBuscar{
+#hiddenBuscar {
     display: none;
 }
 
-/* 13. ESTILOS FORMULARIO EDICIÓN (Híbrido Row/Column) */
+.list-container.ofertas-filtro {
+    background-color: var(--color-fondo-body);
+    border: 1.5px solid var(--color-negro);
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2em 3em;
+    margin: 2em auto 4em auto;
+    max-width: 900px;
+}
 
-/* 1. Contenedor para la fila Título/Fecha.
-   Ocupa las 2 columnas del grid principal.
-*/
-.list-container .form-grid .form-row-full {
-    grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+.ofertas-filtro .button-group {
     display: flex;
-    gap: 1.2em; /* Mismo 'gap' que el grid principal */
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2.5em;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
-/* 2. Grupo de input (label + input) dentro de la fila flex.
-   Cada uno ocupa la mitad.
-*/
-.list-container .form-grid .form-group-half {
-    flex: 1; /* Crece para ocupar el espacio */
-    min-width: 0; 
-}
-
-/* 3. Estilos para labels e inputs DENTRO del .form-group-half.
-   (Para que el label esté ENCIMA del input)
-*/
-.list-container .form-grid .form-group-half label {
-    /* Sobrescribe el 'text-align: right' del grid principal */
-    text-align: left; 
-    font-family: 'Poppins', sans-serif;
+.ofertas-filtro button {
+    background-color: transparent; 
+    color: var(--color-negro);
+    padding: 0.6em 1.5em;
+    font-family: var(--fuente-titulos);
     font-size: 1.1em;
-    font-weight: 600;
-    color: #191919;
-    display: block; /* Ocupa su propia línea */
-    margin-bottom: 0.5em; /* Espacio antes del input */
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: border-bottom 0.3s ease, font-weight 0.2s;
+    border-bottom: 3px solid transparent; 
 }
 
-.list-container .form-grid .form-group-half input {
-    /* El input debe usar el 100% de su contenedor */
-    width: 100%; 
-    
-    /* Copiamos los estilos del input principal (Bloque 10) */
-    padding: 0.7em 1em;
-    border: 3px solid #191919;
-    border-radius: 0.6875em;
-    background-color: #FEFDF8;
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.1em;
-    color: #191919;
-    box-sizing: border-box; 
-    transition: border-color 0.2s, background-color 0.2s;
+.ofertas-filtro button:hover {
+    background-color: transparent;
+    border-color: transparent;
 }
 
-/* 4. Estilos para los campos que siguen en columna 
-      (Descripción, Salario, Ciclos)
-*/
-
-/* Para la Descripción (Label + Textarea) */
-.list-container .form-grid .form-span-label {
-    grid-column: 1 / -1; /* Etiqueta ocupa todo el ancho */
-    text-align: left;
-    margin-bottom: -1em; 
+.ofertas-filtro button.active {
+    background-color: transparent;
+    color: var(--color-verde-brand);
+    font-weight: 700;
+    border-bottom: 3px solid var(--color-negro);
 }
 
-.list-container .form-grid .form-span-input {
-     grid-column: 1 / -1; /* Textarea ocupa todo el ancho */
-}
-
-/* Para los Ciclos (Label) */
-.list-container .form-grid .select-group-label {
-    align-self: start; 
-    padding-top: 0.7em; 
-}
-
-
-/*ESTILOS MODAL DE APLICACION*/
+/* ================================================= */
+/* 9. VENTANAS MODALES                               */
+/* ================================================= */
 
 .velo {
     position: fixed;
@@ -1364,8 +1320,6 @@ body:has(.list-container) {
     z-index: 1005;
 }
 
-
-/* MODAL MÁS GRANDE Y ESPACIOS ADAPTADOS */
 .modal {
     position: fixed;
     left: 50%;
@@ -1377,8 +1331,8 @@ body:has(.list-container) {
     min-height: 500px;
     height: auto;
     overflow-y: auto;
-    background: #FFFFE9;
-    border: 3px solid #191919;
+    background: var(--color-fondo-body);
+    border: 3px solid var(--color-negro);
     z-index: 1006;
     box-shadow: 0 4px 28px rgba(0,0,0,0.32);
     padding: 48px;
@@ -1389,21 +1343,21 @@ body:has(.list-container) {
 }
 
 #modalContent h2 {
-color: #191919;
-font-family: 'Poppins', sans-serif;
-font-size: 1.8em;
-margin: 0 0 30px 0;
-font-weight: 800;
-text-align: center;
+    color: var(--color-negro);
+    font-family: var(--fuente-titulos);
+    font-size: 1.8em;
+    margin: 0 0 30px 0;
+    font-weight: 800;
+    text-align: center;
 }
 
 #cerrarModal {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: #EBD3FD;
-    color: #191919;
-    border: 3px solid #191919;
+    background: var(--color-acento);
+    color: var(--color-negro);
+    border: 3px solid var(--color-negro);
     border-radius: 0.5em;
     width: 38px;
     height: 38px;
@@ -1412,21 +1366,16 @@ text-align: center;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 800;
     font-size: 1.2em;
     z-index: 1010;
 }
 
-
-
 #cerrarModal:hover {
-background: #d7b4f2;
+    background: var(--color-acento-hover);
 }
 
-/* ESTILOS ESPECÍFICOS PARA EL CONTENIDO DEL MODAL (USANDO CLASES) */
-
-/* Contenedor principal del cuerpo del modal */
 .modal-body-container {
     display: flex;
     flex-direction: column;
@@ -1434,17 +1383,15 @@ background: #d7b4f2;
     gap: 30px; 
 }
 
-/* === Cabecera del Modal (Título, Logo y Nombre de Empresa) === */
 .modal-header-content {
     display: flex;
     justify-content: space-between; 
     align-items: center;
-    border-bottom: 2px solid #505050; 
+    border-bottom: 2px solid var(--color-gris-texto); 
     padding-bottom: 20px;
     margin-bottom: 10px; 
 }
 
-/* Estilo para el Envoltorio del Título de la Oferta */
 .modal-title-wrapper {
     flex-grow: 1; 
     margin: 0;
@@ -1453,16 +1400,14 @@ background: #d7b4f2;
 }
 
 .modal-title-wrapper h2 {
-    /* Título H2 */
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.8em;
     font-weight: 700;
-    color: #191919;
+    color: var(--color-negro);
     margin: 0;
     line-height: 1.2;
 }
 
-/* Contenedor del Logo y Nombre de la Empresa */
 .modal-company-info {
     display: flex;
     align-items: center;
@@ -1470,7 +1415,6 @@ background: #d7b4f2;
     flex-shrink: 0; 
 }
 
-/* El logo de la empresa ya tiene la clase .companyPfp por defecto */
 .modal-company-info .companyPfp {
     width: 75px; 
     height: 75px;
@@ -1478,49 +1422,44 @@ background: #d7b4f2;
     flex-shrink: 0;
 }
 
-/* El nombre de la empresa ya tiene la clase .companyName por defecto */
 .modal-company-info .companyName {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 2em;
     font-weight: 600;
-    color: #191919;
+    color: var(--color-negro);
     line-height: 1.2;
     margin: 0;
 }
 
-/* === Cuerpo del Modal (Área de Comentarios) === */
 .modal-body-comments {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
-/* Etiqueta/Título de Comentarios */
 .modal-body-comments::before {
     content: "Añade tu Comentario de Aplicación";
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.2em;
     font-weight: 600;
-    color: #191919;
+    color: var(--color-negro);
     margin-bottom: 15px;
     display: block;
     text-align: left;
 }
 
-/* Textarea de Comentarios */
 .modal-textarea {
     width: 90%;
     flex-grow: 1; 
     min-height: 220px; 
-    
     padding: 1em;
     margin-bottom: 50px;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
-    background-color: #FEFDF8;
-    font-family: 'Libre Baskerville', serif;
+    background-color: var(--color-fondo-tarjeta);
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
-    color: #191919;
+    color: var(--color-negro);
     box-sizing: border-box;
     resize: vertical; 
     transition: border-color 0.2s, background-color 0.2s;
@@ -1528,36 +1467,33 @@ background: #d7b4f2;
 
 .modal-textarea:focus {
     outline: none;
-    border-color: #EBD3FD;
+    border-color: var(--color-acento);
 }
 
-/* Estilo para el placeholder */
 .modal-textarea::placeholder {
-    color: #505050;
+    color: var(--color-gris-texto);
     opacity: 0.8;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-style: italic;
 }
 
-/* === Pie del Modal (Botones) === */
 .modal-actions {
     display: flex;
     justify-content: flex-end; 
     gap: 20px;
     padding-top: 30px;
-    border-top: 2px solid #50505030;
+    border-top: 2px solid var(--color-borde-suave);
     margin-top: auto; 
 }
 
-/* Estilo base para los botones */
 .btn-confirm,
 .btn-cancel {
     padding: 0.7em 2em;
     text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.1em;
     font-weight: 500;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     cursor: pointer;
     transition: background-color 0.2s, border-color 0.2s;
@@ -1565,118 +1501,28 @@ background: #d7b4f2;
     flex-shrink: 0;
 }
 
-/* Botón Confirmar (Estilo principal/Morado) */
 .btn-confirm {
-    background-color: #EBD3FD; 
-    color: #191919;
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
 }
 
 .btn-confirm:hover {
-    background-color: #d7b4f2;
+    background-color: var(--color-acento-hover);
 }
 
-/* Botón Cancelar (Estilo secundario/Claro) */
 .btn-cancel {
-    background-color: #FEFDF8; 
-    color: #191919;
-    border-color: #505050;
+    background-color: var(--color-fondo-tarjeta); 
+    color: var(--color-negro);
+    border-color: var(--color-gris-texto);
 }
 
 .btn-cancel:hover {
-    background-color: #FFFFE9;
-    border-color: #191919;
+    background-color: var(--color-fondo-body);
+    border-color: var(--color-negro);
 }
 
-/* 14. ESTILOS PARA TARJETA DE SOLICITUD */
+/* MODO ELIMINAR EN MODAL */
 
-/* Contenedor principal para la lista de solicitudes (cambiado a flujo vertical) */
-.solicitudes-grid {
-    /* Eliminamos el display: grid para volver al flujo normal (vertical) */
-    display: block; 
-    width: 100%;
-    box-sizing: border-box;
-    /* Agregamos el espacio vertical entre tarjetas */
-}
-
-/* Estilos de la tarjeta de Solicitud (Hereda de .oferta-card) */
-.misSolicitudes-card {
-    /* Asegura que la tarjeta ocupe el ancho completo de su contenedor (solicitudes-grid) */
-    width: 100%;
-    /* Añade espacio después de cada tarjeta para separarlas verticalmente */
-    margin-bottom: 2em; 
-    /* El ancho de la tarjeta es ajustado aquí para que no se vea demasiado ancha
-       asumiendo que .list-container tiene un max-width. */
-    max-width: 900px; /* Limita el ancho como un list-container/oferta típica */
-    margin-left: auto; /* Centra la tarjeta */
-    margin-right: auto; /* Centra la tarjeta */
-}
-
-/* === AJUSTES DE CONTENIDO DENTRO DE LA TARJETA SOLICITUD === */
-
-/* Ajuste específico para la Fecha de Solicitud (reemplaza a card-fecha-fin) */
-.misSolicitudes-card .card-fecha-solicitud {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-    font-weight: 500; /* Menos peso que la de caducidad */
-    color: #16443D; /* Verde oscuro (menos 'peligro') */
-    background-color: #e6f2f0; /* Fondo más claro y verdoso */
-    border: 1px solid #16443D;
-    padding: 0.25em 0.5em;
-    border-radius: 0.68em;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-/* Estilo para los Comentarios (usando la clase 'card-descripcion') */
-.misSolicitudes-card .card-comentarios {
-    /* Permite que los comentarios se expandan a la altura necesaria */
-    max-height: none; 
-    overflow: visible; 
-    /* Eliminamos las propiedades de límite de línea */
-    display: block; 
-    margin-bottom: 0.5em; /* Espacio después de los comentarios */
-    font-style: italic; /* Para diferenciar el comentario de la descripción de la oferta */
-    color: #505050;
-}
-
-/* Ajuste de acciones para que los botones Edit y Delete queden bien */
-.misSolicitudes-card .card-actions {
-    /* Asegura que los botones se justifiquen a la izquierda */
-    justify-content: flex-start;
-}
-
-.misSolicitudes-card .actions-group {
-    display: flex;
-    gap: 1em; /* Espacio entre los botones */
-}
-
-/* Usamos las clases de botones ya definidas en tu CSS para mantener la coherencia */
-.misSolicitudes-card .btn-edit {
-    /* Hereda .list-container .btn-apply (secundario) */
-    background-color: #FEFDF8; 
-    border-color: #505050;
-}
-.misSolicitudes-card .btn-edit:hover {
-    /* Hereda .list-container .btn-apply:hover */
-    background-color: #FFFFE9;
-    border-color: #191919;
-}
-
-.misSolicitudes-card .btn-delete {
-    /* Hereda .list-container .btn-delete (peligro) */
-    background-color: #E53E3E; 
-    color: #FFFFE9;
-    border-color: #E53E3E;
-}
-.misSolicitudes-card .btn-delete:hover {
-    /* Hereda .list-container .btn-delete:hover */
-    background-color: #C53030;
-    border-color: #C53030;
-}
-
-/* 15. ESTILOS ESPECÍFICOS PARA MODAL DE ELIMINACIÓN (DELETE MODE) */
-
-/* Ajuste del contenedor cuando está en modo eliminación */
 .modal-body-container.delete-mode {
     text-align: center;
     justify-content: center;
@@ -1684,7 +1530,6 @@ background: #d7b4f2;
     padding: 1em 0;
 }
 
-/* Quitamos la línea divisoria del header para que se vea más limpio */
 .modal-body-container.delete-mode .modal-header-content {
     border-bottom: none;
     padding-bottom: 0;
@@ -1693,54 +1538,119 @@ background: #d7b4f2;
     justify-content: center;
 }
 
-/* Centramos el título y aumentamos un poco el peso visual */
 .modal-body-container.delete-mode .modal-title-wrapper {
     max-width: 100%;
     text-align: center;
 }
 
 .modal-body-container.delete-mode .modal-title-wrapper h2 {
-    font-size: 2.2em; /* Un poco más grande para llamar la atención */
-    color: #191919;
+    font-size: 2.2em;
+    color: var(--color-negro);
 }
 
-/* Ajuste de la botonera para centrarla */
 .modal-body-container.delete-mode .modal-actions {
-    border-top: none; /* Quitamos la línea superior */
-    justify-content: center; /* Centramos los botones */
+    border-top: none;
+    justify-content: center;
     width: 100%;
     padding-top: 10px;
-    gap: 2em; /* Más separación entre botones */
+    gap: 2em;
 }
 
-/* ESTILO PELIGRO (ROJO) para el botón de confirmar eliminación */
-/* Hereda la forma de .btn-confirm pero cambia los colores */
 .btn-confirm.btn-danger {
-    background-color: #E53E3E; /* Rojo de tu paleta (#E53E3E) */
-    color: #FFFFE9; /* Texto claro */
-    border-color: #191919;
+    background-color: var(--color-estado-error);
+    color: var(--color-fondo-body);
+    border-color: var(--color-negro);
 }
 
 .btn-confirm.btn-danger:hover {
-    background-color: #C53030; /* Rojo más oscuro al hover */
-    border-color: #191919;
+    background-color: var(--color-estado-error-hover);
+    border-color: var(--color-negro);
 }
 
-/* Opcional: Hacer el botón cancelar un poco más sutil en este contexto */
 .modal-body-container.delete-mode .btn-cancel {
     background-color: transparent;
-    border-color: #505050;
+    border-color: var(--color-gris-texto);
 }
 
 .modal-body-container.delete-mode .btn-cancel:hover {
     background-color: #e2e2e2;
-    border-color: #191919;
+    border-color: var(--color-negro);
 }
 
+/* ================================================= */
+/* 10. TARJETAS DE SOLICITUD Y APLICACIÓN            */
+/* ================================================= */
 
-/* 16. ESTILOS PARA TARJETA DE CANDIDATO (V2 - Con Iconos SVG y Caja Comentarios) */
+.solicitudes-grid {
+    display: block; 
+    width: 100%;
+    box-sizing: border-box;
+}
 
-/* Wrapper Principal */
+.misSolicitudes-card {
+    width: 100%;
+    margin-bottom: 2em; 
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.misSolicitudes-card .card-fecha-solicitud {
+    font-family: var(--fuente-titulos);
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--color-solicitud-fecha-texto);
+    background-color: var(--color-solicitud-fecha-bg);
+    border: 1px solid var(--color-solicitud-fecha-texto);
+    padding: 0.25em 0.5em;
+    border-radius: 0.68em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.misSolicitudes-card .card-comentarios {
+    max-height: none; 
+    overflow: visible; 
+    display: block; 
+    margin-bottom: 0.5em;
+    font-style: italic;
+    color: var(--color-gris-texto);
+}
+
+.misSolicitudes-card .card-actions {
+    justify-content: flex-start;
+}
+
+.misSolicitudes-card .actions-group {
+    display: flex;
+    gap: 1em;
+}
+
+.misSolicitudes-card .btn-edit {
+    background-color: var(--color-fondo-tarjeta); 
+    border-color: var(--color-gris-texto);
+}
+
+.misSolicitudes-card .btn-edit:hover {
+    background-color: var(--color-fondo-body);
+    border-color: var(--color-negro);
+}
+
+.misSolicitudes-card .btn-delete {
+    background-color: var(--color-estado-error); 
+    color: var(--color-fondo-body);
+    border-color: var(--color-estado-error);
+}
+
+.misSolicitudes-card .btn-delete:hover {
+    background-color: var(--color-estado-error-hover);
+    border-color: var(--color-estado-error-hover);
+}
+
+/* ================================================= */
+/* 11. TARJETAS DE CANDIDATO                         */
+/* ================================================= */
+
 .candidate-wrapper {
     background-color: transparent; 
     border: none; 
@@ -1753,15 +1663,12 @@ background: #d7b4f2;
     gap: 15px;
 }
 
-/* Grid Layout de la Tarjeta */
 .candidate-card {
-    background-color: #FEFDF8;
-    border: 3px solid #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    
     display: grid;
-    /* Estructura: 38% Imagen | Resto Info */
     grid-template-columns: 38% 1fr 1fr; 
     grid-template-rows: auto auto 1fr auto;
     gap: 1.5em; 
@@ -1769,15 +1676,13 @@ background: #d7b4f2;
     overflow: hidden; 
 }
 
-/* 1. Imagen Visual */
 .candidate-visual {
     grid-row: span 4; 
-    background-color: #191919; 
+    background-color: var(--color-negro); 
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Márgenes negativos para ocupar todo el lateral */
     margin: -1.5em 0 -1.5em -1.5em; 
     height: calc(100% + 3em); 
 }
@@ -1796,7 +1701,6 @@ background: #d7b4f2;
     z-index: 1;
 }
 
-/* 2. Nombre */
 .candidate-name { 
     grid-column-start: 2; 
     grid-row-start: 1; 
@@ -1804,13 +1708,12 @@ background: #d7b4f2;
 }
 
 .candidate-name h3 { 
-    font-family: 'Poppins', sans-serif; 
+    font-family: var(--fuente-titulos); 
     font-size: 1.8em; 
-    color: #191919; 
+    color: var(--color-negro); 
     margin: 0; 
 }
 
-/* 3. Detalles y Caja de Comentarios */
 .candidate-details {
     grid-row: span 2;
     grid-column-start: 2;
@@ -1822,14 +1725,13 @@ background: #d7b4f2;
 }
 
 .candidate-details .dni-text {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.25em; /* AUMENTADO */
+    font-family: var(--fuente-titulos);
+    font-size: 1.25em;
     font-weight: 600;
-    color: #191919;
+    color: var(--color-negro);
     margin: 0;
 }
 
-/* --- ESTILOS DE LA NUEVA CAJA DE COMENTARIOS --- */
 .candidate-comment-block {
     margin-top: 0.5em;
     display: flex;
@@ -1838,44 +1740,42 @@ background: #d7b4f2;
 }
 
 .comment-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.95em; /* AUMENTADO LIGERAMENTE */
+    font-family: var(--fuente-titulos);
+    font-size: 0.95em;
     font-weight: 700;
-    color: #16443D; /* Verde oscuro */
+    color: var(--color-verde-brand);
     text-transform: uppercase;
     margin: 0;
     letter-spacing: 0.05em;
 }
 
 .comment-box {
-    background-color: #FFFFE9;
-    border: 1px solid #50505030;
-    border-left: 4px solid #EBD3FD; /* Borde morado a la izquierda */
+    background-color: var(--color-fondo-body);
+    border: 1px solid var(--color-borde-suave);
+    border-left: 4px solid var(--color-acento);
     border-radius: 0.4em;
     padding: 0.8em;
 }
 
 .candidate-details .comment-text {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.1em; /* AUMENTADO */
-    color: #505050;
+    font-family: var(--fuente-cuerpo);
+    font-size: 1.1em;
+    color: var(--color-gris-texto);
     line-height: 1.4;
     margin: 0;
     font-style: italic;
 }
 
-/* 4. Ubicación */
 .candidate-location { 
     grid-column-start: 2; 
     grid-row-start: 4; 
     display: flex; 
     align-items: center; 
     gap: 0.2em; 
-    font-family: 'Poppins', sans-serif; 
-    font-size: 1.2em; /* AUMENTADO */
+    font-family: var(--fuente-titulos); 
+    font-size: 1.2em;
 }
 
-/* 5. Etiquetas (Estudios) */
 .candidate-tags { 
     grid-row: span 2; 
     grid-column-start: 3; 
@@ -1887,9 +1787,9 @@ background: #d7b4f2;
 }
 
 .candidate-tags .study-tag-candidate {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.0em; /* Se mantiene */
-    color: #191919;      
+    font-family: var(--fuente-titulos);
+    font-size: 1.0em;
+    color: var(--color-negro);      
     font-weight: 500;
     text-align: right;   
     margin-top: 0.2em; 
@@ -1897,11 +1797,10 @@ background: #d7b4f2;
 
 .candidate-tags .study-tag-candidate::before {
     content: '• ';
-    color: #505050; 
+    color: var(--color-gris-texto); 
     font-weight: bold;
 }
 
-/* 6. Meta (Fecha y CV) */
 .candidate-meta { 
     grid-row: span 2; 
     grid-column-start: 3; 
@@ -1914,9 +1813,9 @@ background: #d7b4f2;
 }
 
 .candidate-meta .date-text { 
-    font-family: 'Poppins', sans-serif; 
-    font-size: 1.15em; /* AUMENTADO */
-    color: #505050; 
+    font-family: var(--fuente-titulos); 
+    font-size: 1.15em;
+    color: var(--color-gris-texto); 
     margin: 0; 
     display: flex;
     align-items: center;
@@ -1924,27 +1823,27 @@ background: #d7b4f2;
 
 .candidate-meta .btn-view-cv { 
     text-decoration: none; 
-    font-family: 'Poppins', sans-serif; 
-    font-size: 1.1em; /* AUMENTADO */
+    font-family: var(--fuente-titulos); 
+    font-size: 1.1em;
     font-weight: 600; 
-    color: #191919; 
-    background: #FEFDF8; 
-    border: 2px solid #191919; 
-    padding: 0.6em 1.3em; /* Ajuste el padding con el nuevo tamaño de fuente */
+    color: var(--color-negro); 
+    background: var(--color-fondo-tarjeta); 
+    border: 2px solid var(--color-negro); 
+    padding: 0.6em 1.3em;
     border-radius: 0.5em; 
     transition: all 0.2s; 
     display: flex;
     align-items: center;
 }
+
 .candidate-meta .btn-view-cv:hover { 
-    background: #EBD3FD; 
+    background: var(--color-acento); 
     transform: translateY(-2px); 
 }
 
-/* --- ICONOS SVG --- */
 .icon-mini {
-    width: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
-    height: 1.3em; /* AUMENTADO PARA COINCIDIR CON EL TEXTO */
+    width: 1.3em;
+    height: 1.3em;
     object-fit: contain;
     vertical-align: middle;
     margin-right: 0.4em;
@@ -1952,8 +1851,8 @@ background: #d7b4f2;
 }
 
 .icon-mini-btn {
-    width: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
-    height: 1.2em; /* AUMENTADO PARA COINCIDIR CON EL BOTÓN */
+    width: 1.2em;
+    height: 1.2em;
     margin-left: 0.4em;
     vertical-align: middle;
 }
@@ -1964,7 +1863,6 @@ background: #d7b4f2;
     object-fit: contain;
 }
 
-/* --- BOTONES DE ACCIÓN --- */
 .candidate-actions-group {
     display: flex;
     gap: 20px; 
@@ -1973,7 +1871,7 @@ background: #d7b4f2;
 .btn-decision {
     flex: 1;
     padding: 0.8em;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.2em; 
     font-weight: 700;
     cursor: pointer;
@@ -1982,7 +1880,7 @@ background: #d7b4f2;
     align-items: center;
     justify-content: center;
     gap: 0.8em;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     box-shadow: 0 4px 0 rgba(0,0,0,0.1); 
 }
@@ -1992,45 +1890,46 @@ background: #d7b4f2;
     box-shadow: none; 
 }
 
-/* Botón Rechazar */
 .btn-decision.reject { 
-    background-color: #FEFDF8; 
-    color: #E53E3E; 
-    border-color: #E53E3E; 
+    background-color: var(--color-fondo-tarjeta); 
+    color: var(--color-estado-error); 
+    border-color: var(--color-estado-error); 
 }
+
 .btn-decision.reject:hover { 
-    background-color: #E53E3E; 
-    color: #FFFFE9; 
-    border-color: #191919; 
+    background-color: var(--color-estado-error); 
+    color: var(--color-fondo-body); 
+    border-color: var(--color-negro); 
 }
-/* Invertir color del icono en hover para que se vea blanco */
+
 .btn-decision.reject:hover .icon-action { 
     filter: brightness(0) invert(1); 
 }
 
-/* Botón Aprobar */
 .btn-decision.approve { 
-    background-color: #FEFDF8; 
-    color: #16443D; 
-    border-color: #16443D; 
+    background-color: var(--color-fondo-tarjeta); 
+    color: var(--color-verde-brand); 
+    border-color: var(--color-verde-brand); 
 }
+
 .btn-decision.approve:hover { 
-    background-color: #16443D; 
-    color: #FFFFE9; 
-    border-color: #191919;
+    background-color: var(--color-verde-brand); 
+    color: var(--color-fondo-body); 
+    border-color: var(--color-negro);
     box-shadow: 0 4px 8px rgba(22, 68, 61, 0.3);
 }
-/* Filtro para invertir color del icono a blanco en hover */
+
 .btn-decision.approve:hover .icon-action { 
     filter: brightness(0) invert(1); 
 }
 
-/* 17. ESTILOS DASHBOARD EMPRESA */
+/* ================================================= */
+/* 12. PANELES DE CONTROL (EMPRESA Y ALUMNO)         */
+/* ================================================= */
 
-/* Contenedor principal: Reutiliza estilos de .list-container pero para el dashboard */
 .list-container.dashboard-container {
-    padding: 3.5em 5em; /* Más padding para los gráficos */
-    max-width: 1200px; /* Un poco más ancho que el formulario/lista */
+    padding: 3.5em 5em;
+    max-width: 1200px;
 }
 
 .dashboard-container .header-section {
@@ -2047,20 +1946,17 @@ background: #d7b4f2;
 }
 
 .dashboard-container .dashboard-subtitle {
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.3em;
-    color: #505050;
+    color: var(--color-gris-texto);
     margin-top: 0.5em;
 }
 
 .dashboard-container .icon-dashboard-title {
     width: 60px;
     height: 60px;
-    filter: drop-shadow(0 0 5px #EBD3FD); /* Añade un pequeño brillo al icono */
+    filter: drop-shadow(0 0 5px var(--color-acento));
 }
-
-
-/* --- KPIs --- */
 
 .kpi-grid {
     display: grid;
@@ -2070,8 +1966,8 @@ background: #d7b4f2;
 }
 
 .kpi-card {
-    background-color: #FEFDF8;
-    border: 2px solid #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border: 2px solid var(--color-negro);
     border-radius: 0.6875em;
     padding: 2em;
     text-align: center;
@@ -2093,32 +1989,28 @@ background: #d7b4f2;
 }
 
 .kpi-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.3em;
     font-weight: 600;
-    color: #505050;
+    color: var(--color-gris-texto);
     margin: 0.2em 0;
 }
 
 .kpi-value {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 3.5em;
     font-weight: 700;
-    color: #191919;
+    color: var(--color-negro);
     margin: 0;
 }
 
-/* Colores de acento para KPIs */
 .kpi-offers {
-    border-left: 8px solid #EBD3FD; /* Morado de acento */
+    border-left: 8px solid var(--color-acento);
 }
 
 .kpi-solicitudes {
-    border-left: 8px solid #16443D; /* Verde Oscuro */
+    border-left: 8px solid var(--color-verde-brand);
 }
-
-
-/* --- Gráficos --- */
 
 .charts-row {
     display: grid;
@@ -2128,50 +2020,194 @@ background: #d7b4f2;
 }
 
 .chart-card {
-    background-color: #FEFDF8;
-    border: 2px solid #191919;
+    background-color: var(--color-fondo-tarjeta);
+    border: 2px solid var(--color-negro);
     border-radius: 0.6875em;
     padding: 1.5em;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .chart-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.5em;
     font-weight: 700;
-    color: #191919;
+    color: var(--color-negro);
     text-align: center;
     margin: 0 0 1em 0;
     padding-bottom: 0.5em;
-    border-bottom: 1px solid #50505030;
+    border-bottom: 1px solid var(--color-borde-suave);
 }
 
 .chart-canvas-container {
     position: relative;
-    /* Ajustes de altura específicos para mantener la relación de aspecto en las columnas */
     height: 400px; 
 }
 
-/* Ajuste específico para el gráfico Top Offers (Barras Horizontales) */
 .chart-bar-h .chart-canvas-container {
-    height: 450px; /* Más alto para que quepan las etiquetas largas */
+    height: 450px;
 }
 
-/* 18. ESTILOS FICHA EMPRESA */
+.list-container.dashboard-alumno-container {
+    padding: 3.5em; 
+    max-width: 1200px;
+}
 
-/* Contenedor principal de la ficha: VUELVE A SER CLARO (#FFFFE9) */
+.student-panel-title {
+    font-family: var(--fuente-titulos);
+    font-size: 3em;
+    color: var(--color-negro);
+    margin: 0;
+    margin-bottom: 0.1em;
+}
+
+.dashboard-subtitle {
+    font-family: var(--fuente-cuerpo);
+    font-size: 1.2em;
+    color: var(--color-gris-texto);
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+.section-title {
+    font-family: var(--fuente-titulos);
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--color-negro);
+    margin-top: 0;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+.list-container hr {
+    border: none;
+    border-top: 3px solid var(--color-gris-texto);
+    margin: 4em 0;
+    opacity: 0.2;
+}
+
+.section-empresas {
+    background-color: var(--color-negro);
+    padding: 2.5em 3.5em;
+    margin: 0 -3.5em;
+    border-radius: 0.6875em;
+    text-align: center;
+}
+
+.section-empresas .section-title {
+    color: var(--color-fondo-body);
+    margin-bottom: 1em;
+    padding: 0;
+}
+
+.companies-container {
+    width: 100%;
+    overflow: visible;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5em;
+}
+
+.logo-slider {
+    display: contents;
+    padding: 0;
+    margin: 0;
+    animation: none;
+}
+
+.logo-slider .card-CompanyInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 180px; 
+    margin: 0;
+}
+
+.logo-slider .card-CompanyInfo img {
+    height: 140px;
+    width: 140px;
+    object-fit: contain;
+    background-color: var(--color-fondo-tarjeta);
+    padding: 10px;
+}
+
+.logo-slider .card-CompanyInfo:hover img {
+    border-color: var(--color-acento);
+    box-shadow: 0 4px 12px rgba(235, 211, 253, 0.4);
+}
+
+.logo-slider .card-CompanyInfo p {
+    font-family: var(--fuente-titulos);
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--color-fondo-body);
+    margin: 0;
+    text-align: center;
+    max-width: 180px;
+    word-wrap: break-word;
+}
+
+.ofertas-scroll-container {
+    background-color: var(--color-negro);
+    max-height: 800px;
+    overflow-y: auto;
+    padding-right: 15px;
+    margin: 0 auto;
+    border-radius: 0.6875em;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+}
+
+.ofertas-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-thumb {
+    background-color: var(--color-acento);
+    border-radius: 10px;
+    border: 2px solid var(--color-fondo-body);
+}
+
+.ofertas-scroll-container::-webkit-scrollbar-track {
+    background-color: var(--color-fondo-tarjeta);
+    border-radius: 10px;
+}
+
+.ofertas-scroll-container .oferta-card {
+    max-width: none;
+    margin-right: 25px; 
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+.placeholder-text {
+    text-align: center;
+    font-family: var(--fuente-cuerpo);
+    font-size: 1.2em;
+    color: var(--color-gris-texto);
+    padding: 2em;
+    font-style: italic;
+}
+
+/* ================================================= */
+/* 13. PERFIL PÚBLICO DE EMPRESA                     */
+/* ================================================= */
+
 .list-container.ficha-empresa {
     padding: 0; 
     max-width: 950px; 
     overflow: hidden; 
-    background-color: #FFFFE9; /* FONDO CLARO */
-    border: 1.5px solid #191919; 
+    background-color: var(--color-fondo-body);
+    border: 1.5px solid var(--color-negro); 
     box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
     border-radius: 2em;
-    border-bottom: 1.5px solid #191919; 
+    border-bottom: 1.5px solid var(--color-negro); 
 }
-
-/* --- SECCIÓN CABECERA (LOGO 40% OSCURO Y NOMBRE 60% CLARO) --- */
 
 .ficha-empresa .header-section {
     display: flex;
@@ -2183,17 +2219,15 @@ background: #d7b4f2;
     border-bottom: none; 
 }
 
-/* Contenedor del Logo (40% de ancho) */
 .ficha-empresa .logo-container {
     flex: 0 0 40%; 
-    background-color: #191919; /* FONDO OSCURO (GRIS/NEGRO) para el 40% del logo */
+    background-color: var(--color-negro);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2em 0; 
 }
 
-/* Imagen del logo: Color CLARO para destacar en el fondo oscuro */
 .ficha-empresa .logo-container .companyPfp {
     width: 90%; 
     max-width: 120px; 
@@ -2202,39 +2236,32 @@ background: #d7b4f2;
     margin: 0; 
 }
 
-/* Contenedor del Nombre (60% de ancho) */
 .ficha-empresa .name-container {
-    flex: 1; /* Ocupa el 60% restante */
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center; 
     padding: 2em 1em;
-    background-color: #191919; /* Mantenemos el MORADO de acento para el 60% del nombre */
-    
-    /* Borde divisor debajo del nombre y a la izquierda */
-    border-bottom: 2px solid #191919; 
-    border-left: 2px solid #191919; 
+    background-color: var(--color-negro);
+    border-bottom: 2px solid var(--color-negro); 
+    border-left: 2px solid var(--color-negro); 
 }
 
-/* Color del nombre: Color CLARO/AMARILLENTO de la tarjeta para destacar */
 .ficha-empresa .name-container .companyName {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 3.5em; 
     font-weight: 700;
-    color: #FFFFE9; /* COLOR CLARO solicitado */
+    color: var(--color-fondo-body);
     margin: 0;
     line-height: 1.1;
     text-align: center;
 }
 
-/* --- CONTENEDOR DE INFORMACIÓN GENERAL (CONTACTO/UBICACIÓN) --- */
-
 .ficha-empresa .main-content-wrapper {
-    padding: 3.5em; /* Aplicamos el padding aquí donde está el contenido principal */
+    padding: 3.5em;
 }
 
-/* Contenedor para Contacto y Ubicación (en Grid de 2 columnas/Row) */
 .ficha-empresa .content-section {
     display: grid;
     grid-template-columns: 1fr 1fr; 
@@ -2242,34 +2269,31 @@ background: #d7b4f2;
     margin-bottom: 3em;
 }
 
-/* Estilo de las tarjetas individuales: FONDO CLARO */
 .ficha-empresa .content-section > div {
-    background-color: #FEFDF8; 
-    border: 2px solid #191919; 
+    background-color: var(--color-fondo-tarjeta); 
+    border: 2px solid var(--color-negro); 
     border-radius: 0.6875em;
     padding: 1.5em;
     width: auto; 
     max-width: none; 
 }
 
-/* Títulos de sección (Contacto/Ubicación) */
 .ficha-empresa .content-section h2 {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.6em;
     font-weight: 600;
-    color: #16443D;
+    color: var(--color-verde-brand);
     margin-top: 0;
     margin-bottom: 1em;
     padding-bottom: 0.5em;
-    border-bottom: 2px solid #191919; 
+    border-bottom: 2px solid var(--color-negro); 
     text-align: left;
 }
 
-/* Estilo para los párrafos, separando el label del valor */
 .ficha-empresa .content-section p.companyName {
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
-    color: #191919;
+    color: var(--color-negro);
     margin: 0.8em 0; 
     display: flex;
     align-items: baseline;
@@ -2277,302 +2301,397 @@ background: #d7b4f2;
 }
 
 .ficha-empresa .content-section p.companyName strong {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 600; 
-    color: #191919;
+    color: var(--color-negro);
     flex-shrink: 0; 
     white-space: nowrap; 
 }
 
 .ficha-empresa .content-section p.companyName span {
     font-weight: 400; 
-    color: #505050; 
+    color: var(--color-gris-texto); 
     line-height: 1.4; 
 }
 
-/* Ajuste de la sección de dirección (ya no es especial, es otra tarjeta) */
 .ficha-empresa .address-section {
     margin-top: 0; 
 }
 
-/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO (SIN CAMBIOS) --- */
 
-.list-container.ofertas-filtro {
-    background-color: #FFFFE9;
-    border: 1.5px solid #191919;
-    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
-    border-radius: 2em;
-    padding: 2em 3em;
-    margin: 2em auto 4em auto;
-    max-width: 900px;
-}
+/* RESPONSIVE: */
 
-.ofertas-filtro .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1.5em;
-    margin-bottom: 2.5em;
-    padding-bottom: 1.5em;
-    border-bottom: 2px solid #191919;
-}
+/* ================================================= */
+/*  1.LANDING PAGE                                    */
+/* ================================================= */
 
-.ofertas-filtro button {
-    background-color: #FEFDF8;
-    color: #191919;
-    padding: 0.6em 2em;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
-    font-weight: 500;
-    border: 3px solid #505050;
-    border-radius: 0.6875em;
-    cursor: pointer;
-    transition: all 0.2s;
-}
 
-.ofertas-filtro button:hover {
-    background-color: #FFFFE9;
-    border-color: #191919;
-}
 
-.ofertas-filtro button.active {
-    background-color: #EBD3FD;
-    color: #191919;
-    border-color: #191919;
-    font-weight: 700;
-}
-
-/* --- SECCIÓN DE OFERTAS Y BOTONES DE FILTRO --- */
-
-.list-container.ofertas-filtro {
-    /* Mantiene los estilos del contenedor principal */
-    background-color: #FFFFE9;
-    border: 1.5px solid #191919;
-    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.2);
-    border-radius: 2em;
-    padding: 2em 3em;
-    margin: 2em auto 4em auto;
-    max-width: 900px;
-}
-
-.ofertas-filtro .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1.5em;
-    margin-bottom: 2.5em;
-    padding-bottom: 0; /* Quitamos el padding inferior */
-    border-bottom: none; /* Quitamos la línea de separación estática */
-}
-
-.ofertas-filtro button {
-    /* Reset de estilos */
-    background-color: transparent; 
-    color: #191919;
-    padding: 0.6em 1.5em; /* Ajuste de padding */
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
-    font-weight: 500;
-    border: none; /* ELIMINADO: Bordes y radius */
-    border-radius: 0; /* ELIMINADO: Bordes y radius */
-    cursor: pointer;
-    transition: border-bottom 0.3s ease, font-weight 0.2s; /* Transición para la raya */
+/* --- TABLET (Hasta 1024px) --- */
+@media (max-width: 1024px) {
     
-    /* Estado por defecto: raya invisible */
-    border-bottom: 3px solid transparent; 
-}
-
-.ofertas-filtro button:hover {
-    background-color: transparent;
-    border-color: transparent;
-}
-
-/* Estilo para el botón activo: raya visible */
-.ofertas-filtro button.active {
-    background-color: transparent;
-    color: #16443D;
-    font-weight: 700; /* Negrita al activo */
-    border-bottom: 3px solid #191919; /* Rayita morada de acento */
-}
-
-
-/* 19. ESTILOS DASHBOARD ALUMNO */
-
-/* Ajuste del contenedor principal: Más espacio para el contenido */
-.list-container.dashboard-alumno-container {
-    padding: 3.5em; 
-    max-width: 1200px;
-}
-
-/* Ajuste del Título principal (reutilizando estilos de dashboard-empresa) */
-.student-panel-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3em;
-    color: #191919;
-    margin: 0;
-    margin-bottom: 0.1em;
-}
-
-.dashboard-subtitle {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.2em;
-    color: #505050;
-    margin-top: 0.5em;
-    text-align: center;
-}
-
-/* Títulos de las secciones (Empresas/Ofertas) */
-.section-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.2em;
-    font-weight: 700;
-    color: #191919;
-    margin-top: 0;
-    margin-bottom: 1.5em;
-    text-align: center;
-}
-
-/* Separador horizontal entre secciones */
-.list-container hr {
-    border: none;
-    border-top: 3px solid #505050;
-    margin: 4em 0;
-    opacity: 0.2;
-}
-
-/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL) --- */
-
-/* --- ESTILOS EMPRESAS RELACIONADAS (CARRUSEL SCROLLEABLE HORIZONTAL) --- */
-
-/* --- ESTILOS EMPRESAS RELACIONADAS (GRID CENTRADO Y FLUIDO) --- */
-
-.section-empresas {
-    /* Mantenemos el fondo oscuro y el margen negativo para la estética del dashboard */
-    background-color: #191919;
-    padding: 2.5em 3.5em; /* Añadimos padding vertical y lateral fijo */
-    margin: 0 -3.5em; /* Margen negativo para expandir al borde del contenedor */
-    border-radius: 0.6875em;
-    text-align: center; /* Centramos el título */
-}
-
-.section-empresas .section-title {
-    color: #FFFFE9; /* Título claro en fondo oscuro */
-    margin-bottom: 1em; /* Ajustamos el margen inferior */
-    padding: 0;
-}
-
-/* Contenedor principal de los logos: Actúa como el 'slider' */
-.companies-container {
-    width: 100%;
-    overflow: visible; /* Aseguramos que no haya scrollbar forzado */
-    padding: 0; /* Eliminamos el padding que forzaba el scroll */
     
-    /* Reemplazamos el contenedor de logos y el slider por un layout centrado */
-    display: flex;
-    flex-wrap: wrap; /* CLAVE: Permite que los elementos pasen a la siguiente línea */
-    justify-content: center; /* CLAVE: Centra los elementos horizontalmente */
-    gap: 2.5em; /* Espacio uniforme entre los elementos (filas y columnas) */
-}
-
-.logo-slider {
-    /* Este div ahora es redundante y solo actúa como wrapper del flexbox,
-       pero para mantener la estructura HTML, le damos display: contents para
-       que sus hijos fluyan directamente en .companies-container.
-       Alternativamente, si el HTML no se puede cambiar, forzamos un ancho y flex. */
-    display: contents; /* Hace que los hijos fluyan en el padre .companies-container */
-    padding: 0;
-    margin: 0;
-    animation: none; /* Aseguramos que la animación esté deshabilitada */
-}
-
-/* Estilo para cada tarjeta de logo */
-.logo-slider .card-CompanyInfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    .banner-text h1 {
+        font-size: 4.5em;
+    }
     
-    /* Definimos un tamaño base fijo para que el flex-wrap funcione correctamente */
-    width: 180px; 
-    margin: 0; /* Eliminamos márgenes no deseados */
+    .banner-text h2 {
+        font-size: 1.5em;
+    }
+
+    
+    .feature-card {
+        gap: 2em;
+        padding: 0 1em;
+    }
+    
+    .section1-title {
+        font-size: 3em;
+    }
+
+    .s3-container {
+        
+        margin: 0 5%; 
+        width: 90%; 
+    }
+    
+    .btn-style {
+        padding: 2em;
+    }
+
+    .footer-logo img {
+        margin-left: 3em;
+    }
+
+    .footer-items {
+        margin-left: 5em; 
+        gap: 4em;         
+    }
 }
 
-/* Estilo para cada logo */
-.logo-slider .card-CompanyInfo img {
-    height: 140px; /* Reducimos ligeramente el tamaño de la imagen */
-    width: 140px;
-    object-fit: contain;
-    background-color: #FEFDF8; /* Damos un fondo claro para que el logo se vea mejor */
-    padding: 10px;
+
+/* --- MÓVIL (Hasta 768px) --- */
+@media (max-width: 768px) {
+
+    .banner-container {
+        border-radius: 0 0 1.5em 1.5em;
+    }
+
+    .banner-video {
+        height: 60vh; 
+        object-fit: cover;
+    }
+
+    .banner-text {
+        width: 90%; 
+    }
+
+    .banner-text h1 {
+        font-size: 2.8em;
+        line-height: 1.1;
+    }
+
+    .banner-text h2 {
+        font-size: 1.1em;
+        margin-top: 0.5em;
+    }
+
+    .section1-title {
+        font-size: 2.2em;
+        padding: 0 0.5em;
+    }
+
+    .feature-card, 
+    .feature-card-reverse {
+        flex-direction: column; 
+        gap: 1.5em;
+        margin-bottom: 3em;
+        padding: 0 1em;
+    }
+    .feature-card-reverse {
+        flex-direction: column; 
+    }
+
+    .feature-image-container {
+        flex: 0 0 auto; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .feature-text {
+        padding: 0;
+        text-align: center;
+    }
+
+    .feature-text h3 {
+        font-size: 1.8em;
+    }
+
+    .feature-text p {
+        font-size: 1.1em;
+    }
+
+    #section2 h2 {
+        font-size: 2.5em;
+    }
+
+    #section2 .logo-slider {
+        padding: 40px 0;
+    }
+
+    #section2 .logo-slider img {
+        height: 100px;
+        margin: 0 15px;
+        padding: 10px;
+    }
+
+    #section3 {
+        padding: 4em 0;
+    }
+
+    .s3-container {
+        margin: 0 1em; 
+        width: auto;
+        padding: 2em 1em;
+    }
+
+    .s3-header h3 {
+        font-size: 1.8em;
+    }
+
+    .s3-btn-container {
+        flex-direction: column;
+        gap: 1em;
+        width: 100%;
+    }
+
+    .btn-style {
+        padding: 0.5em 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .a-section3 {
+        width: 80%;
+        padding: 0.8em 0;
+    }
+    
+    .s3-register-link {
+        text-align: center;
+    }
+
+    footer {
+        font-size: 1em;
+        padding-bottom: 2em;
+        height: auto; 
+    }
+
+    .footer-container {
+        flex-direction: column; 
+        align-items: center;
+        padding: 2em 1em;
+        gap: 2em;
+        text-align: center;
+    }
+
+    
+    .footer-logo img {
+        margin: 0; 
+        margin-bottom: 1em;
+        max-width: 150px;
+    }
+
+    
+    .footer-items {
+        margin: 0;
+        flex-direction: column; 
+        gap: 2.5em;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer-title {
+        font-size: 1.4em;
+    }
+    
+    footer > div:last-child {
+        padding: 1em;
+        font-size: 0.85em;
+    }
+
+    /* ================================================= */
+/* RESPONSIVE: OFERTAS, SOLICITUDES Y CANDIDATOS     */
+/* ================================================= */
+
+/* --- TABLET (Hasta 1024px) --- */
+@media (max-width: 1024px) {
+    
+    /* Ajuste de Formularios (Crear/Editar Oferta) */
+    .list-container .form-grid {
+        grid-template-columns: 1fr; /* Una sola columna */
+        gap: 1.5em;
+    }
+
+    .list-container .form-grid label {
+        text-align: left; /* Etiquetas alineadas a la izquierda */
+        margin-bottom: 0.2em;
+    }
+
+    /* Hacemos que la fila de Título/Fecha se apile */
+    .list-container .form-grid .form-row-full {
+        flex-direction: column;
+        gap: 1.5em;
+    }
+
+    /* Tarjeta de Candidato en Tablet (Ajuste intermedio) */
+    .candidate-card {
+        /* Cambiamos proporciones para que la foto no sea tan ancha */
+        grid-template-columns: 30% 1fr 1fr; 
+    }
 }
 
-/* Efecto hover para los logos */
-.logo-slider .card-CompanyInfo:hover img {
-    border-color: #EBD3FD;
-    box-shadow: 0 4px 12px rgba(235, 211, 253, 0.4);
+
+/* --- MÓVIL (Hasta 768px) --- */
+@media (max-width: 768px) {
+
+    /* 1. BARRA DE BÚSQUEDA Y BOTONES SUPERIORES */
+    .list-container .search-bar-container {
+        width: 100%; /* Barra de búsqueda ancho completo */
+    }
+
+    .btn-volver {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 1em;
+    }
+
+    /* 2. FORMULARIOS (Crear/Editar Oferta) */
+    .list-container .form-grid .select-group {
+        flex-direction: column; /* Selects de ciclos uno debajo de otro */
+    }
+
+    .list-container .form-grid .select-group select {
+        width: 100%;
+    }
+
+    .list-container .button-container {
+        flex-direction: column; /* Botones de acción apilados */
+        gap: 1em;
+    }
+
+    .list-container .button-container input {
+        width: 100%;
+    }
+
+    /* 3. TARJETAS DE OFERTA Y SOLICITUDES */
+    .list-container .oferta-card,
+    .misSolicitudes-card {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* Cabecera: Título arriba, fecha abajo */
+    .list-container .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+    }
+
+    /* Pie: Salario y Ciclos apilados */
+    .list-container .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1em;
+    }
+
+    .list-container .card-ciclos {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    /* Acciones: Botones grandes y apilados */
+    .list-container .card-actions {
+        flex-direction: column;
+        gap: 1em;
+        padding: 1em;
+    }
+
+    .list-container .actions-left,
+    .list-container .actions-right,
+    .misSolicitudes-card .actions-group {
+        width: 100%;
+        display: flex;
+        gap: 1em;
+    }
+    
+    /* Botones individuales ocupan espacio equitativo */
+    .list-container .card-btn {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+
+    /* 4. TARJETA DE CANDIDATO (Transformación Total a Vertical) */
+    .candidate-card {
+        display: flex;
+        flex-direction: column;
+        padding: 0; /* El padding lo daremos a los hijos internos */
+    }
+
+    /* Foto del candidato: Ahora es un banner superior o cuadrado centrado */
+    .candidate-visual {
+        width: 100%;
+        height: 250px; /* Altura fija para la foto */
+        margin: 0; /* Reseteamos márgenes negativos del grid */
+        border-bottom: 3px solid var(--color-negro);
+    }
+
+    .candidate-visual img.profile-image {
+        width: auto;
+        height: 90%;
+    }
+
+    /* Contenedores de texto con padding */
+    .candidate-name,
+    .candidate-details,
+    .candidate-location,
+    .candidate-tags,
+    .candidate-meta {
+        padding: 0 1.5em; /* Padding lateral */
+        margin-bottom: 1em;
+        width: auto; /* Reseteo de grid */
+    }
+
+    .candidate-name {
+        margin-top: 1.5em;
+    }
+
+    .candidate-tags {
+        align-items: flex-start; /* Etiquetas a la izquierda en móvil */
+    }
+    
+    .candidate-tags .study-tag-candidate {
+        text-align: left;
+    }
+
+    .candidate-meta {
+        align-items: stretch; /* Botón CV ancho completo */
+        margin-bottom: 1.5em;
+    }
+
+    .candidate-meta .btn-view-cv {
+        justify-content: center;
+    }
+
+    /* Botones de Decisión (Rechazar/Aprobar) */
+    .candidate-actions-group {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
-
-/* Nombre de la empresa debajo del logo */
-.logo-slider .card-CompanyInfo p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1em;
-    font-weight: 600;
-    color: #FFFFE9; /* Color claro para contrastar con fondo oscuro */
-    margin: 0;
-    text-align: center;
-    max-width: 180px;
-    word-wrap: break-word;
-}
-
-/* Reutilizamos .companies-container y .logo-slider del Bloque 3 para el carrusel animado */
-/* Nota: Si el carrusel no funciona, es porque el JS no ha duplicado los logos */
-
-
-/* --- ESTILOS ÚLTIMAS OFERTAS (LISTA CON SCROLL) --- */
-
-.ofertas-scroll-container {
-    /* Dimensiones para habilitar el scroll */
-    background-color: #191919;
-    max-height: 800px; /* Altura máxima antes de que aparezca el scroll */
-    overflow-y: auto; /* Habilita el scroll vertical */
-    padding-right: 15px; /* Espacio para que la barra de scroll no toque las tarjetas */
-    margin: 0 auto; /* Centrado si hay un max-width */
-    border-radius: 0.6875em;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 30px;
-}
-
-/* Estilo para la barra de scroll (opcional pero recomendado) */
-.ofertas-scroll-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.ofertas-scroll-container::-webkit-scrollbar-thumb {
-    background-color: #EBD3FD; /* Morado de acento */
-    border-radius: 10px;
-    border: 2px solid #FFFFE9; /* Borde del color de la tarjeta */
-}
-
-.ofertas-scroll-container::-webkit-scrollbar-track {
-    background-color: #FEFDF8; /* Fondo claro de la tarjeta */
-    border-radius: 10px;
-}
-
-/* Aseguramos que la tarjeta de oferta ocupe el 100% (menos el espacio del scroll) */
-.ofertas-scroll-container .oferta-card {
-    max-width: none; /* Asegura que la tarjeta no se vea limitada por estilos anteriores */
-    margin-right: 25px; 
-    margin-left: 25px;/* Compensa el padding-right del contenedor para centrar la tarjeta */
-    margin-top: 25px;
-}
-
-/* Texto de placeholder si las ofertas o empresas aún no han cargado */
-.placeholder-text {
-    text-align: center;
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.2em;
-    color: #505050;
-    padding: 2em;
-    font-style: italic;
 }
