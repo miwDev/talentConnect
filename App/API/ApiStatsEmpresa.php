@@ -10,8 +10,6 @@ use App\core\data\EmpresaRepo;
 use PDOException;
 use Exception;
 
-// --- Funciones Auxiliares ---
-
 function getAuthorizationHeader() {
     if (function_exists('getallheaders')) {
         $headers = getallheaders();
@@ -51,8 +49,6 @@ switch ($method) {
         
         try {
             switch ($stat) {
-                
-                // --- Indicadores Clave ---
                 case 'totalOffers':
                     $totalOffers = OfertaRepo::countTotalOffersByEmpresa($empresaId);
                     echo json_encode(['success' => true, 'data' => $totalOffers]);
@@ -63,14 +59,12 @@ switch ($method) {
                     echo json_encode(['success' => true, 'data' => $totalSolicitudes]);
                     break;
 
-                // --- Gráficos de Distribución ---
                 case 'activeExpiredOffers':
                     $data = OfertaRepo::countActiveAndExpiredOffers($empresaId);
                     echo json_encode(['success' => true, 'data' => $data]);
                     break;
 
                 case 'topOffers':
-                    // Por defecto, limitamos a 5
                     $limit = $_GET['limit'] ?? 5; 
                     $data = OfertaRepo::findTopOffersBySolicitudesForEmpresa($empresaId, (int)$limit);
                     echo json_encode(['success' => true, 'data' => $data]);
@@ -81,14 +75,12 @@ switch ($method) {
                     echo json_encode(['success' => true, 'data' => $data]);
                     break;
                 
-                // --- Gráfico de Tendencia ---
                 case 'monthlyTrend':
                     $data = OfertaRepo::getSolicitudesMonthlyTrend($empresaId);
                     echo json_encode(['success' => true, 'data' => $data]);
                     break;
 
                 default:
-                    // Si el 'statType' no coincide con ninguno de los cases.
                     http_response_code(404);
                     echo json_encode(['success' => false, 'message' => 'Endpoint de estadística no válido.']);
                     break;
@@ -106,7 +98,7 @@ switch ($method) {
         break;
 
     default:
-        http_response_code(405); // Método no permitido
+        http_response_code(405);
         echo json_encode(['success' => false, 'message' => 'Método HTTP no permitido.']);
         break;
 }

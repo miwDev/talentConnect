@@ -6,7 +6,10 @@ use App\core\data\EmpresaRepo;
 use App\core\data\OfertaRepo;
 use App\core\helper\Adapter;
 use App\core\helper\Session;
+use App\core\helper\Validator;
 use App\mail\Mailer;
+
+
 
 class EmpresaController
 {
@@ -24,20 +27,28 @@ class EmpresaController
     {
         $this->handlePostActions($engine);
         
-        $empresasAll = EmpresaRepo::findAll();
-        $empresasAllDTO = Adapter::AllEmpresasToDTO($empresasAll);
-        $empresasLista = $empresasAllDTO; 
+        $empresasLista = [];
 
-        if (!empty($_POST["buscar"])) {
-            $filter = $_POST["buscar"];
-            $empresasFiltered = EmpresaRepo::filteredFindAll($filter);
 
-            if (!empty($empresasFiltered)) {
-                $empresasLista = Adapter::AllEmpresasToDTO($empresasFiltered);
-            } 
+        if (isset($_POST['btnOrdenar'])) {
+            $filtro = $_POST['ordenEmpresa'] ?? 'nombre';
+            $empresasRaw = EmpresaRepo::findAllOrderBy($filtro);
+            $empresasLista = Adapter::AllEmpresasToDTO($empresasRaw);
+        } 
+        elseif (isset($_POST['btnBuscar']) && !empty($_POST['buscar'])) {
+            $texto = $_POST['buscar'];
+            $empresasRaw = EmpresaRepo::filteredFindAll($texto);
+            $empresasLista = Adapter::AllEmpresasToDTO($empresasRaw);
+        } 
+        else {
+            $empresasRaw = EmpresaRepo::findAll();
+            $empresasLista = Adapter::AllEmpresasToDTO($empresasRaw);
         }
 
+        $empresasAll = EmpresaRepo::findAll();
+        $empresasAllDTO = Adapter::AllEmpresasToDTO($empresasAll);
         $empresasPendientes = [];
+        
         foreach ($empresasAllDTO as $empresa) {
             if (!$empresa->validated) {
                 $empresasPendientes[] = $empresa;
@@ -89,12 +100,27 @@ class EmpresaController
             exit(); 
         }
         
+        // CORRECCIÓN: Este es el único bloque para manejar btnAddCompany
         if (isset($_POST["btnAddCompany"])) {
-            EmpresaRepo::save(Adapter::DTOtoEmpresa());
-            header($selfRoute);
-            exit();
-        }
+            
+            // 1. Validar los datos
+            $errors = Validator::validateEmpresaRegistrationAdmin($_POST);
 
+            if (empty($errors)) {
+                // 2. Si no hay errores, guarda la empresa y redirige.
+                EmpresaRepo::save(Adapter::DTOtoEmpresa());
+                header($selfRoute);
+                exit();
+            } else {
+                // 3. Si hay errores, re-renderiza la plantilla con los datos POST y los errores.
+                echo $engine->render('Empresa/addEmpresa', [
+                    'errors' => $errors,
+                    'postData' => $_POST
+                ]);
+                exit();
+            }
+        }
+        
         if (isset($_POST["btnEdit"])) {
             $id = $_POST["btnEdit"];
             $empresaDTO = Adapter::empresaToDTO($id);

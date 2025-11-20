@@ -21,17 +21,15 @@ $this->layout('layout/adminLayout', [
         <div class="admin-toolbar">
             
             <form action="" method="post" class="toolbar-group-left" style="width: auto; flex: 1;">
-                
-                <button type="submit" id="buscar-btn" class="toolbar-btn btn-secondary">Buscar</button>
+    
+                <button type="submit" id="buscar-btn" name="btnBuscar" class="toolbar-btn btn-secondary">Buscar</button>
 
                 <input type="text" name="buscar" id="buscar" class="toolbar-input" placeholder="Buscar empresa..." style="min-width: 200px;">
                 
                 <button type="submit" name="btnOrdenar" class="toolbar-btn btn-secondary">Ordenar</button>
 
                 <select name="ordenEmpresa" id="ordenEmpresa" class="toolbar-select">
-                    <option value="">Ordenar por...</option>
-                    <option value="cif">Cif</option>
-                    <option value="nombre">Nombre</option>
+                    <option value="nombre">Nombre (Defecto)</option> <option value="cif">Cif</option>
                     <option value="email">Email</option>
                     <option value="telefono">Telefono</option>
                 </select>

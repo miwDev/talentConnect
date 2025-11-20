@@ -114,6 +114,64 @@ class EmpresaRepo implements RepoInterface
         return $empresas;
     }
 
+    // READ ORDER BY
+    public static function findAllOrderBy($filtro)
+    {
+        $conn = DBC::getConnection();
+        $empresas = [];
+
+        $allowedColumns = [
+            'nombre'    => 'e.nombre',
+            'email'  => 'u.user_name',
+            'cif'       => 'e.cif',
+            'telefono' => 'e.telefono',
+        ];
+
+        $orderBy = $allowedColumns[$filtro] ?? 'e.nombre';
+
+        $sql = 'SELECT e.id AS empresa_id,
+                    u.user_name AS username,
+                    u.passwrd AS pass,
+                    e.nombre AS nombre,
+                    e.telefono AS telefono,
+                    e.direccion AS direccion,
+                    e.nombre_persona AS nombrePersona,
+                    e.telefono_persona AS telPersona,
+                    e.logo AS logo,
+                    e.validacion AS validacion,
+                    e.provincia AS provincia,
+                    e.localidad AS localidad,
+                    e.cif AS cif
+             FROM EMPRESA e
+             JOIN USER u ON e.user_id = u.id
+             ORDER BY ' . $orderBy; 
+
+        $query = $conn->prepare($sql);
+        $query->execute();
+
+        $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($resultados as $res) {
+            $empresas[] = new Empresa(
+                $res['empresa_id'],
+                $res['username'],
+                $res['pass'],
+                $res['cif'],
+                $res['nombre'],
+                $res['telefono'],
+                $res['direccion'],
+                $res['provincia'],
+                $res['localidad'],
+                $res['nombrePersona'],
+                $res['telPersona'],
+                $res['logo'],
+                $res['validacion']
+            );
+        }
+
+        return $empresas;
+    }
+
     public static function filteredFindAll($string)
     {
         $conn = DBC::getConnection();
@@ -485,6 +543,42 @@ class EmpresaRepo implements RepoInterface
         }
 
         return $salida;
+    }
+
+    public static function isEmailTaken(string $email): bool
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT COUNT(id) FROM USER WHERE user_name = :email';
+        
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error de DB al verificar email: " . $e->getMessage());
+            return true; 
+        }
+    }
+
+    public static function isCifTaken(string $cif): bool
+    {
+        $conn = DBC::getConnection();
+
+        $query = 'SELECT COUNT(id) FROM EMPRESA WHERE cif = :cif';
+
+        try {
+            $stmt = $conn->prepare($query);
+            $stmt->bindValue(':cif', $cif, PDO::PARAM_STR);
+            $stmt->execute();
+
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error de DB al verificar CIF: " . $e->getMessage());
+            return true; 
+        }
     }
 
     

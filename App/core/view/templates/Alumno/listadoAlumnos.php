@@ -32,13 +32,13 @@ $this->layout('layout/adminLayout', [
         </div>
     </div>
     <div class="table-container">
-        <table>
+        <table id="tablaMain">
             <thead>
                 <tr>
-                    <th>ID <span class="static-arrow"></span></th>
-                    <th>Nombre <span class="static-arrow"></span></th>
-                    <th>Apellido <span class="static-arrow"></span></th>
-                    <th>Email <span class="static-arrow"></span></th>
+                    <th class="numero">ID <span id="ID" class="static-arrow"></span></th>
+                    <th class="texto">Nombre <span id="NOMBRE" class="static-arrow"></span></th>
+                    <th class="texto">Apellido <span id="APELLIDO" class="static-arrow"></span></th>
+                    <th class="texto">Email <span id="EMAIL" class="static-arrow"></span></th>
                     <th class="actions-column">Acciones</th>
                 </tr>
             </thead>

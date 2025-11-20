@@ -10,21 +10,30 @@ use App\core\data\CicloRepo;
 use App\core\model\Oferta;
 use App\core\helper\Adapter;
 use App\core\helper\Session;
+use App\core\helper\Validator;
 use App\mail\Mailer;
 
 class OfertaController
 {
     public function renderAddOferta($engine){
-
-        $this->handlePostActions($engine);
-
         $role = Session::readRole();
-        $username = Session::readUser();
         $ciclos = CicloRepo::findAll();
+        
+        $errors = [];
+        $postData = [];
+        
+        $result = $this->handlePostActions($engine);
+
+        if (is_array($result)) {
+            $errors = $result['errors'];
+            $postData = $result['postData'];
+        }
 
         echo $engine->render('Empresa/crearOferta', [
             'role' => $role,
-            'ciclos' => $ciclos
+            'ciclos' => $ciclos,
+            'errors' => $errors,
+            'postData' => $postData
         ]);
     }
 
@@ -45,27 +54,37 @@ class OfertaController
     }
 
     private function handlePostActions($engine){
+
         $role = Session::readRole();
         $selfRoute = "Location: " . $_SERVER['PHP_SELF'] . "?menu=mis-ofertas";
+        $resultado = null;
 
         if (isset($_POST["btnAddOffer"])) {
             
-            $oferta = Adapter::postDataToOffer();
-            
-            if ($oferta === false) {
-                header("Location: " . $_SERVER['PHP_SELF'] . "?menu=create-oferta");
-                exit();
-            }
-            
-            $success = OfertaRepo::save($oferta);
+            $postData = $_POST;
+            $errors = Validator::validateOfferCreation($postData);
 
-            if($success){
-                header($selfRoute);
-                exit(); 
+            if (empty($errors)) {
+                
+                $oferta = Adapter::postDataToOffer();
+                $success = OfertaRepo::save($oferta);
+
+                if($success){
+                    header($selfRoute);
+                    exit();
+                } else {
+                    $errors['general_error'] = "Error de base de datos al guardar la oferta. Inténtalo de nuevo.";
+                    $resultado = [
+                        'errors' => $errors,
+                        'postData' => $postData
+                    ];
+                }
             } else {
-                error_log("Error: No se pudo guardar la oferta en la base de datos");
+                $resultado = [
+                    'errors' => $errors,
+                    'postData' => $postData
+                ];
             }
-            exit(); 
         }
 
         if (isset($_POST["btnCancel"])) {
@@ -227,6 +246,8 @@ class OfertaController
             
             exit();
 
-        }        
+        }   
+        
+        return $resultado;
     }
 }

@@ -581,8 +581,9 @@ use App\core\helper\Security;
     }
 
     public static function editedDatatoSolicitud($data, $header){
-        $token = self::tokenRetrieve($header); 
         $solicitud = false;
+        $token = self::tokenRetrieve($header); 
+
 
         if (!is_null($token)){
             $solicitud = SolicitudRepo::findById($data['solicitudId']);

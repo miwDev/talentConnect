@@ -5,9 +5,9 @@ $this->layout('layout/layout', [
 ]);
 ?>
 <?php $this->start('js') ?>
+<script src="/public/assets/js/validators.js"></script>
 <script src="/public/assets/js/misSolicitudesLogic.js"></script>
 <script src="/public/assets/js/elements.js" defer></script>
-<script src="/public/assets/js/addons.js" defer></script>
 <?php $this->stop() ?>
 <?php $this->start('pageContent') ?>
 <div class="list-container">

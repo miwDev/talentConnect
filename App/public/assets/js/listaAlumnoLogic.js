@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", function(){
         return divTableC;
         
     }
-
+                                                                                                                                                                              
     function crearCampo(labelText, inputType, inputId, required = false) {
                 const div = document.createElement("div");
                 div.className = "form-field";
@@ -57,6 +57,9 @@ window.addEventListener("DOMContentLoaded", function(){
                 const errorDiv = document.createElement("div");
                 errorDiv.className = "error-message";
                 errorDiv.id = `error-${inputId}`;
+                // Estilo básico para el error
+                errorDiv.style.color = "red";
+                errorDiv.style.fontSize = "0.8em";
                 
                 div.appendChild(label);
                 div.appendChild(input);
@@ -75,7 +78,7 @@ window.addEventListener("DOMContentLoaded", function(){
         let c4 = document.createElement("td");
         let c5 = document.createElement("td");
         
-        c1.innerHTML = id;
+        c1.innerHTML = id-0;
         c2.innerHTML = nombre;
         c3.innerHTML = apellido;
         c4.innerHTML = email;
@@ -144,6 +147,8 @@ window.addEventListener("DOMContentLoaded", function(){
                     const errorDiv = document.createElement("div");
                     errorDiv.className = "error-message";
                     errorDiv.id = `error-${inputId}`;
+                    errorDiv.style.color = "red";
+                    errorDiv.style.fontSize = "0.8em";
                     
                     div.appendChild(label);
                     div.appendChild(input);
@@ -190,6 +195,33 @@ window.addEventListener("DOMContentLoaded", function(){
 
                 form.addEventListener("submit", function(e) {
                     e.preventDefault();
+
+                    // --- VALIDACIÓN EDITAR ---
+                    const inNom = document.getElementById("nombre");
+                    const inApe = document.getElementById("apellido");
+                    const inEmail = document.getElementById("email");
+                    let valido = true;
+
+                    // Limpiar errores
+                    document.getElementById("error-nombre").textContent = "";
+                    document.getElementById("error-apellido").textContent = "";
+                    document.getElementById("error-email").textContent = "";
+
+                    if(!inNom.value.trim() || !inNom.value.esNombreValido()){
+                        document.getElementById("error-nombre").textContent = "Nombre inválido";
+                        valido = false;
+                    }
+                    if(!inApe.value.trim() || !inApe.value.esNombreValido()){
+                        document.getElementById("error-apellido").textContent = "Apellido inválido";
+                        valido = false;
+                    }
+                    if(!inEmail.value.trim() || !inEmail.value.esEmailValido()){
+                        document.getElementById("error-email").textContent = "Email inválido";
+                        valido = false;
+                    }
+
+                    if(!valido) return; // Paramos si hay errores
+                    // --------------------------
                     
                     const formData = new FormData(this);
                     formData.append('id', rowToEdit.cells[0].textContent);
@@ -817,81 +849,176 @@ window.addEventListener("DOMContentLoaded", function(){
 
 
         btnAdd.addEventListener("click", function(){
-            crearModal();
-            const modalContent = document.getElementById("modalContent");
-            const titulo = document.createElement("h2");
-            titulo.textContent = "Registro de Usuario";
+        crearModal();
+        const modalContent = document.getElementById("modalContent");
+        
+        // Título del Modal
+        const titulo = document.createElement("h2");
+        titulo.textContent = "Nuevo Alumno";
+        modalContent.appendChild(titulo);
+        
+        const form = document.createElement("form");
+        form.id = "registroForm"; 
+        form.className = "form-content-wrapper"; // Usamos tu wrapper para centrar
+
+        // --- FUNCIÓN HELPER PARA CREAR INPUTS CON TU ESTILO ---
+        function crearCampoEstilizado(labelText, inputType, inputId, required = false, fullWidth = false) {
+            const div = document.createElement("div");
+            div.className = "form-field";
+            if(fullWidth) div.className += " full-width"; // Clase para ancho completo
+
+            const label = document.createElement("label");
+            label.textContent = labelText;
+            label.htmlFor = inputId;
+            label.className = "form-label-styled"; // Tu clase de estilo
+
+            const input = document.createElement("input");
+            input.type = inputType;
+            input.id = inputId;
+            input.name = inputId;
+            input.required = required;
+            input.className = "form-styled-input"; // Tu clase de estilo
+
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "error-message";
+            errorDiv.id = `error-${inputId}`;
             
-            const form = document.createElement("form");
-            form.id = "registroForm";    
-
-            const formGrid = document.createElement("div");
-            formGrid.className = "form-grid";
+            div.appendChild(label);
+            div.appendChild(input);
+            div.appendChild(errorDiv);
             
-            const divNombre = crearCampo("Nombre:", "text", "nombre", true);
-            const divApellido = crearCampo("Apellido:", "text", "apellido", true);
-            const divDni = crearCampo("DNI:", "text", "dni", true);
-            const divEmail = crearCampo("Email:", "email", "email", true);
-            const divTelefono = crearCampo("Teléfono:", "tel", "telefono", true);
-            const divProvincia = crearCampo("Provincia:", "text", "provincia");
-            const divLocalidad = crearCampo("Localidad:", "text", "localidad");
-            const divDireccion = crearCampo("Dirección:", "text", "direccion");
+            return div;
+        }
+
+        // --- SECCIÓN 1: DATOS PERSONALES ---
+        const titlePersonal = document.createElement("h3");
+        titlePersonal.textContent = "Datos Personales";
+        titlePersonal.className = "form-section-title";
+        form.appendChild(titlePersonal);
+
+        const gridPersonal = document.createElement("div");
+        gridPersonal.className = "form-grid-styled";
+
+        gridPersonal.appendChild(crearCampoEstilizado("Nombre:", "text", "nombre", true));
+        gridPersonal.appendChild(crearCampoEstilizado("Apellido:", "text", "apellido", true));
+        gridPersonal.appendChild(crearCampoEstilizado("DNI:", "text", "dni", true));
+        gridPersonal.appendChild(crearCampoEstilizado("Teléfono:", "tel", "telefono", true));
+        gridPersonal.appendChild(crearCampoEstilizado("Email:", "email", "email", true, true));
+
+        form.appendChild(gridPersonal);
+
+        // --- SECCIÓN 2: UBICACIÓN ---
+        const titleUbicacion = document.createElement("h3");
+        titleUbicacion.textContent = "Dirección";
+        titleUbicacion.className = "form-section-title";
+        form.appendChild(titleUbicacion);
+
+        const gridUbicacion = document.createElement("div");
+        gridUbicacion.className = "form-grid-styled";
+
+        // Fila 1
+        gridUbicacion.appendChild(crearCampoEstilizado("Provincia:", "text", "provincia"));
+        gridUbicacion.appendChild(crearCampoEstilizado("Localidad:", "text", "localidad"));
+        // Fila 2 (Dirección ancho completo)
+        gridUbicacion.appendChild(crearCampoEstilizado("Dirección:", "text", "direccion", false, true));
+
+        form.appendChild(gridUbicacion);
+        // Fila 3 Educacion
+        const titleEducacion = document.createElement("h3");
+        titleEducacion.textContent = "Educación";
+        titleEducacion.className = "form-section-title";
+        form.appendChild(titleEducacion);
+
+        const gridEducacion = document.createElement("div");
+        gridEducacion.className = "form-grid-styled";
+
+        
+
+        form.append(gridEducacion);
+
+        // --- BOTONERA ---
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "button-container";
+        buttonContainer.style.marginTop = "30px"; // Separación extra
+        
+        // Botón Cancelar (Opcional, mejora UX)
+        const btnCancelar = document.createElement("button");
+        btnCancelar.type = "button";
+        btnCancelar.textContent = "Cancelar";
+        btnCancelar.id = "btnCancelar";
+        btnCancelar.addEventListener("click", window.cerrarModal);
+
+        const btnRegistrar = document.createElement("button");
+        btnRegistrar.type = "submit";
+        btnRegistrar.textContent = "Guardar Alumno";
+        btnRegistrar.id = "btnConfirmar"; // Reutilizamos tu estilo btnConfirmar
+        
+        buttonContainer.appendChild(btnCancelar);
+        buttonContainer.appendChild(btnRegistrar);
+        
+        form.appendChild(buttonContainer);
+        modalContent.appendChild(form);
+
+        // --- VALIDACIÓN Y ENVÍO (Funcionalidad Original Mantenida) ---
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
             
+            const inNom = document.getElementById("nombre");
+            const inApe = document.getElementById("apellido");
+            const inDni = document.getElementById("dni");
+            const inEmail = document.getElementById("email");
+            const inTlf = document.getElementById("telefono");
+            const inDir = document.getElementById("direccion");
+            let valido = true;
 
-            const btnRegistrar = document.createElement("button");
-            btnRegistrar.type = "submit";
-            btnRegistrar.textContent = "Registrar Usuario";
-            btnRegistrar.id = "btnRegistrar";
-            
+            document.querySelectorAll(".error-message").forEach(s => s.textContent = "");
 
-            formGrid.appendChild(divNombre);
-            formGrid.appendChild(divApellido);
-            formGrid.appendChild(divEmail);
-            formGrid.appendChild(divDni);
-            formGrid.appendChild(divTelefono);
-            formGrid.appendChild(divProvincia);
-            formGrid.appendChild(divLocalidad);
-            formGrid.appendChild(divDireccion);
-            
+            if(!inNom.value.trim() || !inNom.value.esNombreValido()){
+                document.getElementById("error-nombre").textContent = "Nombre inválido";
+                valido = false;
+            }
+            if(!inApe.value.trim() || !inApe.value.esNombreValido()){
+                document.getElementById("error-apellido").textContent = "Apellido inválido";
+                valido = false;
+            }
+            if(!inDni.value.trim() || !inDni.value.esDni()){
+                document.getElementById("error-dni").textContent = "DNI incorrecto";
+                valido = false;
+            }
+            if(!inEmail.value.trim() || !inEmail.value.esEmailValido()){
+                document.getElementById("error-email").textContent = "Email incorrecto";
+                valido = false;
+            }
+            if(!inTlf.value.trim() || !inTlf.value.esTelefonoValido()){
+                document.getElementById("error-telefono").textContent = "Teléfono incorrecto";
+                valido = false;
+            }
+            if(inDir.value.trim().length > 0 && !inDir.value.esDireccionValida()){
+                document.getElementById("error-direccion").textContent = "Dirección inválida";
+                valido = false;
+            }
 
-            form.appendChild(formGrid);
-            form.appendChild(btnRegistrar);
-            
+            if(!valido) return; 
 
-            modalContent.appendChild(titulo);
-            modalContent.appendChild(form);
-            
-
-            form.addEventListener("submit", function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                fetch('/API/ApiAlumno.php', {
-                    method: 'POST',
-                    headers: {'Authorization': 'Bearer ' + userToken},
-                    body: formData
-                    })
-                .then((response)=>response.json())
-                .then((data)=>{
-                    if(data.success){
-                        let nuevoAlumno = data.alumno;
-                        
-                        let nuevaFila = crearFilaTabla(
-                            nuevoAlumno.id, 
-                            nuevoAlumno.nombre, 
-                            nuevoAlumno.apellido, 
-                            nuevoAlumno.email
-                        );
-                        tbody.appendChild(nuevaFila);
-
-                        window.cerrarModal();
-                    } else {
-                        alert("Error al registrar el alumno.");
-                    }
+            const formData = new FormData(this);
+            fetch('/API/ApiAlumno.php', {
+                method: 'POST',
+                headers: {'Authorization': 'Bearer ' + userToken},
+                body: formData
                 })
-                .catch(error => console.error('Error en POST:', error));
+            .then((response)=>response.json())
+            .then((data)=>{
+                if(data.success){
+                    let nuevoAlumno = data.alumno;
+                    let nuevaFila = crearFilaTabla(nuevoAlumno.id, nuevoAlumno.nombre, nuevoAlumno.apellido, nuevoAlumno.email);
+                    tbody.appendChild(nuevaFila);
+                    window.cerrarModal();
+                } else {
+                    alert("Error al registrar el alumno.");
+                }
+            })
+            .catch(error => console.error('Error en POST:', error));
         });
-
     });
 
     barraBusqueda.addEventListener("input", function(e) {

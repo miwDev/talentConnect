@@ -1,4 +1,4 @@
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
 
     const userToken = sessionStorage.getItem("token");
     const companyData = document.querySelectorAll(".card-CompanyInfo");

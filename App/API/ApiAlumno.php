@@ -41,6 +41,10 @@ switch ($method) {
             getFullList($authHeaderValue);
         } else if($process === 'pfp'){
             getProfilePic($authHeaderValue); 
+        } else if($process === 'checkEmail'){
+            checkEmailExists();
+        } else if($process === 'checkDni'){
+            checkDniExists();
         }
         break;
     case 'POST':
@@ -283,4 +287,37 @@ function editAlumno($body, $authHeaderValue)
         http_response_code(403);
         echo json_encode(['success' => false, 'error' => 'Unauthorized or Invalid Token']);
     }
+}
+
+
+function checkEmailExists() {
+    header('Content-Type: application/json');
+    $email = $_GET['email'] ?? '';
+    
+    if (empty($email)) {
+        http_response_code(400);
+        echo json_encode(['exists' => false, 'error' => 'Email parameter is missing']);
+        return;
+    }
+    
+    $exists = AlumnoRepo::isEmailTaken($email); 
+    
+    http_response_code(200);
+    echo json_encode(['exists' => $exists]);
+}
+
+function checkDniExists() {
+    header('Content-Type: application/json');
+    $dni = $_GET['dni'] ?? '';
+    
+    if (empty($dni)) {
+        http_response_code(400);
+        echo json_encode(['exists' => false, 'error' => 'DNI parameter is missing']);
+        return;
+    }
+    
+    $exists = AlumnoRepo::isDniTaken($dni);
+    
+    http_response_code(200);
+    echo json_encode(['exists' => $exists]);
 }
