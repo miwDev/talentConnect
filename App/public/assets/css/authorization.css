@@ -1,151 +1,103 @@
 /* ================================================= */
-/* 1. ESTILOS BASE Y CONTENEDOR PRINCIPAL (PAGE/BODY)*/
+/* :ROOT - TOKENS DE DISEÑO (COLORES Y TIPOGRAFÍA)   */
 /* ================================================= */
 
-body{
-    /* Fondo principal de la aplicación */
-    background-color: #16443D;
+:root {
+    /* --- PALETA DE COLORES --- */
+    
+    /* Fondos */
+    --color-fondo-body: #FFFFE9;       /* Crema principal */
+    --color-fondo-tarjeta: #FEFDF8;    /* Blanco roto/Hueso */
+    --color-fondo-verde-oscuro: #16443D; /* Verde corporativo fondo */
+    --color-fondo-gris-claro: #f0f0f0; 
+    --color-fondo-gris-medio: #e0e0e0;
+
+    /* Textos y Bordes */
+    --color-negro: #191919;            /* Negro principal (texto y bordes) */
+    --color-gris-texto: #505050;       
+    --color-borde-gris: #aaa;
+    --color-borde-gris-oscuro: #888;
+
+    /* Acentos e Interactividad */
+    --color-acento: #EBD3FD;           /* Lila principal */
+    --color-acento-hover: #d7b4f2;     /* Lila más oscuro al pasar ratón */
+    --color-verde-brand: #16443D;      /* Verde corporativo elementos */
+    
+    /* Estados */
+    --color-estado-error: #d32f2f;     /* Rojo error específico de auth */
+    
+    /* --- TIPOGRAFÍA --- */
+    --fuente-cuerpo: 'Libre Baskerville', serif;
+    --fuente-titulos: 'Poppins', sans-serif;
 }
 
-.login-container{
-    /* Estilos de la caja principal (fondo claro, borde, centrado) */
-    background-color: #FFFFE9;
+/* ÍNDICE DE CONTENIDOS
+
+   1. ESTILOS BASE Y CONTENEDOR PRINCIPAL
+   2. TIPOGRAFÍA Y ENCABEZADOS
+   3. ESTRUCTURA DEL LOGIN (LAYOUT)
+   4. ESTILOS DE FORMULARIO
+   5. BOTONES Y ACCIONES
+   6. TARJETAS INFORMATIVAS Y LISTAS
+   7. MENSAJES DE ERROR
+   8. PÁGINA DE SELECCIÓN DE REGISTRO
+   9. REGISTRO ESPECÍFICO (ALUMNO/AVATAR)
+   10. SELECTORES DE EDUCACIÓN
+   11. VENTANAS MODALES Y CÁMARA
+   12. PANTALLA DE PENDIENTE/CONFIRMACIÓN
+*/
+
+/* ================================================= */
+/* 1. ESTILOS BASE Y CONTENEDOR PRINCIPAL            */
+/* ================================================= */
+
+body {
+    background-color: var(--color-fondo-verde-oscuro);
+    margin: 0;
+    padding: 0;
+    font-family: var(--fuente-cuerpo);
+}
+
+.login-container {
+    background-color: var(--color-fondo-body);
     margin: 60px auto;
     max-width: 1200px;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 2em;
     padding: 15px;
 }
 
 /* ================================================= */
-/* 2. TIPOGRAFÍA Y ENCABEZADOS */
+/* 2. TIPOGRAFÍA Y ENCABEZADOS                       */
 /* ================================================= */
 
-.h2-title{
-    /* Estilo del título principal (Iniciar Sesión / Registro) */
+.h2-title {
     font-size: 2.5em;
     font-weight: 800;
     margin-top: 0;
-    font-family: 'Poppins', sans-serif;
-    color: #191919;
+    font-family: var(--fuente-titulos);
+    color: var(--color-negro);
     text-align: left;
 }
 
-.h2-title-alter{
-    /* Color de acento para la palabra resaltada en el título */
-    color: #EBD3FD;
+.h2-title-alter {
+    color: var(--color-acento);
 }
 
 /* ================================================= */
-/* 3. CONTENEDOR FLEX (FORMULARIO Y TARJETA) */
+/* 3. ESTRUCTURA DEL LOGIN (LAYOUT)                  */
 /* ================================================= */
 
-.login-contents{
-    /* Configuración Flexbox que alinea el formulario y la tarjeta */
+.login-contents {
     display: flex;
     align-items: stretch;
     gap: 40px;
     width: 100%;
 }
 
-/* ================================================= */
-/* 4. ESTILOS DEL CONTENEDOR DEL FORMULARIO */
-/* ================================================= */
-
-.login-form-container{
-    /* Contenedor del formulario dentro del flexbox */
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-}
-
-.form-group{
-    /* Espacio vertical entre cada par Label/Input */
-    margin-bottom: 1.5em;
-}
-
-.form-group label{
-    /* Estilos de las etiquetas (Email, Contraseña) */
-    display: block;
-    margin-bottom: 0.5em;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.3em;
-    font-weight: 500;
-    color: #191919;
-}
-
-.form-group input {
-    /* Estilos base de los campos de texto */
-    width: 100%;
-    padding: 0.6em;
-    box-sizing: border-box;
-    border: 3px solid #191919;
-    border-radius: 0.6875em;
-    font-size: 1em;
-}
-
-.form-group input:focus{
-    /* Estilo al enfocar (quitar outline y borde de acento) */
-    outline: none;
-    border: 3px solid #EBD3FD
-}
-
-.form-actions {
-    /* Contenedor para botón y enlace (para alinear) */
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    margin-top: 2em;
-}
-
-/* ================================================= */
-/* 5. ESTILOS DE BOTONES Y ENLACES DE ACCIÓN */
-/* ================================================= */
-
-.login-btn {
-    /* Estilo principal del botón "Entrar" */
-    background-color: #EBD3FD; 
-    color: #191919;
-    padding: 0.6em 3em;
-    box-sizing: border-box; 
-    text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.3em;
-    font-weight: 500;
-    border: 3px solid #191919;
-    border-radius: 0.6875em;
-    cursor: pointer;
-    margin-bottom: 1em;
-}
-
-.login-btn:hover {
-    /* Efecto hover del botón */
-    background-color: #d7b4f2;
-}
-
-.forgot-password-link {
-    /* Estilo del enlace "¿Olvidaste tu contraseña?" */
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1em;
-    color: #191919;
-    text-decoration: none;
-}
-
-.forgot-password-link:hover {
-    /* Efecto hover del enlace */
-    color: #EBD3FD;
-}
-
-/* ================================================= */
-/* 6. ESTILOS DE LA TARJETA LATERAL (LOGIN INFO) */
-/* ================================================= */
-
 .login-info-card {
-    /* Contenedor principal de la tarjeta (fondo oscuro, borde a borde) */
     flex: 1;
-    background-color: #191919;
+    background-color: var(--color-negro);
     border-radius: 2em; 
     padding: 2.5em;
     box-shadow: 0 0.5em 1em rgba(25, 25, 25, 0.1); 
@@ -153,11 +105,136 @@ body{
     flex-direction: column;
 }
 
+/* ================================================= */
+/* 4. ESTILOS DE FORMULARIO                          */
+/* ================================================= */
+
+.login-form-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-family: var(--fuente-titulos);
+    font-size: 1.3em;
+    font-weight: 500;
+    color: var(--color-negro);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.6em;
+    box-sizing: border-box;
+    border: 3px solid var(--color-negro);
+    border-radius: 0.6875em;
+    font-size: 1em;
+}
+
+.form-group input:focus {
+    outline: none;
+    border: 3px solid var(--color-acento);
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 2em;
+}
+
+/* Input Password Toggle */
+.input-wrapper {
+  position: relative;
+}
+
+#toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer; 
+  background: url("/public/assets/images/unveil.svg");
+  width: 24px;  
+  height: 24px; 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.input-wrapper input {
+  padding-right: 40px; 
+}
+
+/* ================================================= */
+/* 5. BOTONES Y ACCIONES                             */
+/* ================================================= */
+
+.login-btn {
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
+    padding: 0.6em 3em;
+    box-sizing: border-box; 
+    text-decoration: none;
+    font-family: var(--fuente-titulos);
+    font-size: 1.3em;
+    font-weight: 500;
+    border: 3px solid var(--color-negro);
+    border-radius: 0.6875em;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+
+.login-btn:hover {
+    background-color: var(--color-acento-hover);
+}
+
+.forgot-password-link {
+    font-family: var(--fuente-cuerpo);
+    font-size: 1em;
+    color: var(--color-negro);
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    color: var(--color-acento);
+}
+
+.btn-register-link {
+    display: block;
+    width: 100%;
+    font-size: 1.1em;
+    padding: 1em 0;
+    text-align: center;
+    background-color: var(--color-acento);
+    color: var(--color-negro);
+    text-decoration: none;
+    border-radius: 0.6875em;
+    font-family: var(--fuente-titulos);
+    font-weight: 600;
+    margin-top: auto;
+}
+
+.btn-register-link:hover {
+    background-color: var(--color-acento-hover);
+}
+
+/* ================================================= */
+/* 6. TARJETAS INFORMATIVAS Y LISTAS                 */
+/* ================================================= */
+
 .login-info-card h3 {
-    /* Título dentro de la tarjeta */
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 1.8em;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
     text-align: left;
     margin-top: 0;
     margin-bottom: 0.8em;
@@ -166,33 +243,29 @@ body{
 }
 
 .card-subtitle {
-    /* Subtítulo o texto introductorio de la tarjeta */
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
-    color: #EBD3FD;
+    color: var(--color-acento);
     margin-bottom: 1.5em;
     line-height: 1.5;
 }
 
 .advantages-list {
-    /* Lista de ventajas */
     padding: 0;
     margin: 0 0 2em 0;
     list-style: none;
 }
 
 .advantages-list li {
-    /* Item individual de la lista */
     display: flex;
     align-items: flex-start;
     margin-bottom: 1.5em;
 }
 
 .advantages-list li::before {
-    /* Iconos o viñetas personalizadas de la lista (el círculo de color) */
     font-size: 1.5em;
-    color: #16443D;
-    background-color: #EBD3FD;
+    color: var(--color-verde-brand);
+    background-color: var(--color-acento);
     border-radius: 50%;
     width: 1.2em;
     height: 1.2em;
@@ -204,59 +277,48 @@ body{
 }
 
 .advantages-list p {
-    /* Párrafos dentro de la lista */
     margin: 0;
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1em;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
 }
 
 .advantages-list strong {
-    /* Texto en negrita dentro de la lista */
-    color: #FFFFE9;
-}
-
-.btn-register-link {
-    /* Botón de "Regístrate Ahora" dentro de la tarjeta */
-    display: block;
-    width: 100%;
-    font-size: 1.1em;
-    padding: 1em 0;
-    text-align: center;
-    background-color: #EBD3FD;
-    color: #191919;
-    text-decoration: none;
-    border-radius: 0.6875em;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    margin-top: auto;
-}
-
-.btn-register-link:hover {
-    /* Efecto hover del botón de registro */
-    background-color: #d7b4f2;
+    color: var(--color-fondo-body);
 }
 
 /* ================================================= */
-/* 7. ESTILOS DE MENSAJES DE ERROR */
+/* 7. MENSAJES DE ERROR                              */
 /* ================================================= */
 
 .error-message {
-    /* Estilos para el div invisible de errores */
-    color: #d32f2f;
-    font-family: 'Poppins', sans-serif;
+    color: var(--color-estado-error);
+    font-family: var(--fuente-titulos);
     font-size: 0.9em;
     margin-top: 1em;
     text-align: center;
     padding: 1em;
 }
 
+.input-error-message {
+    display: block; 
+    color: var(--color-estado-error);
+    font-family: var(--fuente-titulos);
+    font-size: 0.85em;
+    margin-top: 5px;
+    min-height: 1.2em; 
+    visibility: hidden; 
+}
+
+.input-error-message:not(:empty) {
+    visibility: visible;
+}
+
 /* ================================================= */
-/* 8. ESTILOS DE LA PÁGINA DE SELECCIÓN DE REGISTRO */
+/* 8. PÁGINA DE SELECCIÓN DE REGISTRO                */
 /* ================================================= */
 
 .register-redirect-container {
-    /* Modificación del contenedor principal para la página de selección */
     max-width: 650px; 
     padding: 60px 40px; 
     display: flex;
@@ -265,27 +327,23 @@ body{
 }
 
 .registration-header {
-    /* Encabezado y subtítulo de la página de selección */
     text-align: center;
     width: 100%;
 }
 
 .registration-header .h2-title {
-    /* Ajuste del título para centrar en esta página */
     margin-bottom: 0.5em; 
     text-align: center; 
 }
 
 .registration-subtitle {
-    /* Subtítulo descriptivo */
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.1em;
-    color: #191919;
+    color: var(--color-negro);
     margin-bottom: 2em;
 }
 
 .registration-choices {
-    /* Contenedor de los dos botones (Alumno/Empresa) */
     display: flex;
     width: 80%; 
     gap: 1.5em; 
@@ -293,18 +351,16 @@ body{
 }
 
 .choice-btn {
-    /* Estilo de los botones Alumno/Empresa */
     width: 75%; 
     padding: 1em;
 }
 
 .back-link {
-    /* Contenedor del enlace "Volver al inicio" */
     font-size: 1.1em;
 }
 
 /* ================================================= */
-/* 9. ESTILOS ESPECÍFICOS DE REGISTRO ALUMNO */
+/* 9. REGISTRO ESPECÍFICO (ALUMNO/AVATAR)            */
 /* ================================================= */
 
 .register-contents {
@@ -315,7 +371,6 @@ body{
     padding: 20px;
 }
 
-/* Estilos para las filas de 2 columnas */
 .form-row {
     display: flex;
     gap: 20px; 
@@ -326,33 +381,17 @@ body{
     flex: 1; 
 }
 
-/* Estilos para los Selects */
 .form-select {
     width: 100%;
     padding: 0.6em;
     box-sizing: border-box;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
     font-size: 1em;
-    background-color: #FFFFE9;
+    background-color: var(--color-fondo-body);
 }
 
-/* --- Estilos de botones de añadir  --- */
-
-.add-estudios{
-    background: url("/public/assets/images/Add.svg");
-    visibility: hidden;
-    display: inline-block; 
-    width: 30px;  
-    height: 30px; 
-    margin-top: 48px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer; 
-}
-
-/* --- Estilos de la Tarjeta de Avatar --- */
+/* Avatar Styles */
 
 .register-avatar-card {
     flex: 0 0 300px; 
@@ -372,10 +411,9 @@ body{
     max-width: 200px;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    border: 5px solid #EBD3FD;
+    border: 5px solid var(--color-acento);
     margin-bottom: 20px;
     margin-left: 20px;
-    
     display: block; 
     height: 200px;
 }
@@ -402,70 +440,37 @@ body{
 }
 
 .avatar-btn {
-    /* Botones de cámara/subida de archivo */
     font-size: 1.1em;
     padding: 0.8em;
 }
 
-/* Añade esto a tu CSS existente */
-
 .cv-upload {
-    /* Espacio entre los botones de avatar y el botón de CV */
     margin-top: 10px; 
 }
 
 .cv-btn {
-    /* Darle un color ligeramente diferente para distinguirlo del botón de foto si lo deseas, 
-       o simplemente mantener el color base (.login-btn) */
-    background-color: #f0f0f0; /* Fondo más claro opcional */
-    color: #191919;
-    border: 3px solid #191919;
+    background-color: var(--color-fondo-gris-claro); 
+    color: var(--color-negro);
+    border: 3px solid var(--color-negro);
 }
+
 .cv-btn:hover {
-    background-color: #d7b4f2; /* Mantiene el hover de acento */
+    background-color: var(--color-acento-hover);
 }
 
 .back-to-login {
-    margin-top: auto; /* Empuja el enlace hacia abajo */
+    margin-top: auto;
     width: 100%;
     text-align: center;
-    color: #FFFFE9;
+    color: var(--color-fondo-body);
 }
 
 .back-to-login a {
-    color: #EBD3FD; /* Cambiar el color del enlace en la tarjeta oscura */
-}
-
-
-.input-wrapper {
-  position: relative;
-}
-
-#toggle-password {
-  /* Tu código existente */
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  cursor: pointer; 
-  background: url("/public/assets/images/unveil.svg");
-
-  width: 24px;  
-  height: 24px; 
-  
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-/* 3. (Opcional) Añade espacio al input para que el texto no se escriba debajo del icono */
-.input-wrapper input {
-  /* Añade padding a la derecha del input */
-  padding-right: 40px; 
+    color: var(--color-acento);
 }
 
 /* ================================================= */
-/* 11. ESTILOS DE SELECTS DE CICLO */
+/* 10. SELECTORES DE EDUCACIÓN                       */
 /* ================================================= */
 
 .add-estudios {
@@ -494,9 +499,6 @@ body{
     cursor: pointer; 
 }
 
-/* 1. Fila principal (Wrapper de Selects + Wrapper de Botones)
-   Alineada por la base.
-*/
 .education-colum {
     display: flex;
     align-items: flex-end;
@@ -504,98 +506,61 @@ body{
     margin-bottom: 1em !important; 
 }
 
-/* 2. Wrapper de los Selects
-   Le decimos que crezca (flex: 1) y que alinee los
-   dos selects con un 'gap'.
-*/
 .education-selects-wrapper {
-    flex: 1; /* Ocupa todo el espacio posible */
+    flex: 1; 
     display: flex;
-    gap: 20px; /* Espacio entre Familia y Ciclo */
+    gap: 20px; 
 }
 
-/* 3. El .half-width (flex: 1) que ya tienes
-   hará que los dos selects se repartan el espacio
-   dentro del .education-selects-wrapper.
-*/
 .education-selects-wrapper .form-group {
-    margin-bottom: 0; /* Quitamos el margen inferior de los form-group */
+    margin-bottom: 0; 
 }
 
-/* 4. Wrapper de los Botones
-   Le decimos que NO crezca (flex: 0) y que 
-   ocupe solo su contenido.
-*/
 .education-buttons-group {
     flex: 0 1 auto;
-    margin-bottom: 0; /* Quitamos el margen inferior */
+    margin-bottom: 0; 
 }
 
-/* 5. Contenedor de los iconos de botón */
 .education-buttons-wrapper {
     display: flex;
     gap: 10px;
 }
 
-/* 6. Fila de Fechas (sin cambios) */
 .education-dates {
     padding-bottom: 1.5em;
     margin-bottom: 1.5em;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid var(--color-fondo-gris-medio);
 }
+
 #divEducacion .education-dates:last-of-type {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
 }
 
-/* 7. Estilos de Inputs de Fecha (sin cambios) */
 .education-dates .form-group label {
     font-size: 1.1em;
     font-weight: 500;
     margin-bottom: 0.4em;
 }
+
 .education-dates .form-group input {
     font-size: 0.9em;
     padding: 0.5em;
     width: 100%;
     box-sizing: border-box;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.6875em;
 }
+
 .education-dates .input-error-message {
     min-height: 1em;
 }
 
-/* ================================================= */
-/* 10. ESTILOS DE MENSAJES DE ERROR POR CAMPO */
-/* ================================================= */
-
-.input-error-message {
-    /* Estilo del texto de error */
-    display: block; /* Asegura que ocupe su propia línea */
-    color: #d32f2f;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.85em;
-    margin-top: 5px;
-    
-    /* 💥 CLAVE: Reserva el espacio vertical para el mensaje */
-    min-height: 1.2em; 
-    
-    /* El texto debe ser invisible si el span está vacío */
-    visibility: hidden; 
-}
-
-/* Regla para hacer el mensaje visible solo cuando tiene contenido */
-.input-error-message:not(:empty) {
-    visibility: visible;
-}
-
 
 /* ================================================= */
-/* 11. ESTILOS DE MODALES */
+/* 11. VENTANAS MODALES Y CÁMARA                     */
 /* ================================================= */
-
 
 .velo {
     position: fixed;
@@ -607,24 +572,22 @@ body{
     z-index: 1005;
 }
 
-
-/* MODAL MÁS GRANDE Y ESPACIOS ADAPTADOS */
 .modal {
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 80em;              /* Ampliar el ancho máximo (antes 50em) */
-    max-height: 90vh;         /* Ampliar más el alto máximo */
-    min-width: 600px;         /* Forzar un mínimo ancho útil */
-    min-height: 500px;        /* Forzar un mínimo alto útil */
+    width: 80em;              
+    max-height: 90vh;         
+    min-width: 600px;         
+    min-height: 500px;        
     height: auto;
     overflow-y: auto;
-    background: #FFFFE9;
-    border: 3px solid #191919;
+    background: var(--color-fondo-body);
+    border: 3px solid var(--color-negro);
     z-index: 1006;
     box-shadow: 0 4px 28px rgba(0,0,0,0.32);
-    padding: 48px;            /* Un poco más de espacio interno */
+    padding: 48px;            
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -632,22 +595,21 @@ body{
 }
 
 #modalContent h2 {
-/* Título del modal: Poppins, oscuro, negrita */
-color: #191919;
-font-family: 'Poppins', sans-serif;
-font-size: 1.8em;
-margin: 0 0 30px 0;
-font-weight: 800;
-text-align: center;
+    color: var(--color-negro);
+    font-family: var(--fuente-titulos);
+    font-size: 1.8em;
+    margin: 0 0 30px 0;
+    font-weight: 800;
+    text-align: center;
 }
 
 #cerrarModal {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: #EBD3FD;
-    color: #191919;
-    border: 3px solid #191919;
+    background: var(--color-acento);
+    color: var(--color-negro);
+    border: 3px solid var(--color-negro);
     border-radius: 0.5em;
     width: 38px;
     height: 38px;
@@ -656,18 +618,15 @@ text-align: center;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 800;
     font-size: 1.2em;
     z-index: 1010;
 }
 
-
-
 #cerrarModal:hover {
-background: #d7b4f2;
+    background: var(--color-acento-hover);
 }
-
 
 #modalContent {
     display: flex;
@@ -676,9 +635,7 @@ background: #d7b4f2;
     box-sizing: border-box;
 }
 
-/* 2. Este es el contenedor principal del contenido */
 #divContent {
-   
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -686,33 +643,26 @@ background: #d7b4f2;
     overflow: hidden;
 }
 
-/* 3. La barra superior (Modificada como "dropzone") */
 #divSubida {
     flex-shrink: 0; 
-    padding: 2em 1em; /* Más espacio vertical para el texto */
-    margin-bottom: 1em; /* Separación con el canvas */
-    
-    /* CAMBIO: Borde de línea discontinua */
-    border: 3px dashed #aaa; 
+    padding: 2em 1em; 
+    margin-bottom: 1em; 
+    border: 3px dashed var(--color-borde-gris); 
     border-radius: 0.8em;
-    background: #f9f9f9; /* Fondo más claro */
-    
-    /* CAMBIO: Estilos para el texto "Subir archivos" */
+    background: #f9f9f9; 
     text-align: center;
     color: #666;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 600;
     font-size: 1.1em;
     cursor: pointer; 
 }
 
 #divSubida:hover {
-    background: #f0f0f0;
-    border-color: #888;
+    background: var(--color-fondo-gris-claro);
+    border-color: var(--color-borde-gris-oscuro);
 }
 
-
-/* 4. El contenedor del canvas (Modificado) */
 #divCanva { 
     flex-grow: 1;     
     position: relative;
@@ -725,11 +675,9 @@ background: #d7b4f2;
   height: auto;
   object-fit: contain;
   display: none; 
-  background-color: #e0e0e0;
+  background-color: var(--color-fondo-gris-medio);
 }
 
-
-/* 5. Un contenedor para los botones (Sin cambios) */
 #divBotones {
     display: flex;
     flex-direction: row;
@@ -739,32 +687,29 @@ background: #d7b4f2;
     flex-shrink: 0;
 }
 
-/* 6. Estilos para los botones (Sin cambios) */
 #divBotones input[type="button"] {
     padding: 12px 24px;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.5em;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 700;
     cursor: pointer;
     font-size: 0.9em;
 }
 
 #btnAdd {
-    background: #EBD3FD;
-    color: #191919;
+    background: var(--color-acento);
+    color: var(--color-negro);
 }
-#btnAdd:hover { background: #d7b4f2; }
+#btnAdd:hover { background: var(--color-acento-hover); }
 
 #btnCancel {
     background: transparent;
-    color: #191919;
+    color: var(--color-negro);
 }
-#btnCancel:hover { background: #e0e0e0; }
+#btnCancel:hover { background: var(--color-fondo-gris-medio); }
 
-/* ================================================= */
-/* 12. ESTILOS DEL MODAL DE CÁMARA (MODIFICADO) */
-/* ================================================= */
+/* Módulo Cámara */
 
 .camara-step {
     display: flex; 
@@ -779,16 +724,14 @@ background: #d7b4f2;
 .camara-video,
 .camara-canvas {
     width: 100%;
-    max-width: 500px; /* Límite de ancho */
-    aspect-ratio: 1 / 1; /* Forzar cuadrado */
+    max-width: 500px; 
+    aspect-ratio: 1 / 1; 
     height: auto;
-    background: #e0e0e0; 
+    background: var(--color-fondo-gris-medio); 
     border-radius: 0.5em;
-    object-fit: cover; /* Llenar el cuadrado */
-    margin: 0 auto; /* Centrar */
+    object-fit: cover; 
+    margin: 0 auto; 
 }
-
-/* Ya no se necesita la regla .camara-video separada */
 
 #recorte {
     position: absolute;
@@ -804,36 +747,27 @@ background: #d7b4f2;
 #btnCapture,
 #btnCut {
     padding: 12px 24px;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.5em;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 700;
     cursor: pointer;
     font-size: 0.9em;
-    background: #EBD3FD;
-    color: #191919;
-    
-    /* Centrar los botones debajo del visor cuadrado */
+    background: var(--color-acento);
+    color: var(--color-negro);
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box; /* Para que el padding no afecte el ancho */
+    box-sizing: border-box; 
 }
 
 #btnCapture:hover,
 #btnCut:hover {
-    background: #d7b4f2;
+    background: var(--color-acento-hover);
 }
 
+/* Ajuste específico para divBotones cuando está en cámara */
 #divBotones {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end; 
-    gap: 1em;
-    margin-top: 0; 
-    flex-shrink: 0;
-    
-    /* Centrar los botones debajo del visor cuadrado */
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -841,94 +775,219 @@ background: #d7b4f2;
 
 #btnVolver {
     padding: 12px 24px;
-    border: 3px solid #191919;
+    border: 3px solid var(--color-negro);
     border-radius: 0.5em;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 700;
     cursor: pointer;
     font-size: 0.9em;
-    
     background: transparent;
-    color: #191919;
-    
+    color: var(--color-negro);
     margin-right: auto; 
 }
 #btnVolver:hover { 
-    background: #e0e0e0; 
+    background: var(--color-fondo-gris-medio); 
 }
 
 /* ================================================= */
-/* 8. ESTILOS DE PANTALLA DE CONFIRMACIÓN (NUEVO) */
+/* 12. PANTALLA DE PENDIENTE/CONFIRMACIÓN            */
 /* ================================================= */
 
-/* Contenedor principal para centrar la caja en la pantalla.
-  Usa el color de fondo verde oscuro de tu .list-container
- 
-*/
 .pending-container {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 80vh; /* Altura mínima para centrar verticalmente */
+    min-height: 80vh; 
     padding: 2em;
-    background-color: #16443D;
+    background-color: var(--color-verde-brand);
     box-sizing: border-box;
 }
 
-/* La caja de contenido "más pequeña y centrada".
-  Copia los estilos de .list-container
-*/
 .pending-box {
-    background-color: #FFFFE9;
-    border: 3px solid #191919;
-    border-radius: 2em; /* Radio de borde de .list-container */
+    background-color: var(--color-fondo-body);
+    border: 3px solid var(--color-negro);
+    border-radius: 2em; 
     padding: 3em 2.5em;
-    max-width: 760px; /* La hacemos más pequeña que 1200px */
+    max-width: 760px; 
     text-align: center;
     box-shadow: 0 5px 15px rgba(25, 25, 25, 0.2);
 }
 
-/* Estilo del título, basado en .list-container h1 
- 
-*/
 .pending-box h1 {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-size: 2.5em;
-    color: #191919;
+    color: var(--color-negro);
     font-weight: 800;
     margin: 0 0 0.8em 0;
 }
 
-/* Estilo del párrafo, basado en .confirmation-message 
- 
-*/
 .pending-box p {
-    font-family: 'Libre Baskerville', serif;
+    font-family: var(--fuente-cuerpo);
     font-size: 1.25em;
-    color: #191919;
+    color: var(--color-negro);
     line-height: 1.6;
     margin: 1.5em 0 2.5em 0;
 }
 
-/* Estilo del botón, copiando .search-btn 
- 
-*/
 .pending-button {
-    display: inline-block; /* Para que el padding funcione */
+    display: inline-block; 
     text-decoration: none;
-    background-color: #EBD3FD; /* Color de acento */
-    color: #191919;
-    border: 3px solid #191919;
+    background-color: var(--color-acento); 
+    color: var(--color-negro);
+    border: 3px solid var(--color-negro);
     padding: 0.8em 2em;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--fuente-titulos);
     font-weight: 500;
     font-size: 1.2em;
-    border-radius: 0.6875em; /* Radio de borde */
+    border-radius: 0.6875em; 
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .pending-button:hover {
-    background-color: #d7b4f2; /* Color hover */
+    background-color: var(--color-acento-hover); 
+}
+
+
+/* ================================================= */
+/* RESPONSIVE: LOGIN Y REGISTRO                      */
+/* ================================================= */
+
+@media (max-width: 1024px) {
+    
+    .login-container {
+        margin: 40px 20px; 
+        padding: 30px;
+    }
+
+    .h2-title {
+        font-size: 2.2em; 
+    }
+
+    .login-contents {
+        gap: 20px; 
+    }
+
+    .login-info-card {
+        padding: 2em; 
+    }
+}
+
+@media (max-width: 768px) {
+
+    .login-container {
+        margin: 20px 15px; 
+        padding: 20px;
+        border-radius: 1.5em; 
+        overflow: hidden; 
+    }
+
+    .h2-title {
+        font-size: 1.8em;
+        text-align: center; 
+        margin-bottom: 0.5em;
+    }
+
+    .login-contents, 
+    .register-contents {
+        flex-direction: column; 
+        gap: 0; 
+    }
+
+    .login-form-container,
+    .register-form-container {
+        padding: 10px 0 20px 0; 
+        width: 100%;
+        order: 1; 
+    }
+
+    .form-row {
+        flex-direction: column; 
+        gap: 1.5em; 
+    }
+
+    .half-width {
+        width: 100%; 
+    }
+
+    .form-group input,
+    .form-select {
+        padding: 0.8em; 
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 0.8em;
+    }
+
+    /* TARJETA NEGRA (INFO LOGIN) */
+    .login-info-card {
+        order: 2; 
+        width: calc(100% + 40px); 
+        box-sizing: border-box; 
+        margin-left: 0px;
+        margin-right: -20px;
+        margin-bottom: -5px; 
+        margin-top: 20px;     
+        border-radius: 0 0 1.5em 1.5em; 
+        padding: 2.5em 2em;
+    }
+
+    .login-info-card h3 {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .advantages-list li {
+        margin-bottom: 1em;
+    }
+
+    .btn-register-link {
+        padding: 0.8em 0;
+    }
+
+    /* TARJETA DE AVATAR / LOGO EMPRESA (REGISTRO) */
+    .register-avatar-card {
+        order: 1; 
+        width: 100%;
+        max-width: none;
+        padding: 0 0 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        text-align: center;
+    }
+
+    /* EL LOGO DE LA EMPRESA: MÁS PEQUEÑO Y CENTRADO */
+    .register-avatar-card .company-logo {
+        max-width: 150px; 
+        height: auto;
+        margin: 0 auto 20px auto; 
+        display: block;
+    }
+    
+    .generic-avatar {
+        margin: 0 auto 20px auto; 
+        max-width: 150px;
+        height: 150px;
+    }
+
+    .avatar-upload-area {
+        width: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avatar-buttons {
+        width: 100%;
+        align-items: center;
+    }
+
+    .avatar-btn {
+        width: 100%;
+        max-width: 300px;
+    }
 }
